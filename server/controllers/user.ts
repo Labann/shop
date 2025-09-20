@@ -3,6 +3,7 @@ import { Prisma, type User } from "../generated/prisma/index";
 import bcrypt from "bcrypt"
 import prisma from "../utils/prisma";
 import { generateToken } from "../utils/genearateToken";
+import { checkUser } from "../utils/checkUser";
 
 
 export const login: express.RequestHandler = async (req, res) =>{
@@ -120,3 +121,95 @@ export const logout: express.RequestHandler = async (req, res) => {
         })
     }
 }
+
+
+export const getProfile: express.RequestHandler = async (req, res) =>{
+    try {
+        const {username} = req.body;
+        if(!username){
+            return res.status(400).json({
+                error: "bad request"
+            })
+        }
+
+        const user = await prisma.user.findUnique({
+            where: {
+                username: username
+            }
+        })
+
+        if(!user){
+            return res.status(404).json({
+                error: "user not found"
+            })
+        }
+
+        const {password, ...saferUser} = user;
+
+        return res.status(200).json(saferUser);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
+
+
+export const updateProfile: express.RequestHandler = async (req, res) =>{
+    try {
+        const data = req.body;
+        
+
+        const user = req.user as User
+
+        checkUser(user);
+
+        if(!Object.keys(data).length){
+            return res.status(400).json({
+                error: "no data provided"
+            })
+        }
+
+        const updateUser = await prisma.user.update({
+            where:{
+                id: user.id        
+            },
+            data
+        });
+
+        const {password, ...safeUser} = updateUser;
+
+        return res.status(200).json(safeUser);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
+
+
+export const deleteAccount: express.RequestHandler = async (req, res) => {
+    try {
+        const user = req.user as User;
+        
+        checkUser(user);
+
+        const deleted = await prisma.user.delete({
+            where: {
+                id: user.id
+            }
+        })
+
+        return res.status(200).json(deleted);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
+//getProfile 
+//update profile
+//delete account

@@ -33,9 +33,10 @@ model Product{
   name String
   description String
   price Decimal @db.Decimal(10, 2)
+  images String[]
   category String
   stock Int
-  shop Shop @relation(fields: [shopId], references: [id])
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
   shopId String
   order OrderItem[]
   cartItems CartItem[]
@@ -45,16 +46,16 @@ model Product{
 
 model Shop{
   id String @id @default(uuid())
-  name String
+  name String @unique
   description String
   logo String
   category String
-  owner User @relation(fields: [userId], references: [id])
+  owner User @relation(fields: [userId], references: [id], onDelete: Cascade)
   products Product[]
   userId String
   location String?
   transaction_details Json?
-  status SHOP_STATUS
+  status SHOP_STATUS @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -70,7 +71,7 @@ model Order{
 
 model Payment{
   id String @id @default(uuid())
-  order Order @relation("OrderPayment" ,fields: [orderId], references: [id])
+  order Order @relation("OrderPayment" ,fields: [orderId], references: [id], onDelete: Cascade)
   orderId String @unique
   method PAYMENT_METHOD @default(MPESA)
   status PAYMENT_STATUS
@@ -89,10 +90,10 @@ enum PAYMENT_METHOD{
 
 model OrderItem{
   id String @id @default(uuid())
-  order Order @relation(fields: [orderId], references: [id])
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId String
   quantity Int @default(1)
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -100,7 +101,7 @@ model OrderItem{
 model Cart{
    id        String    @id @default(uuid())
   userId    String    @unique
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     CartItem[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -108,9 +109,9 @@ model Cart{
 model CartItem {
   id        String    @id @default(uuid())
   cartId    String
-  cart      Cart      @relation(fields: [cartId], references: [id])
+  cart      Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
   productId String
-  product   Product   @relation(fields: [productId], references: [id])
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   quantity  Int       @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
