@@ -1,6 +1,7 @@
 import * as express from "express";
 import type { Product } from "../generated/prisma/index";
 import prisma from "../utils/prisma";
+import { uploadToCloudinary } from "../utils/cloudinary";
 
 export const addProduct: express.RequestHandler = async (req, res) => {
     const {
@@ -11,24 +12,29 @@ export const addProduct: express.RequestHandler = async (req, res) => {
         price
     }: Product = req.body;
 
-    
+    const files = req.files as Express.Multer.File[]
 
     const {shopId} = req.params;
     try {
         if(!name || !description 
             || !price || !category || !stock 
-            || !shopId){
+            || !shopId || files.length === 0){
             return res.status(400).json({
                 error: "bad request"
             })
         }
 
+        const images = await Promise.all(
+            files.map(file => uploadToCloudinary(file?.buffer, {folder: "products_img"}))
+        )
+        const imagesUrl = images.map(img => img.secure_url);
         const newProduct = await prisma.product.create({
             data: {
                 name,
                 description,
                 price,
                 category,
+                images: imagesUrl,
                 stock,
                 shopId,
             }
@@ -49,16 +55,27 @@ export const updateProduct: express.RequestHandler = async (req, res) => {
     const {productId} = req.params;
     try {
 
+        const files = req.files as Express.Multer.File[];
+
         if(!productId) return res.status(400).json({
             error: "bad request"
         })
 
-        if(!Object.keys(data).length){
+        if(!data || Object(data).keys.length === 0){
             return res.status(400).json({
                 error: "at least on detail is required"
             })
         }
 
+        if(files && files.length !== 0) {
+            const images = await Promise.all(
+                files.map(img => uploadToCloudinary(img.buffer, {folder: "products_folder"}))
+            )
+            const imageUrls = images.map(img => img.secure_url);
+            
+            data.images = imageUrls
+
+        }
         const updatedProduct = await prisma.product.update({
             where: {
                 id: productId

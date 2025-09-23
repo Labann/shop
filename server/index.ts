@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/user"
 import productRoutes from "./routes/product"
 import shopRoutes from "./routes/shop"
+import cartRoutes from "./routes/cart"
+import orderRoutes from "./routes/order"
 const app = express();
 app.use(cors());
 app.use(express.json({limit: "30mb"}))
@@ -15,5 +17,9 @@ dotenv.config();
 app.use("/user", authRoutes);
 app.use("/shop", shopRoutes);
 app.use("/product", productRoutes)
+app.use("/cart", cartRoutes)
+app.use("/order", orderRoutes)
+
+
 const port = process.env.PORT!
 app.listen(port, () => console.log(`app running in port: ${port}`));

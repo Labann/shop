@@ -2,6 +2,7 @@ import * as express from "express"
 import type { Shop, User } from "../generated/prisma/index";
 import prisma from "../utils/prisma";
 import { checkUser } from "../utils/checkUser";
+import { uploadToCloudinary } from "../utils/cloudinary";
 
 export const applyForShop: express.RequestHandler = async (req, res) => {
     const {
@@ -12,8 +13,13 @@ export const applyForShop: express.RequestHandler = async (req, res) => {
         location,
         
     }: Shop= req.body
+
+    const file = req.file as Express.Multer.File
+    let logoImg
+    let logoUrl    
+
     try {
-        if(!name && !description && !logo && !category && !location){
+        if(!name || !description || !logo || !category || !location || !file){
             return res.status(400).json({
                 error: "bad request"
             })
@@ -21,11 +27,15 @@ export const applyForShop: express.RequestHandler = async (req, res) => {
 
         const user = req.user as User;
         checkUser(user)
+        
+        logoImg = await uploadToCloudinary(file?.buffer, {folder: "logo_upload"});
+        logoUrl = logoImg.secure_url
+
         const newShop = await prisma.shop.create({
             data: {
                 name,
                 description,
-                logo,
+                logo: logoUrl? logoUrl: null,
                 category,
                 location,
                 userId: user.id
@@ -121,11 +131,13 @@ export const updateShopDetails: express.RequestHandler = async (req, res) => {
             error: "bad request"
         })
 
-        if(!Object.keys(data).length){
+        if(!data || Object(data).keys.length === 0){
             return res.status(400).json({
                 error: 'at least on detail is required'
             })
         }
+
+        
 
         const shop = await prisma.shop.findUnique({
             where: {
@@ -137,6 +149,12 @@ export const updateShopDetails: express.RequestHandler = async (req, res) => {
             error: 'shop not found'
         })
 
+        if(req.file){
+            const logoImg = await uploadToCloudinary(req.file.buffer, {folder: "logo_folder"});
+            const logoUrl = logoImg.secure_url;
+            data.logo = logoUrl
+        }
+        
         const updatedShop = await prisma.shop.update({
             where:{
                 id: shopId

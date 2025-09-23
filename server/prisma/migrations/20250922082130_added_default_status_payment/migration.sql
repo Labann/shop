@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "public"."PAYMENT_STATUS" ADD VALUE 'PENDING';
