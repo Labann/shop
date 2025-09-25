@@ -62,15 +62,17 @@ export const signup = async (req, res) => {
                 error: "user already exist"
             });
         }
+        const salt = await bcrypt.genSalt(10);
+        const passwordHashed = await bcrypt.hash(password, salt);
         const newUser = await prisma.user.create({
             data: {
                 username,
                 fullname,
-                password,
+                password: passwordHashed,
                 email
             }
         });
-        const { password: _, ...safeUser } = req.body;
+        const { password: _, ...safeUser } = newUser;
         return res.status(201).json(safeUser);
     }
     catch (error) {
@@ -129,7 +131,7 @@ export const updateProfile = async (req, res) => {
     try {
         const data = req.body;
         const user = req.user;
-        checkUser(user);
+        await checkUser(user);
         if (!Object.keys(data).length) {
             return res.status(400).json({
                 error: "no data provided"
@@ -152,15 +154,36 @@ export const updateProfile = async (req, res) => {
     }
 };
 export const deleteAccount = async (req, res) => {
+    const { username } = req.body;
     try {
         const user = req.user;
-        checkUser(user);
+        if (!username)
+            return res.status(400).json({
+                error: "bad request"
+            });
+        await checkUser(user);
         const deleted = await prisma.user.delete({
             where: {
-                id: user.id
+                username: username
             }
         });
         return res.status(200).json(deleted);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+export const getAllUser = async (req, res) => {
+    try {
+        const users = await prisma.user.findMany();
+        if (!users || users.length === 0)
+            return res.status(404).json({
+                error: "users not found"
+            });
+        return res.status(200).json(users);
     }
     catch (error) {
         console.error(error);

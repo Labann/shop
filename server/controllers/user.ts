@@ -10,7 +10,7 @@ export const login: express.RequestHandler = async (req, res) =>{
     const {
         email,
         password
-    }: User = req.body;
+    } = req.body;
     try {
         if(!email || !password){
             return res.status(400).json({
@@ -82,17 +82,19 @@ export const signup: express.RequestHandler = async (req, res) => {
                 error: "user already exist"
             })
         }
-
+        
+        const salt = await bcrypt.genSalt(10)
+        const passwordHashed = await  bcrypt.hash(password, salt)
         const newUser = await prisma.user.create({
             data: {
                 username,
                 fullname,
-                password,
+                password: passwordHashed,
                 email
             }
         })
 
-        const {password: _, ...safeUser} = req.body;
+        const {password: _, ...safeUser} = newUser;
 
         return res.status(201).json(safeUser);
     } catch (error) {
@@ -163,7 +165,7 @@ export const updateProfile: express.RequestHandler = async (req, res) =>{
 
         const user = req.user as User
 
-        checkUser(user);
+        await checkUser(user);
 
         if(!Object.keys(data).length){
             return res.status(400).json({
@@ -191,18 +193,39 @@ export const updateProfile: express.RequestHandler = async (req, res) =>{
 
 
 export const deleteAccount: express.RequestHandler = async (req, res) => {
+    const {username} = req.body;
     try {
         const user = req.user as User;
         
-        checkUser(user);
+        if(!username) return res.status(400).json({
+            error: "bad request"
+        })
+
+        await checkUser(user);
 
         const deleted = await prisma.user.delete({
             where: {
-                id: user.id
+                username: username
             }
         })
 
         return res.status(200).json(deleted);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
+
+export const getAllUser: express.RequestHandler = async(req, res) => {
+    try {
+        const users = await prisma.user.findMany();
+        if(!users || users.length === 0) return res.status(404).json({
+            error: "users not found"
+        })    
+
+        return res.status(200).json(users);
     } catch (error) {
         console.error(error);
         return res.status(500).json({

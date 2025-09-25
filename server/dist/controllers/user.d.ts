@@ -5,4 +5,5 @@ export declare const logout: express.RequestHandler;
 export declare const getProfile: express.RequestHandler;
 export declare const updateProfile: express.RequestHandler;
 export declare const deleteAccount: express.RequestHandler;
+export declare const getAllUser: express.RequestHandler;
 //# sourceMappingURL=user.d.ts.map

@@ -10,7 +10,7 @@ export const addProduct: express.RequestHandler = async (req, res) => {
         category,
         stock, 
         price
-    }: Product = req.body;
+     } = req.body;
 
     const files = req.files as Express.Multer.File[]
 
@@ -35,7 +35,7 @@ export const addProduct: express.RequestHandler = async (req, res) => {
                 price,
                 category,
                 images: imagesUrl,
-                stock,
+                stock: parseInt(stock),
                 shopId,
             }
         })
@@ -61,7 +61,17 @@ export const updateProduct: express.RequestHandler = async (req, res) => {
             error: "bad request"
         })
 
-        if(!data || Object(data).keys.length === 0){
+        const productExist = await prisma.product.findUnique({
+            where:{
+                id: productId
+            }
+        })
+
+        if(!productExist) return res.status(404).json({
+            error: "product does not exist in database"
+        })
+
+        if(!data || data.length === 0){
             return res.status(400).json({
                 error: "at least on detail is required"
             })
@@ -76,6 +86,7 @@ export const updateProduct: express.RequestHandler = async (req, res) => {
             data.images = imageUrls
 
         }
+
         const updatedProduct = await prisma.product.update({
             where: {
                 id: productId
@@ -101,13 +112,24 @@ export const deleteProduct: express.RequestHandler = async (req, res) => {
             error: "bad request"
         })
 
+        const productExist = await prisma.product.findUnique({
+            where: {
+                id:  productId
+            }
+        })
+
+        if(!productExist) return res.status(404).json({
+            error: "product does not exist in the database"
+        })
+
+
         const deletedProduct = await prisma.product.delete({
             where:{
                 id: productId
             }
         })
 
-        return res.status(200).json(deletedProduct);
+        return res.status(200).json({deletedProduct, message: "deleted"});
     } catch (error) {
         console.error(error);
         return res.status(500).json({
@@ -123,6 +145,16 @@ export const getProductByShop: express.RequestHandler = async (req, res) => {
             error: "bad request"
         })
 
+        const shopExist = await prisma.shop.findUnique({
+            where:{
+                id: shopId
+            }
+        })
+
+        if(!shopExist) return res.status(404).json({
+            error: "shop does not exist in database"
+        })
+        
         const products = await prisma.product.findMany({
             where: {
                 shopId: shopId

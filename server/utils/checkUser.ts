@@ -1,5 +1,6 @@
 import type { User } from "../generated/prisma/index"
 import prisma from "./prisma"
+import * as express from "express"
 
 export const checkUser = async (user: User) => {
     try {
@@ -8,10 +9,11 @@ export const checkUser = async (user: User) => {
                 id: user.id
             }
         })
-        if(!validUser) throw new Error("user not found")
+        if(!validUser) throw Error("user not found")
     
     } catch (error) {
         console.error(error);
         throw new Error((error as Error).message)
     }
 }
+

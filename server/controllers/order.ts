@@ -12,7 +12,7 @@ export const createOrder: express.RequestHandler = async (req, res) => {
     } = req.body
     try {
         const user = req.user as User;
-        checkUser(user);
+        await checkUser(user);
         
         if(!items || items.length === 0){
             return res.status(400).json({
@@ -39,13 +39,19 @@ export const createOrder: express.RequestHandler = async (req, res) => {
         //checking quantity with stock
         for(const item of items){
             const product = products.find(p => p.id === item.productId);
-            if(product){
-                if(item.quantity > product.stock){
-                    return res.status(400).json({
-                        error: `not enough stock for product: ${product.name}`
-                    })
-                }
+            if(product && item.quantity === 0){
+                return res.status(400).json({
+                    error: "quantity cannot be zero"
+                })
             }
+
+            if(product && item.quantity > product.stock){
+                
+                return res.status(400).json({
+                    error: `not enough stock for product: ${product.name}`
+                })
+            }
+            
         }
 
         //for atomicity when one operation fails everything fails
@@ -56,14 +62,7 @@ export const createOrder: express.RequestHandler = async (req, res) => {
                     userId: user.id,
                     status: "PENDING"
                 },
-                include: {
-                items: {
-                    include:{
-                        product: true
-                    }
-                },
-                    payment: true
-                }
+                
             })
 
             //create all order-items
@@ -77,9 +76,12 @@ export const createOrder: express.RequestHandler = async (req, res) => {
 
             //Deduct stock for each product
             for(const item of items){
-                await tx.product.update({
+                const updated = await tx.product.updateMany({
                     where: {
-                        id: item.productId
+                        id: item.productId,
+                        stock: {
+                            gte: item.quantity
+                        }
                     },
                     data: {
                         stock: {
@@ -87,6 +89,10 @@ export const createOrder: express.RequestHandler = async (req, res) => {
                         }
                     }
                 })
+                
+                if(updated.count === 0){
+                    throw new Error(`Not enough stock for product Id: ${item.productId}`)
+                }
             }
 
             //create a pending payment record
@@ -100,7 +106,20 @@ export const createOrder: express.RequestHandler = async (req, res) => {
             })
 
 
-            return newOrder;
+            const fullOrder = await tx.order.findUnique({
+                    where: { id: newOrder.id },
+                    include: {
+                    items: {
+                        include: {
+                        product: true,
+                        },
+                    },
+                    payment: true,
+                    },
+                });
+
+                return fullOrder;
+        
         })
 
           
@@ -112,15 +131,12 @@ export const createOrder: express.RequestHandler = async (req, res) => {
         })
     }
 }
-export const getMyOrders: express.RequestHandler = async (req, res) => {
-    const {orderId} = req.params;
-    try {
-        if(!orderId) return res.status(400).json({
-            error: "bad request order is required"
-        })
 
+export const getMyOrders: express.RequestHandler = async (req, res) => {
+    try {
+       
         const user = req.user as User
-        checkUser(user);
+        await checkUser(user);
         const order = await prisma.order.findMany({
             where: {
                 userId: user.id
@@ -167,6 +183,62 @@ export const getSingleOrder: express.RequestHandler = async (req, res) => {
     }
 }
 
+export const getOrdersInMyShop: express.RequestHandler = async (req, res) => {
+    const {shopId} = req.params;
+    try {
+        if(!shopId) return res.status(400).json({
+            error: "bad request"
+        })
+
+        const user = req.user as User;
+        const orders = await prisma.order.findMany({
+            where:{
+                items: {
+                    some: {
+                        product: {
+                            shopId: shopId
+                        }
+                    }
+                }
+            },
+            include: {
+                
+                user: {
+                    select: {
+                        id: true,
+                        fullname: true,
+                        email: true,
+                    },
+                },
+                
+                payment: true,
+                items: {
+                    include: {
+                        product: {
+                        select: {
+                            id: true,
+                            name: true,
+                            price: true,
+                        },
+                        },
+                    },
+                },
+            },
+        
+            orderBy: {
+                createdAt: "desc", // Most recent orders first
+            },
+            
+        });
+
+        return res.status(200).json(orders);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
 
 export const updateOrderStatus: express.RequestHandler = async (req, res) => {
     const {status} = req.body;
@@ -184,6 +256,19 @@ export const updateOrderStatus: express.RequestHandler = async (req, res) => {
              })
         }
 
+        const orderExist = await prisma.order.findUnique({
+            where: {
+                id: orderId
+            }
+        })
+
+        if(!orderExist){
+            return res.status(404).json({
+                error: "order does not exist"
+            })
+        }
+
+        
          const updated = await prisma.order.update({
                 where: {
                     id: orderId
@@ -212,7 +297,7 @@ export const cancelOrder: express.RequestHandler = async (req, res) => {
     const {orderId} = req.params;
     try {
         const user = req.user as User;
-        checkUser(user);
+        await checkUser(user);
         
         if(!orderId) return res.status(400).json({
             error:"bad request, orderId is required"

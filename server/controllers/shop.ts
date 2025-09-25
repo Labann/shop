@@ -8,26 +8,46 @@ export const applyForShop: express.RequestHandler = async (req, res) => {
     const {
         name,
         description,
-        logo,
         category,
         location,
         
     }: Shop= req.body
 
     const file = req.file as Express.Multer.File
+    if(!file) return res.status(400).json({
+        error: "bad request logo is a must"
+    })
     let logoImg
     let logoUrl    
 
     try {
-        if(!name || !description || !logo || !category || !location || !file){
+        if(!name || !description || !category || !location || !file){
             return res.status(400).json({
                 error: "bad request"
             })
         }
 
-        const user = req.user as User;
-        checkUser(user)
+
+
+        const shopExist = await prisma.shop.findUnique({
+            where: {
+                name: name
+            }
+        })
+
+        if(shopExist) return res.status(400).json({
+            error: "shop already exist"
+        })
         
+        const user = req.user as User;
+        await checkUser(user)
+        
+        if(user.role === "SUPER_ADMIN"){
+            return res.status(401).json({
+                error: "unauthorized - super admin cannot apply for shop"
+            })
+        }
+
         logoImg = await uploadToCloudinary(file?.buffer, {folder: "logo_upload"});
         logoUrl = logoImg.secure_url
 
@@ -58,24 +78,45 @@ export const approveShop: express.RequestHandler = async (req, res) => {
             error: "bad request"
         })
 
-        const shop = prisma.shop.findUnique({
+        const shop = await  prisma.shop.findUnique({
             where: {
                 id: shopId
             }
         })
 
+        
         if(!shop) return res.status(404).json({
             error: "shop not found"
         })
+
+        if(shop.status === "OPEN"){
+            return res.status(400).json({
+                error: "already approved"
+            })
+        }
+        
+        await prisma.user.update({
+            where:{
+                id: shop.userId
+            },
+            data: {
+                role: "VENDOR"
+            }
+        });
 
         const approveShop = await prisma.shop.update({
             where: {
                 id: shopId
             },
+            include: {
+                owner: true
+            },
             data: {
-                status: "OPEN"
+                status: "OPEN",
             }
         });
+
+        
 
         return res.status(200).json(approveShop);
         
@@ -95,15 +136,32 @@ export const closeShop: express.RequestHandler = async (req, res) => {
             error: "bad request"
         })
 
+        
         const shop = await prisma.shop.findUnique({
             where: {
                 id:  shopId
             }
         });
 
+        const user = req.user as User
+        await checkUser(user)
+
+        
+
         if(!shop) return res.status(404).json({
             error: 'shop not found'
         })
+
+        if(shop.status === "PENDING"){
+            return res.status(400).json({
+                error: "shop status is PENDING approval, it's not opened yet!"
+            })
+        }
+        if(user.id !== shop.userId){
+            return res.status(401).json({
+                error: "only owners can close shop"
+            })
+        }
 
         const closedShop = await prisma.shop.update({
             where: {
@@ -131,12 +189,22 @@ export const updateShopDetails: express.RequestHandler = async (req, res) => {
             error: "bad request"
         })
 
-        if(!data || Object(data).keys.length === 0){
+        if(!data || data.length === 0){
             return res.status(400).json({
                 error: 'at least on detail is required'
             })
         }
 
+        if(data.name){
+            const shopExist = await prisma.shop.findUnique({
+                where: {
+                    name: data.name
+                }
+            })
+            if(shopExist) return res.status(400).json({
+                error: "shop already exist"
+            })
+        }
         
 
         const shop = await prisma.shop.findUnique({
@@ -145,9 +213,18 @@ export const updateShopDetails: express.RequestHandler = async (req, res) => {
             }
         })
 
+        const user = req.user as User
+        await checkUser(user);
+
         if(!shop) return res.status(404).json({
             error: 'shop not found'
         })
+
+        if(user.id !== shop.userId){
+            return res.status(401).json({
+                error: "only owners can close shop"
+            })
+        }
 
         if(req.file){
             const logoImg = await uploadToCloudinary(req.file.buffer, {folder: "logo_folder"});
@@ -174,11 +251,16 @@ export const updateShopDetails: express.RequestHandler = async (req, res) => {
 //GET ALL SHOPS
 export const getAllShops: express.RequestHandler = async (req, res) => {
     try {
-        const shops = await prisma.shop.findMany({});
+        const shops = await prisma.shop.findMany({
+            include: {
+                owner: true
+            }
+        });
 
-        if(!shops) return res.status(404).json({
+        if(!shops || shops.length === 0) return res.status(404).json({
             error: "no shop found"
         })
+
 
         return res.status(200).json(shops);
     } catch (error) {
@@ -194,7 +276,7 @@ export const getMyShops: express.RequestHandler = async (req, res) => {
     try {
         const user = req.user as User
         
-        checkUser(user);
+        await checkUser(user);
 
         const shops = await prisma.shop.findMany({
             where: {
@@ -229,7 +311,6 @@ export const getMyShop: express.RequestHandler = async(req, res) => {
         console.error((error as Error).message)
     }
 }
-
 //shop controllers
 
 //apply For Shop

@@ -1,21 +1,75 @@
-import e, * as express from "express";
-import type { CartItem } from "../generated/prisma/index";
+import * as express from "express";
+import type { CartItem, User } from "../generated/prisma/index";
 import prisma from "../utils/prisma";
+import { checkUser } from "../utils/checkUser";
+
+
+
+export const createCart: express.RequestHandler = async (req, res) => {
+    try {
+        const user = req.user as User;
+
+        const cartExist = await prisma.cart.findUnique({
+            where:{
+                userId: user.id
+            }
+        })
+
+        if(cartExist) return res.status(400).json({
+            error: "cart already exist"
+        })
+
+        const newCart = await prisma.cart.create({
+            data:{
+                userId: user.id
+            }
+        });
+
+        return res.status(201).json(newCart);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
+
 
 export const addToCart: express.RequestHandler =  async (req, res) =>{
     const {
-        cartId, 
+        cartId,
         productId,
         quantity
-    }: CartItem = req.body;
+    } = req.body;
     try {
         if(!cartId || !productId || !quantity){
             return res.status(400).json({
                 error: 'bad request'
             })
         }
+        const cartExist = await prisma.cart.findUnique({
+            where: {
+                id: cartId
+            }
+        })
+        const productExist = await prisma.product.findUnique({
+            where:{
+                id: productId
+            }
+        })
 
-        if(quantity < 0) return res.status(400).json({
+        if(!cartExist){
+            return res.status(404).json({
+                error: "cart does not exist"
+            })
+        }
+        if(!productExist){
+            return res.status(404).json({
+                error: "product does not exist"
+            })
+        }
+        
+        if(quantity <= 0) return res.status(400).json({
             error: "quantity cannot be less than zero"
         })
 
@@ -28,6 +82,7 @@ export const addToCart: express.RequestHandler =  async (req, res) =>{
             }
         })
 
+        
         if(cartItem){
             const updatedCartItem = await prisma.cartItem.update({
                 where:{
@@ -37,7 +92,7 @@ export const addToCart: express.RequestHandler =  async (req, res) =>{
                     }
                 },
                 data:{
-                    quantity
+                    quantity: parseInt(quantity)
                 }
             });
 
@@ -48,7 +103,7 @@ export const addToCart: express.RequestHandler =  async (req, res) =>{
             data:{
                 cartId,
                 productId,
-                quantity
+                quantity: parseInt(quantity)
             }
         });
 
@@ -64,10 +119,8 @@ export const addToCart: express.RequestHandler =  async (req, res) =>{
 
 
 export const removeFromCart: express.RequestHandler = async (req, res) => {
-    const {
-        cartId,
-    }: CartItem = req.body;
-    const {productId} = req.params;
+    
+    const {productId, cartId} = req.params;
     try {
         if(!cartId || !productId) return res.status(400).json({
             error: "bad request"
@@ -106,15 +159,17 @@ export const removeFromCart: express.RequestHandler = async (req, res) => {
 
 
 export const getMyCart: express.RequestHandler = async (req, res) => {
-    const {cartId} = req.params;
+    
     try {
-        if(!cartId) return res.status(400).json({
-            error: "bad request, cartId is required"
-        })
-
+        
+        const user = req.user as User
+        await checkUser(user);
         const cart = await prisma.cart.findUnique({
             where:{
-                id: cartId
+                userId: user.id
+            },
+            include: {
+                items: true
             }
         })
 
@@ -131,23 +186,27 @@ export const getMyCart: express.RequestHandler = async (req, res) => {
 export const clearCart: express.RequestHandler = async (req, res) => {
     const {cartId} = req.params;
     try{
+        
+        const user = req.user as User;
+        await checkUser(user);
         if(!cartId) return res.status(400).json({
-            error: "bad request, cartId required"
+            error: "bad request"
         })
 
         const cart = await prisma.cart.findUnique({
             where:{
-                id:cartId
+                id: cartId
             }
         }) 
+        
         if(!cart) return res.status(404).json({
             error: "cart does not exist"
         })
 
-        const removedCart = await prisma.cartItem.delete({
+        const removedCart = await prisma.cartItem.deleteMany({
             where:{
-                id: cartId
-            }
+                cartId: cartId
+            },
         })
 
         return res.status(200).json(removedCart)

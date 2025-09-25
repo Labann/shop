@@ -1,4 +1,4 @@
-import type { User } from "../generated/prisma/index";
-export declare const adminsOnly: (user: User) => void;
-export declare const vendorsOnly: (user: User) => void;
+import * as express from "express";
+export declare const adminsOnly: express.RequestHandler;
+export declare const vendorsOnly: express.RequestHandler;
 //# sourceMappingURL=adminsOnly.d.ts.map
