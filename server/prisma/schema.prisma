@@ -78,7 +78,23 @@ model Payment{
   orderId String @unique
   method PAYMENT_METHOD @default(MPESA)
   status PAYMENT_STATUS @default(PENDING)
-  transaction_details Json?
+  amount Decimal @db.Decimal(10,2) @default(0.00)
+  // ===== M-Pesa Specific =====
+  merchantRequestId   String?        // From initial STK push response
+  checkoutRequestId   String?        // From initial STK push response
+  mpesaReceiptNumber  String?        // From callback
+  phoneNumber         String?        // Customer phone
+  transactionDate     DateTime?      // Parsed from callback YYYYMMDDHHMMSS
+
+  // ===== Card Payment Specific =====
+  cardBrand           String?        // e.g. "Visa", "MasterCard"
+  cardLast4           String?        // Last 4 digits of the card
+  cardTransactionId   String?        // ID from the card processor
+  cardHolderName      String?        // Name on the card
+
+  // ===== Shared =====
+  rawCallback         Json?          // Full raw response or callback
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

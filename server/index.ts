@@ -7,6 +7,7 @@ import productRoutes from "./routes/product"
 import shopRoutes from "./routes/shop"
 import cartRoutes from "./routes/cart"
 import orderRoutes from "./routes/order"
+import paymentRoutes from "./routes/payment"
 import morgan from "morgan";
 import { errorHandler } from "./utils/errorHandler";
 const app = express();
@@ -23,7 +24,7 @@ app.use("/api/shop", shopRoutes);
 app.use("/api/product", productRoutes)
 app.use("/api/cart", cartRoutes)
 app.use("/api/order", orderRoutes)
-
+app.use("/api/payment", paymentRoutes)
 
 const port = process.env.PORT!
 app.listen(port, () => console.log(`app running in port: ${port}`));
