@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import Image from 'next/image'
+
 import { CiSearch } from "react-icons/ci";
 const Hero = () => {
   return (

@@ -13,7 +13,7 @@ const Navbar = () => {
     <div className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
         {
             isMenu && (
-                <div className='absolute top-20 left-0 md:hidden text-white bg-primary/30 flex flex-col space-y-2 p-2 font-bold rounded-r-md'>
+                <div className='absolute top-26 left-0 z-50 md:hidden text-white bg-primary/30 flex flex-col space-y-2 p-2 py-3 font-bold rounded-r-md'>
                     <Link 
                         href={"/"} 
                         className='hover:text-black'
