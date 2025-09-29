@@ -45,7 +45,7 @@ const Navbar = () => {
                 src={"/logo-t.png"}
                 width={200}
                 height={100}
-                className='w-[7em] md:w-[10em]'
+                className='w-[7em]'
                 alt="logo-img"
             />
         </div>
