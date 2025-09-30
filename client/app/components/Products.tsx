@@ -1,12 +1,8 @@
 "use client"
-import Link from 'next/link'
 import React from 'react'
+import Link from "next/link"
 import Product from './Product'
-
-
-
-
-const Featured = () => {
+const Products = () => {
     const data = [
         {
             item: "1",
@@ -24,11 +20,27 @@ const Featured = () => {
             item: "4",
             img: "/shoe.png"
         },
+        {
+            item: "5",
+            img: "/shoe.png"
+        },
+        {
+            item: "6",
+            img: "/shoe.png"
+        },
+        {
+            item: "7",
+            img: "/shoe.png"
+        },
+        {
+            item: "8",
+            img: "/shoe.png"
+        }
     ]
   return (
     <div className='max-w-7xl mx-auto p-4'>
         <div className="flex justify-between items-center">
-            <h1 className='md:text-3xl text-2xl font-bold'>Featured Products</h1>
+            <h1 className='md:text-3xl text-2xl font-bold'>Explore Products</h1>
             <Link href="" className=''>
                 <span className='md:hidden text-primary'>See all</span>
                 <span className='hidden md:block bg-primary text-white px-6 rounded p-2'>view all</span>
@@ -48,4 +60,4 @@ const Featured = () => {
   )
 }
 
-export default Featured
+export default Products

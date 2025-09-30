@@ -9,7 +9,7 @@ const Hero = () => {
         <h1 className='md:text-5xl text-3xl font-bold'>Welcome to SOKONI</h1>
         <p className='text-xl'>Connecting buyers and sellers, Shaping your Marketplace by Experience</p>
         <form className="pt-10 flex w-full">
-            <div className="flex-1 relative text-slate-600 rounded-md overflow-hidden">
+            <div className="flex-1 relative text-slate-600 rounded-md overflow-hidden w-full">
                 <CiSearch
                     size={"1.5em"}
                     className='absolute left-0 top-3 cursor-pointer'

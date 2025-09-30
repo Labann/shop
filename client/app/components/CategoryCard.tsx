@@ -9,7 +9,6 @@ const CategoryCard = ({category, img}:{
     <div 
         className={`relative  bg-cover h-[18em] w-[20em] rounded-md overflow-hidden`}
         style={{ backgroundImage: `url(${img})` }}
-
         >
         
         <p className="absolute bottom-0 p-2 text-white text-xl left-0 w-full rounded-t-md bg-black/80">
