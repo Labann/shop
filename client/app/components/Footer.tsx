@@ -4,7 +4,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 const Footer  = () => {
     return (
-        <div className="bg-primary text-white p-4">
+        <div className="bg-primary py-3 text-white p-4">
             <div className="grid grid-cols-3 md:grid-cols-4 max-w-7xl mx-auto justify-items-center gap-7 py-10">
                 <div className="flex flex-col space-y-3 col-span-3 md:col-span-1">
                     <div className="">
@@ -44,7 +44,7 @@ const Footer  = () => {
                     <p>0793712929</p>
                 </div>
             </div>
-            <div className="text-center border-t border-slate-100">
+            <div className="text-center border-t border-slate-100 py-4">
                 <p>© 2025 SOKONI. All Rights Reserved</p>
             </div>
         </div>
