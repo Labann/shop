@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { IoCloseSharp } from "react-icons/io5";
 const Navbar = () => {
     const [isMenu, setIsMenu] = useState(false);    
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState(true);
   return (
     <div className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
         {
@@ -60,21 +60,21 @@ const Navbar = () => {
 
 
         {isLogin? <div className="flex items-center space-x-3">
-            <div className="relative cursor-pointer">
+            <Link href="/cart" className="relative cursor-pointer">
                 <IoCartOutline 
                     size={"1.5em"}
                     className='font-bold'
                     />
                 <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>2</span>
-            </div>
+            </Link>
             
-            <div className="relative cursor-pointer">
+            <Link href={"/wishlist"} className="relative cursor-pointer">
                 <MdOutlineFavoriteBorder 
                     size={"1.5em"}
                     className='font-bold'
                     />
                 <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>2</span>
-            </div>
+            </Link>
             
             <Link href={"/profile"}>
                 <GoPerson 
