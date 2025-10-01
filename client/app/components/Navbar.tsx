@@ -22,9 +22,9 @@ const Navbar = () => {
                         Home
                     </Link>
                     <Link 
-                        href={"/about-us"}
+                        href={"/shop/create-shop"}
                         className='hover:text-black'
-                        >About us</Link>
+                        >Create shop</Link>
                     <Link href={"/contact-us"} className='hover:text-black'>Contact us</Link>
                 </div>
             )
@@ -54,7 +54,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center space-x-4 md:text-xl font-bold">
             <Link href={"/"}>Home</Link>
-            <Link href={"/about-us"}>About us</Link>
+            <Link href={"/shop/create-shop"}>Create shop</Link>
             <Link href={"/contact-us"}>Contact us</Link>
         </div>
 

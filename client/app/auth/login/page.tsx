@@ -5,7 +5,7 @@ import { GoEye } from "react-icons/go";
 import Image from 'next/image'
 import Link from 'next/link';
 import { FcGoogle } from "react-icons/fc";
-import Footer from '@/app/components/Footer';
+
 import { useFormik } from 'formik';
 import * as yup from "yup"
 const Login = () => {
@@ -97,7 +97,7 @@ const Login = () => {
         </div>
         
     </div>
-    <Footer/>
+    
     </>
     
   )

@@ -5,21 +5,25 @@ import { GoEye } from "react-icons/go";
 import Image from 'next/image'
 import Link from 'next/link';
 import { FcGoogle } from "react-icons/fc";
-import Footer from '@/app/components/Footer';
+
 import { useFormik } from 'formik';
 import * as yup from "yup"
 
 
 const SignUp = () => {
     const [isSeen, setIsSeen] = useState(false);
+    const [isSeenConfirm, setIsSeenConfirm] = useState(false);
     const schema = yup.object({
         firstName: yup.string().min(3).required(),
         lastName: yup.string().min(3).required(),
         email: yup.string().email("invalid format").required(),
-        password: yup.string().min(3).required()
+        password: yup.string().min(3).required(),
+        confirm: yup.string()
+            .oneOf([yup.ref("password")], "Password must match").required()
+
     })
     const formik = useFormik({
-        initialValues: {email: "", password: "", firstName: "", lastName: ""},
+        initialValues: {email: "", password: "", firstName: "", lastName: "", confirm: ""},
         onSubmit: () => console.log("submitted"),
         validationSchema: schema
     })
@@ -107,8 +111,35 @@ const SignUp = () => {
                                 className='right-2 top-13  absolute cursor-pointer'
                                 onClick={()=> setIsSeen(!isSeen)}
                                 />: <GoEyeClosed 
-                                    className='right-2 top-12  absolute cursor-pointer'
+                                    className='right-2 top-13  absolute cursor-pointer'
                                      onClick={()=> setIsSeen(!isSeen)}
+                                />
+                        }
+                    </div>
+
+                    <div className="flex flex-col relative space-y-2">
+                        <label htmlFor="confirm" className='text-primary font-semibold'>confirm password</label>
+                        <input 
+                            type={isSeenConfirm? "text": "password"} 
+                            placeholder='Confirm password'
+                            name='confirm'
+                            value={formik.values.confirm}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className='w-full p-2 border-1 border-primary rounded-md'
+                            />
+                        {
+                            formik.errors.confirm && formik.touched.confirm && (
+                                <h4 className='text-red-600 text-xs'>{formik.errors.confirm}</h4>
+                            )
+                        }
+                        {
+                            isSeenConfirm? <GoEye 
+                                className='right-2 top-13  absolute cursor-pointer'
+                                onClick={()=> setIsSeenConfirm(!isSeenConfirm)}
+                                />: <GoEyeClosed 
+                                    className='right-2 top-13  absolute cursor-pointer'
+                                     onClick={()=> setIsSeenConfirm(!isSeenConfirm)}
                                 />
                         }
                     </div>
@@ -132,7 +163,7 @@ const SignUp = () => {
             </div>
             
         </div>
-        <Footer/>
+        
         </>
   )
 }
