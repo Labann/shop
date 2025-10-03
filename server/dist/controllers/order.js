@@ -173,7 +173,9 @@ export const getOrdersInMyShop = async (req, res) => {
                 user: {
                     select: {
                         id: true,
-                        fullname: true,
+                        firstName: true,
+                        lastName: true,
+                        username: true,
                         email: true,
                     },
                 },
