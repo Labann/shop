@@ -4,6 +4,8 @@ import { FiDatabase } from "react-icons/fi";
 import Image from "next/image";
 import { BsGraphUpArrow  } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
+import { useState } from "react";
+import AddProductModal from "../components/AddProductModal";
 const Dashboard = () => {
 
     const data = [
@@ -23,8 +25,14 @@ const Dashboard = () => {
             id: 5
         }
     ]
+    const [isAddProduct, setIsAddProduct] = useState<boolean>(false);
     return (
-        <div className="">
+        <div className="relative">
+            {
+                isAddProduct && (
+                    <AddProductModal setIsAddProduct={setIsAddProduct}/>
+                )
+            }
             <div className="grid grid-cols-3 gap-3">
                 <div className="rounded-md p-3 bg-primary cursor-pointer flex flex-col space-y-5">
                     <div className="flex items-center justify-between">
@@ -71,7 +79,7 @@ const Dashboard = () => {
             <div className="rounded-t bg-gray-200 w-full overflow-x-scroll">
                 <div className="flex justify-between p-3 items-center w-full rounded-t">
                     <h3 className="font-semibold text-xl">Product List</h3>
-                    <button className="bg-primary cursor-pointer px-3 py-2 text-white rounded">Add new Product</button>
+                    <button className="bg-primary cursor-pointer px-3 py-2 text-white rounded" onClick={()=> setIsAddProduct(true)}>Add new Product</button>
                 </div>
                 <table className="w-full">
                     <thead className=" bg-white ">

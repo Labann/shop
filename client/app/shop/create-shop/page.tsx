@@ -122,9 +122,9 @@ const CreateShop = () => {
                                 />
                             
                             {
-                                formik.touched.location && formik.errors.location &&
+                                formik.touched.logo && formik.errors.logo &&
                                 (<h4 className='text-red-600 text-xs'>
-                                    {formik.errors.location}
+                                    {formik.errors.logo}
                                 </h4>)
                             }
                             
