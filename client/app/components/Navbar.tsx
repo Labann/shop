@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaBars } from "react-icons/fa";
 import { IoCartOutline } from "react-icons/io5";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
@@ -7,11 +7,29 @@ import { GoPerson } from "react-icons/go";
 import Image from "next/image"
 import Link from 'next/link';
 import { IoCloseSharp } from "react-icons/io5";
-import { useAppSelector } from '../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { logout, reset } from '../store/authSlice';
+import Spinner from './Spinner';
+import { toast } from 'react-toastify';
 const Navbar = () => {
-    const [isMenu, setIsMenu] = useState(false);    
-    const {currentUser} = useAppSelector(state => state.auth);
-  return (
+    const [isMenu, setIsMenu] = useState(false);
+    const dispatch = useAppDispatch();    
+    const {currentUser, isLoading, isSuccess, isError, message} = useAppSelector(state => state.auth);
+    useEffect(()=>{
+        if(isSuccess){
+            toast.success("logged out!")
+            return
+        }
+        if(isError){
+            toast.error(message);
+            return
+        }
+
+        return () => {
+            dispatch(reset())
+        }
+    }, [dispatch, isError, isSuccess, message])
+    return (
     <div className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
         {
             isMenu && (
@@ -27,6 +45,14 @@ const Navbar = () => {
                         className='hover:text-black'
                         >Create shop</Link>
                     <Link href={"/contact-us"} className='hover:text-black'>Contact us</Link>
+                    {currentUser && currentUser.role === "VENDOR" && <Link href={"/dashboard/vendors/"}>Vendors</Link>}
+                    {
+                        currentUser && <button 
+                        onClick={()=> dispatch(logout())}
+                        className='bg-primary p-1 cursor-pointer rounded-md text-sm'>
+                            {isLoading? <Spinner/>:  "Logout"}
+                        </button>
+                    }
                 </div>
             )
         }
@@ -57,9 +83,10 @@ const Navbar = () => {
             <Link href={"/"}>Home</Link>
             <Link href={"/shop/create-shop"}>Create shop</Link>
             <Link href={"/contact-us"}>Contact us</Link>
+            {currentUser && currentUser.role === "VENDOR" && <Link href={"/dashboard/vendors/"}>Vendors</Link>}
         </div>
 
-
+            
         {currentUser? <div className="flex items-center space-x-3">
             <Link href="/cart" className="relative cursor-pointer">
                 <IoCartOutline 

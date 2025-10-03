@@ -78,6 +78,33 @@ export const signup = createAsyncThunk<
     }
 })
 
+export const logout = createAsyncThunk
+<
+    {message: string},
+    void,
+    {rejectValue: string}
+>("/auth/logout", async (_, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/user/logout`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            credentials: "include"
+        });
+
+        const data = await res.json();
+
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error);
+        }
+        localStorage.removeItem("user");
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message);
+    }
+})
 
 const authSlice = createSlice({
     name: "auth",
@@ -118,6 +145,19 @@ const authSlice = createSlice({
                 state.currentUser = action.payload
             })
             .addCase(signup.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload as string
+            })
+            .addCase(logout.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.currentUser = null
+            })
+            .addCase(logout.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload as string

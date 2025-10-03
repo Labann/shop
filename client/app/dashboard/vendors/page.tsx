@@ -5,7 +5,7 @@ import Image from "next/image";
 import { BsGraphUpArrow  } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 import { useState } from "react";
-import AddProductModal from "../components/AddProductModal";
+import AddProductModal from "../../components/AddProductModal";
 const Dashboard = () => {
 
     const data = [

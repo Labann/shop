@@ -118,7 +118,9 @@ export const logout: express.RequestHandler = async (req, res) => {
             maxAge: 0
         })
 
-        return res.sendStatus(200);
+        return res.status(200).json({
+            message: "logged out successfully"
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
