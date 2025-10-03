@@ -1,18 +1,18 @@
-type User = {
+export type IUser = {
   id :string  
   username :string 
   fullname :string 
   email :string 
   password :string 
   role :string
-  shops: Shop[]
-  orders: Order[]
-  cart: Cart 
+  shops: IShop[]
+  orders: IOrder[]
+  cart: ICart 
   createdAt: Date
   updatedAt: Date
 }
 
-type Product = {
+export type IProduct = {
   id :string  
   name :string
   description :string
@@ -20,51 +20,51 @@ type Product = {
   images :string[]
   category :string
   stock: number
-  shop: Shop 
+  shop: IShop 
   shopId :string
-  order: OrderItem[]
-  cartItems: CartItem[]
+  order: IOrderItem[]
+  cartItems: ICartItem[]
   createdAt: Date
   updatedAt: Date
 }
-type JSONValue =
+export type IJSONValue =
   | string
   | number
   | boolean
   | null
-  | { [key: string]: JSONValue }
-  | JSONValue[];
+  | { [key: string]: IJSONValue }
+  
 
-type Shop = {
+export type IShop = {
   id :string  
   name :string 
   description :string
   logo :string | null
   category :string
-  owner :User 
-  products: Product[]
+  owner : IUser 
+  products: IProduct[]
   userId  :string
   location :string | null
-  transaction_details: JSONValue
+  transaction_details: IJSONValue
   status :string
   createdAt: Date
   updatedAt: Date
 }
 
-type Order = {
+export type IOrder = {
   id :string  
   status   :string
-  items:  OrderItem[]
-  user :  User
+  items:  IOrderItem[]
+  user :  IUser
   userId :string
-  payment:  Payment
+  payment:  IPayment
   createdAt: Date
   updatedAt: Date
 }
 
-type Payment = {
+export type IPayment = {
   id :string  
-  order: Order 
+  order: IOrder 
   orderId :string 
   method:  string
   status: string 
@@ -83,35 +83,35 @@ type Payment = {
   cardHolderName      :string| null       // Name on the card
 
   // ===== Shared =====
-  rawCallback:        JSONValue| null         // Full raw response or callback
+  rawCallback:        IJSONValue| null         // Full raw response or callback
 
   createdAt: Date
   updatedAt: Date
 }
 
-type OrderItem = {
+export type IOrderItem = {
   id :string 
-  order : Order 
+  order : IOrder 
   orderId :string
   quantity : number
-  product :Product 
+  product : IProduct 
   productId :string
   createdAt :Date 
   updatedAt :Date 
 }
-type Cart = {
+export type ICart = {
    id        :string   
   userId    :string    
-  user      :User      
-  items     :CartItem[]
+  user      : IUser      
+  items     : ICartItem[]
   createdAt :Date  
   updatedAt :Date  
 }
-type CartItem = {
+export type ICartItem = {
   id        :string    
   cartId    :string
-  cart      : Cart      
-  product   : Product   
+  cart      : ICart      
+  product   : IProduct   
   quantity  : number       
   createdAt :Date 
   updatedAt : Date 
