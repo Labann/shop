@@ -12,7 +12,7 @@ export const applyForShop: express.RequestHandler = async (req, res) => {
         location,
         
     }: Shop= req.body
-
+    
     const file = req.file as Express.Multer.File
     if(!file) return res.status(400).json({
         error: "bad request logo is a must"
@@ -21,6 +21,7 @@ export const applyForShop: express.RequestHandler = async (req, res) => {
     let logoUrl    
 
     try {
+        
         if(!name || !description || !category || !location || !file){
             return res.status(400).json({
                 error: "bad request"

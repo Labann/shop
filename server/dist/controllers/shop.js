@@ -12,6 +12,8 @@ export const applyForShop = async (req, res) => {
     let logoImg;
     let logoUrl;
     try {
+        console.log(req.body);
+        console.log(file);
         if (!name || !description || !category || !location || !file) {
             return res.status(400).json({
                 error: "bad request"

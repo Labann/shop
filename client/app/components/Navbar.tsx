@@ -7,9 +7,10 @@ import { GoPerson } from "react-icons/go";
 import Image from "next/image"
 import Link from 'next/link';
 import { IoCloseSharp } from "react-icons/io5";
+import { useAppSelector } from '../hooks/redux';
 const Navbar = () => {
     const [isMenu, setIsMenu] = useState(false);    
-    const [isLogin, setIsLogin] = useState(true);
+    const {currentUser} = useAppSelector(state => state.auth);
   return (
     <div className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
         {
@@ -59,7 +60,7 @@ const Navbar = () => {
         </div>
 
 
-        {isLogin? <div className="flex items-center space-x-3">
+        {currentUser? <div className="flex items-center space-x-3">
             <Link href="/cart" className="relative cursor-pointer">
                 <IoCartOutline 
                     size={"1.5em"}

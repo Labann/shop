@@ -46,7 +46,6 @@ export const login = async (req, res) => {
 };
 export const signup = async (req, res) => {
     const { firstName, lastName, email, password, username, } = req.body;
-    console.log(req.body);
     try {
         if (!firstName || !lastName || !email || !password || !username) {
             return res.status(400).json({

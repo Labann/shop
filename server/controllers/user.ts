@@ -65,7 +65,7 @@ export const signup: express.RequestHandler = async (req, res) => {
         password,
         username,
     }: User = req.body;
-    console.log(req.body)
+   
     try {
         if(!firstName || !lastName || !email || !password || !username){
             return res.status(400).json({

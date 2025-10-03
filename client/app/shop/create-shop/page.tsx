@@ -1,9 +1,33 @@
 "use client"
+import Spinner from '@/app/components/Spinner'
+import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
+import { applyShop, reset } from '@/app/store/shopSlice'
 import { useFormik } from 'formik'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useRef } from 'react'
+import { toast } from 'react-toastify'
 import * as yup from "yup"
 const CreateShop = () => {
-  const schema = yup.object({
+    const {isLoading, isSuccess, isError, message} = useAppSelector(state => state.shop);
+    const dispatch = useAppDispatch();
+    
+    useEffect(()=>{
+        if(isSuccess){
+            toast.success("applied for shop successfully, await admin approval")
+            return
+        }
+
+        if(isError){
+            toast.error(message)
+            return
+        }
+
+        return () => {
+            dispatch(reset())
+        }
+
+    }, [dispatch, isSuccess, isError, message])
+    const schema = yup.object({
     name: yup.string().min(3).required(),
     description: yup.string().min(15).required(),
     category: yup.string().required(),
@@ -20,14 +44,31 @@ const CreateShop = () => {
           return file.size <= 2 * 1024 * 1024;
         }),
   })
+  
+  const fileRef = useRef<HTMLInputElement | null>(null);
   const formik = useFormik({
     initialValues: {name: "", description: "", category: "", location: "", logo: null as File | null},
-    onSubmit: () => console.log("submit"),
+    onSubmit: async (values) => {
+        const formData = new FormData();
+
+        for(const key in values){
+            const typedKey = key as keyof typeof values
+            const val = values[typedKey];
+            formData.append(typedKey, val instanceof File ? val : String(val));
+        }
+        
+        await dispatch(applyShop(formData));
+        if (fileRef.current) {
+            fileRef.current.value = ""; 
+        }
+        formik.resetForm();
+    },
     validationSchema: schema
   })
+
   return (
     <>
-      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 py-10'>
+      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 py-10 px-4'>
         <div className="w-lg bg-[url('/auth.png')] hidden lg:block bg-cover h-[50vh] self-center rounded-md">
             
         </div>
@@ -35,7 +76,7 @@ const CreateShop = () => {
         <div className="max-w-lg mx-auto md:col-span-2 lg:col-span-1 flex flex-col w-full">
                     <h1 className='font-bold md:text-3xl text-center md:text-left py-4'>{"Let's create your seller account"}</h1>
                     <br />
-                    <h4 className='text-sm'>Account information</h4>
+                    <h4 className='text-sm text-center md:text-left'>Account information</h4>
                     <br />
 
                     <form onSubmit={formik.handleSubmit} className='flex flex-col  space-y-3' action="">
@@ -108,7 +149,7 @@ const CreateShop = () => {
                                 accept='image/*'
                                 placeholder='logo'
                                 name='logo'
-
+                                ref={fileRef}
                                 onChange={(e)=> {
                                   if (!e.currentTarget.files) return; 
                                   formik.setFieldValue(
@@ -155,7 +196,7 @@ const CreateShop = () => {
                             <span className='text-primary text-sm'>By signing up, I agree with the terms and conditions</span>
                         </div>
 
-                        
+                        <button type="submit" className='w-full p-3 bg-primary rounded text-white cursor-pointer'>{isLoading? <Spinner/>: "apply for shop"}</button>
                     </form>
                 </div>
       </div>
