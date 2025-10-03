@@ -12,9 +12,10 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks/redux';
 import { login, reset } from '@/app/store/authSlice';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/app/components/Spinner';
 const Login = () => {
     const dispatch = useAppDispatch();
-    const {isSuccess, isError, message} = useAppSelector(state => state.auth);
+    const {isSuccess, isError, message, isLoading} = useAppSelector(state => state.auth);
     const [isSeen, setIsSeen] = useState(false);
     const router = useRouter(); 
     useEffect(()=>{
@@ -102,7 +103,8 @@ const Login = () => {
                     <input type="checkbox" placeholder='checkbox' className='cursor-pointer'/>
                     <span className='text-primary text-sm'>Forgot Password</span>
                 </div>
-                <button className='w-full bg-gray-300 p-3 cursor-pointer rounded text-sm'>Sign in</button>
+
+                <button className='w-full bg-gray-300 p-3 cursor-pointer rounded text-sm'>{isLoading? <Spinner/>: "Sign in"}</button>
 
                 <span className='text-center text-sm'>or</span>
                 

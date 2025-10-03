@@ -12,11 +12,12 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks/redux';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { reset, signup } from '@/app/store/authSlice';
+import Spinner from '@/app/components/Spinner';
 
 
 const SignUp = () => {
     const dispatch = useAppDispatch();
-    const {isSuccess, isError, message} = useAppSelector(state => state.auth);
+    const {isSuccess, isError, message, isLoading} = useAppSelector(state => state.auth);
     const router = useRouter(); 
     const [isSeen, setIsSeen] = useState(false);
     const [isSeenConfirm, setIsSeenConfirm] = useState(false);
@@ -188,7 +189,8 @@ const SignUp = () => {
                         <input type="checkbox" placeholder='checkbox' className='cursor-pointer'/>
                         <span className='text-primary text-sm'>Forgot Password</span>
                     </div>
-                    <button className='w-full bg-gray-300 cursor-pointer rounded p-3 text-sm'>Sign in</button>
+                    
+                    <button className='w-full bg-gray-300 cursor-pointer rounded p-3 text-sm'>{isLoading? <Spinner/>: "Sign up"}</button>
     
                     <span className='text-center text-sm'>or</span>
                     

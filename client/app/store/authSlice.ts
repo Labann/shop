@@ -97,7 +97,7 @@ const authSlice = createSlice({
     extraReducers: (builder => {
         builder
             .addCase(login.pending, (state) => {
-                state.isLoading = false
+                state.isLoading = true
             })
             .addCase(login.fulfilled,(state, action) => {
                 state.isLoading = false
@@ -110,7 +110,7 @@ const authSlice = createSlice({
                 state.message = action.payload as string
             } )
             .addCase(signup.pending, (state) => {
-                state.isLoading = false
+                state.isLoading = true
             })
             .addCase(signup.fulfilled,(state, action) => {
                 state.isLoading = false
