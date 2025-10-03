@@ -59,13 +59,15 @@ export const login: express.RequestHandler = async (req, res) =>{
 
 export const signup: express.RequestHandler = async (req, res) => {
     const {
-        fullname,
+        firstName,
+        lastName,
         email,
         password,
         username,
     }: User = req.body;
+    console.log(req.body)
     try {
-        if(!fullname || !email || !password || !username){
+        if(!firstName || !lastName || !email || !password || !username){
             return res.status(400).json({
                 error: "bad request"
             })
@@ -88,7 +90,8 @@ export const signup: express.RequestHandler = async (req, res) => {
         const newUser = await prisma.user.create({
             data: {
                 username,
-                fullname,
+                firstName,
+                lastName,
                 password: passwordHashed,
                 email
             }

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoEyeClosed } from "react-icons/go";
 import { GoEye } from "react-icons/go";
 import Image from 'next/image'
@@ -8,23 +8,46 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useFormik } from 'formik';
 import * as yup from "yup"
+import { useAppDispatch, useAppSelector } from '@/app/hooks/redux';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { reset, signup } from '@/app/store/authSlice';
 
 
 const SignUp = () => {
+    const dispatch = useAppDispatch();
+    const {isSuccess, isError, message} = useAppSelector(state => state.auth);
+    const router = useRouter(); 
     const [isSeen, setIsSeen] = useState(false);
     const [isSeenConfirm, setIsSeenConfirm] = useState(false);
+    useEffect(()=>{
+            if(isError){
+                toast.error(message)
+                return
+            }
+            if(isSuccess){
+                router.push("/")
+                return
+            }
+    
+            return () => {
+                dispatch(reset())
+            }
+        }, [isSuccess, isError,  dispatch, message, router])
     const schema = yup.object({
         firstName: yup.string().min(3).required(),
         lastName: yup.string().min(3).required(),
         email: yup.string().email("invalid format").required(),
         password: yup.string().min(3).required(),
+        username: yup.string().min(3).required(),
         confirm: yup.string()
             .oneOf([yup.ref("password")], "Password must match").required()
 
     })
+    
     const formik = useFormik({
-        initialValues: {email: "", password: "", firstName: "", lastName: "", confirm: ""},
-        onSubmit: () => console.log("submitted"),
+        initialValues: {email: "", password: "", firstName: "", lastName: "", confirm: "", username: ""},
+        onSubmit: (values) => dispatch(signup(values)),
         validationSchema: schema
     })
   return (
@@ -86,6 +109,23 @@ const SignUp = () => {
                             />
                         {
                             formik.errors.email && formik.touched.email && (
+                                <h4 className='text-xs text-red-600'>{formik.errors.email}</h4>
+                            )
+                        }
+                    </div>
+                    <div className="flex flex-col space-y-2">
+                        <label htmlFor="username" className='text-primary font-semibold'>username</label>
+                        <input 
+                            type="text" 
+                            placeholder='Username'
+                            name="username"
+                            onChange={formik.handleChange}
+                            value={formik.values.username}
+                            onBlur={formik.handleBlur}
+                            className='w-full p-2 border-1 border-primary rounded-md'
+                            />
+                        {
+                            formik.errors.username && formik.touched.username && (
                                 <h4 className='text-xs text-red-600'>{formik.errors.email}</h4>
                             )
                         }

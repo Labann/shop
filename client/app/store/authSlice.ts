@@ -29,7 +29,7 @@ export const login = createAsyncThunk<
         if(data.error){
             return thunkApi.rejectWithValue(data.error);
         }
-
+        localStorage.setItem("user" ,JSON.stringify(data))
         return data;
     } catch (error) {
         console.error(error);
@@ -46,7 +46,13 @@ const initialState: IInitialState = {
 
 export const signup = createAsyncThunk<
     IUser,
-    {email: string, password: string, fullname: string, username: string},
+    {
+        email: string, 
+        password: string, 
+        firstName: string, 
+        lastName: string, 
+        username: string , 
+        confirm: string},
     {rejectValue: string}
 >("/auth/signup", async (user, thunkApi) => {
     try {
@@ -64,7 +70,7 @@ export const signup = createAsyncThunk<
         if(data.error){
             return thunkApi.rejectWithValue(data.error);
         }
-
+        localStorage.setItem("user" ,JSON.stringify(data))
         return data;
     } catch (error) {
         console.error(error);
@@ -72,42 +78,21 @@ export const signup = createAsyncThunk<
     }
 })
 
-export const getProfile = createAsyncThunk<
-    IUser,
-    {username: string},
-    {rejectValue: string}
->("/user/profile", async (username, thunkApi) => {
-    try {
-        const res = await fetch(`${apiUrl}/user/profile`, {
-            method: "GET",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(username)
-        });
-        const data = await res.json();
 
-        if(data.error){
-            return thunkApi.rejectWithValue(data.error)
-        }
-
-        return data
-    } catch (error) {
-        console.error(error);
-        return thunkApi.rejectWithValue((error as Error).message);
-    }
-})
 const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
         reset: (state) => {
-            state.currentUser = null
             state.isLoading = false
             state.isSuccess = false
             state.isError = false
             state.message = ""
         },
+        setUser(state, action){
+            console.log("set user executed", action.payload)
+            state.currentUser = action.payload
+        }
     },
     extraReducers: (builder => {
         builder
@@ -142,5 +127,5 @@ const authSlice = createSlice({
 
 
 
-export const { reset} = authSlice.actions;
+export const { reset, setUser} = authSlice.actions;
 export default authSlice.reducer

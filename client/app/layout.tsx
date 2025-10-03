@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from '@/app/components/Footer';
 import { headers } from "next/headers";
 import DashboardNav from "./components/DashboardNav";
+import Providers from "./components/Providers";
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300','400','500','600','700'],
@@ -34,12 +35,15 @@ export default async function RootLayout({
       <body
         className={`${poppins.variable} antialiased`}
       >
-        {
-          path === "/dashboard"? 
-          <DashboardNav/>: <Navbar/>
-        }
-        {children}
-        <Footer/>
+        <Providers>
+            {
+            path === "/dashboard"? 
+            <DashboardNav/>: <Navbar/>
+          }
+          {children}
+          <Footer/>
+        </Providers>
+        
       </body>
     </html>
   );

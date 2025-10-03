@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoEyeClosed } from "react-icons/go";
 import { GoEye } from "react-icons/go";
 import Image from 'next/image'
@@ -8,9 +8,29 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useFormik } from 'formik';
 import * as yup from "yup"
+import { useAppDispatch, useAppSelector } from '@/app/hooks/redux';
+import { login, reset } from '@/app/store/authSlice';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 const Login = () => {
+    const dispatch = useAppDispatch();
+    const {isSuccess, isError, message} = useAppSelector(state => state.auth);
     const [isSeen, setIsSeen] = useState(false);
-    
+    const router = useRouter(); 
+    useEffect(()=>{
+        if(isError){
+            toast.error(message)
+            return
+        }
+        if(isSuccess){
+            router.push("/")
+            return
+        }
+
+        return () => {
+            dispatch(reset())
+        }
+    }, [isSuccess, isError,  dispatch, message, router])
     const schema = yup.object({
         email: yup.string().email("Invalid format").required(),
         password: yup.string().min(3).max(20).required()
@@ -18,7 +38,7 @@ const Login = () => {
 
     const formik = useFormik({
         initialValues: {email: "", password: ""},
-        onSubmit: () => console.log("submit"),
+        onSubmit: async (values) => await dispatch(login(values)),
         validationSchema: schema,
     })
   return (
