@@ -17,7 +17,7 @@ import Spinner from '@/app/components/Spinner';
 
 const SignUp = () => {
     const dispatch = useAppDispatch();
-    const {isSuccess, isError, message, isLoading} = useAppSelector(state => state.auth);
+    const {isSuccess, isError, currentUser,  message, isLoading} = useAppSelector(state => state.auth);
     const router = useRouter(); 
     const [isSeen, setIsSeen] = useState(false);
     const [isSeenConfirm, setIsSeenConfirm] = useState(false);
@@ -26,7 +26,8 @@ const SignUp = () => {
                 toast.error(message)
                 return
             }
-            if(isSuccess){
+            if(isSuccess && currentUser){
+                toast.success("use created successfully")
                 router.push("/")
                 return
             }

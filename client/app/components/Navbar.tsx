@@ -6,29 +6,37 @@ import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { GoPerson } from "react-icons/go";
 import Image from "next/image"
 import Link from 'next/link';
+import { FaChevronDown } from "react-icons/fa";
+import { FaChevronUp } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { reset as shopReset } from '../store/shopSlice';
 import { logout, reset } from '../store/authSlice';
 import Spinner from './Spinner';
 import { toast } from 'react-toastify';
+import { getMyShops } from '../store/shopSlice';
 const Navbar = () => {
     const [isMenu, setIsMenu] = useState(false);
     const dispatch = useAppDispatch();    
+    const {myShops} = useAppSelector(state => state.shop);
+    
+    const [isShowShops, setIsShowShops] = useState(false);
     const {currentUser, isLoading, isSuccess, isError, message} = useAppSelector(state => state.auth);
     useEffect(()=>{
-        if(isSuccess){
+        if(isSuccess && !currentUser){
             toast.success("logged out!")
             return
         }
-        if(isError){
-            toast.error(message);
+        
+        if(currentUser && currentUser.role == "VENDOR"){
+            dispatch(getMyShops({userId: currentUser.id}))
             return
         }
-
         return () => {
-            dispatch(reset())
+            dispatch(reset());
+            dispatch(shopReset())
         }
-    }, [dispatch, isError, isSuccess, message])
+    }, [dispatch, isError, isSuccess, message, currentUser])
     return (
     <div className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
         {
@@ -36,16 +44,42 @@ const Navbar = () => {
                 <div className='absolute top-26 left-0 z-50 md:hidden text-white bg-primary/30 flex flex-col space-y-2 p-2 py-3 font-bold rounded-r-md'>
                     <Link 
                         href={"/"} 
-                        className='hover:text-black'
+                        className='hover:font-normal'
                         >
                         Home
                     </Link>
                     <Link 
                         href={"/shop/create-shop"}
-                        className='hover:text-black'
+                        className='hover:font-normal'
                         >Create shop</Link>
-                    <Link href={"/contact-us"} className='hover:text-black'>Contact us</Link>
-                    {currentUser && currentUser.role === "VENDOR" && <Link href={"/dashboard/vendors/"}>Vendors</Link>}
+                    <Link href={"/contact-us"} className='hover:font-normal'>Contact us</Link>
+                    {
+                        currentUser && currentUser.role === "VENDOR" &&  (
+                            myShops.length !== 0  && <div className="flex flex-col relative">
+                                <h5 className='flex space-x-2 items-center'>
+                                    <span>shops - <span className='text-sm'>{myShops.length}</span></span>
+                                    {
+                                        isShowShops ? <FaChevronUp 
+                                            className='text-sm cursor-pointer'
+                                            onClick={()=> setIsShowShops(!isShowShops)}
+                                            />: <FaChevronDown 
+                                            className='text-sm cursor-pointer'
+                                            onClick={()=> setIsShowShops(!isShowShops)}
+                                            />
+                                        }
+                                </h5>
+                                {isShowShops && <ul className='border-l border-white bg-primary/30 text-white min-w-20 p-2 text-sm  flex space-y-3'>
+                                    
+                                        { myShops.map(shop => 
+                                            <li key={shop.id}>
+                                                <Link onClick={()=> setIsShowShops(!isShowShops)} href={`/dashboard/vendors/${shop.id}`} className='hover:font-extrabold text-center'>{shop.name}</Link>
+                                            </li>
+                                        )}
+                                    
+                                </ul>}
+                            </div>
+                            
+                    )}
                     {
                         currentUser && <button 
                         onClick={()=> dispatch(logout())}
@@ -83,7 +117,32 @@ const Navbar = () => {
             <Link href={"/"}>Home</Link>
             <Link href={"/shop/create-shop"}>Create shop</Link>
             <Link href={"/contact-us"}>Contact us</Link>
-            {currentUser && currentUser.role === "VENDOR" && <Link href={"/dashboard/vendors/"}>Vendors</Link>}
+            {currentUser && currentUser.role === "VENDOR" && (
+                myShops.length !== 0  && <div className="flex flex-col relative">
+                    <h5 className='flex space-x-2 items-center'>
+                        <span>shops - <span className='text-sm'>{myShops.length}</span></span>
+                        {
+                            isShowShops? <FaChevronUp 
+                                className='text-sm cursor-pointer'
+                                onClick={()=> setIsShowShops(!isShowShops)}
+                                />: <FaChevronDown 
+                                className='text-sm cursor-pointer'
+                                onClick={()=> setIsShowShops(!isShowShops)}
+                                />
+                            }
+                    </h5>
+                    {isShowShops && <ul className='border-l border-white bg-primary/30 text-white min-w-20 p-2 text-sm  flex space-y-3 absolute top-7'>
+                        
+                           { myShops.map(shop => 
+                                <li key={shop.id}>
+                                    <Link onClick={()=> setIsShowShops(!isShowShops)} href={`/dashboard/vendors/${shop.id}`} className='hover:font-extrabold text-center'>{shop.name}</Link>
+                                </li>
+                            )}
+                        
+                    </ul>}
+                </div>
+                
+            )}
         </div>
 
             

@@ -41,6 +41,7 @@ export const protect: express.RequestHandler = async (req, res, next) => {
         })
 
         if(!user){
+            console.log("the error is here")
             return res.status(404).json({
                 error: 'user not found'
             })

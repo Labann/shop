@@ -91,7 +91,9 @@ export const logout = async (req, res) => {
             sameSite: "strict",
             maxAge: 0
         });
-        return res.sendStatus(200);
+        return res.status(200).json({
+            message: "logged out successfully"
+        });
     }
     catch (error) {
         console.error(error);

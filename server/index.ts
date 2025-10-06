@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(morgan("dev"))
 dotenv.config();
 
-app.use(errorHandler)
+//app.use(errorHandler)
 app.use("/api/user", authRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/product", productRoutes)

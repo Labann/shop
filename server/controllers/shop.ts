@@ -273,15 +273,15 @@ export const getAllShops: express.RequestHandler = async (req, res) => {
 }
 
 export const getMyShops: express.RequestHandler = async (req, res) => {
-    
+    const {userId} = req.params;
     try {
-        const user = req.user as User
-        
-        await checkUser(user);
+        if(!userId) return res.status(400).json({
+            error: "bad request"
+        })
 
         const shops = await prisma.shop.findMany({
             where: {
-                userId: user.id
+                userId: userId
             }
         });
 

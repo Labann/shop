@@ -90,16 +90,36 @@ export const deleteProduct = async (req, res) => {
                 id: productId
             }
         });
-        if (!productExist)
+        if (!productExist) {
+            console.log("here is the error");
             return res.status(404).json({
                 error: "product does not exist in the database"
             });
+        }
         const deletedProduct = await prisma.product.delete({
             where: {
                 id: productId
             }
         });
         return res.status(200).json({ deletedProduct, message: "deleted" });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+export const getAllProducts = async (req, res) => {
+    try {
+        const products = await prisma.product.findMany({});
+        if (products.length === 0) {
+            console.log("here is the error");
+            return res.status(404).json({
+                error: "no products found"
+            });
+        }
+        return res.status(200).json(products);
     }
     catch (error) {
         console.error(error);

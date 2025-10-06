@@ -7,8 +7,10 @@ export const checkUser = async (user) => {
                 id: user.id
             }
         });
-        if (!validUser)
+        if (!validUser) {
+            console.log("the error is in check user");
             throw Error("user not found");
+        }
     }
     catch (error) {
         console.error(error);

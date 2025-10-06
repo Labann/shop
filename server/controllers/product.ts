@@ -15,10 +15,13 @@ export const addProduct: express.RequestHandler = async (req, res) => {
     const files = req.files as Express.Multer.File[]
 
     const {shopId} = req.params;
+    if(!shopId) return res.status(400).json({
+        error: "shop id is required"
+    })
     try {
         if(!name || !description 
             || !price || !category || !stock 
-            || !shopId || files.length === 0){
+            || files.length === 0){
             return res.status(400).json({
                 error: "bad request"
             })
@@ -42,7 +45,7 @@ export const addProduct: express.RequestHandler = async (req, res) => {
 
         res.status(201).json(newProduct)
     } catch (error) {
-        console.error(error);
+        
         return res.status(500).json({
             error: (error as Error).message
         })
@@ -118,10 +121,13 @@ export const deleteProduct: express.RequestHandler = async (req, res) => {
             }
         })
 
-        if(!productExist) return res.status(404).json({
-            error: "product does not exist in the database"
-        })
-
+        if(!productExist){
+            
+            return res.status(404).json({
+                
+                error: "product does not exist in the database"
+            })
+        }
 
         const deletedProduct = await prisma.product.delete({
             where:{
@@ -138,8 +144,28 @@ export const deleteProduct: express.RequestHandler = async (req, res) => {
     }
 }
 
+
+export const getAllProducts:  express.RequestHandler = async (req, res) => {
+    try {
+        const products = await prisma.product.findMany({});
+        if(products.length === 0){
+            
+            return res.status(404).json({
+                error: "no products found"
+            })
+        }
+
+        return res.status(200).json(products);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
 export const getProductByShop: express.RequestHandler = async (req, res) => {
     const {shopId} = req.params;
+    console.log("reached")
     try {
         if(!shopId) return res.status(400).json({
             error: "bad request"
@@ -161,9 +187,11 @@ export const getProductByShop: express.RequestHandler = async (req, res) => {
             }
         })
 
-        if(products.length === 0) return res.status(404).json({
+        if(products.length === 0) {
+            console.error("Error in no product found")
+            return res.status(404).json({
             error: "no product found"
-        })
+        })}
 
         return res.status(200).json(products);
     } catch (error) {
@@ -188,9 +216,11 @@ export const getSingleProduct: express.RequestHandler = async (req, res) => {
             }
         })
 
-        if(!product) return res.status(404).json({
+        if(!product) {
+            
+            return res.status(404).json({
             error: "product not found"
-        })
+        })}
 
         return res.status(200).json(product)
     } catch (error) {

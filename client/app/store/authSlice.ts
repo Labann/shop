@@ -117,7 +117,6 @@ const authSlice = createSlice({
             state.message = ""
         },
         setUser(state, action){
-            console.log("set user executed", action.payload)
             state.currentUser = action.payload
         }
     },

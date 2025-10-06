@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import Spinner from '@/app/components/Spinner';
 const Login = () => {
     const dispatch = useAppDispatch();
-    const {isSuccess, isError, message, isLoading} = useAppSelector(state => state.auth);
+    const {isSuccess, currentUser, isError, message, isLoading} = useAppSelector(state => state.auth);
     const [isSeen, setIsSeen] = useState(false);
     const router = useRouter(); 
     useEffect(()=>{
@@ -23,7 +23,8 @@ const Login = () => {
             toast.error(message)
             return
         }
-        if(isSuccess){
+        if(isSuccess && currentUser){
+            toast.success("logged in successfully")
             router.push("/")
             return
         }

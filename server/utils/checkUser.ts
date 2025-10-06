@@ -9,8 +9,10 @@ export const checkUser = async (user: User) => {
                 id: user.id
             }
         })
-        if(!validUser) throw Error("user not found")
-    
+        if(!validUser) {
+            console.log("the error is in check user")
+            throw Error("user not found")
+        }
     } catch (error) {
         console.error(error);
         throw new Error((error as Error).message)
