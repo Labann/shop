@@ -108,6 +108,32 @@ export const getSingleProduct = createAsyncThunk<
 })
 
  
+export const deleteProduct = createAsyncThunk<
+    {deletedProduct: IProduct, message: string},
+    {productId:string},
+    {rejectValue: string}
+>("/product/delete", async ({productId}, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/product/delete/${productId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json"
+            },
+            credentials: "include"
+        })
+
+        const data = await res.json();
+
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error);
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message)
+    }
+})
 
 export const getShopProducts = createAsyncThunk<
     IProduct[],
@@ -246,6 +272,21 @@ const productSlice = createSlice({
                 state.isLoading = false
                 state.isError=  true
                 state.message = action.payload as string
+            })
+            .addCase(deleteProduct.pending, state=> {
+                state.isLoading = true
+            })
+            .addCase(deleteProduct.fulfilled, (state, action) =>{
+                state.isLoading = false
+                state.isSuccess = true
+                //delete product in shopProducts
+                const shopProductIndex = state.shopProducts.findIndex(product => product.id === action.payload.deletedProduct.id);
+                if(shopProductIndex === -1) return //product not found
+                state.shopProducts.splice(shopProductIndex, 1);
+                //delete product in main products
+                const productIndex = state.shopProducts.findIndex(product => product.id === action.payload.deletedProduct.id);
+                if(productIndex === -1) return //product not found
+                state.products.splice(productIndex, 1);
             })
     })
 })

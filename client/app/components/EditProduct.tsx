@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react'
 import * as yup from "yup"
 import { IoClose } from "react-icons/io5";
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { createProduct, editProduct, getSingleProduct, reset } from '../store/productSlice';
+import { createProduct, deleteProduct, editProduct, getSingleProduct, reset } from '../store/productSlice';
 import { toast } from 'react-toastify';
 import Spinner from './Spinner';
 import Image from 'next/image';
@@ -95,7 +95,18 @@ const EditProductModal = ({setIsEditProduct, productId}:{
                 className="absolute md:right-15 right-5 top-4 md:top-6 cursor-pointer md:text-3xl font-bold text-white"
                 onClick={()=>setIsEditProduct(false)}
                 />
-            <form onSubmit={formik.handleSubmit} className='flex bg-white p-3 flex-col max-w-lg py-4 mx-auto space-y-3 rounded-md' action="">
+            <div className="flex bg-white max-w-lg mx-auto p-1 rounded-t-2">
+                <button onClick={async ()=> {
+                const action = await dispatch(deleteProduct({productId}))
+                console.log(action.payload)
+                if(action.type === "/product/delete/fulfilled"){
+                    toast.success("deleted successfully")
+                    setIsEditProduct(false)
+                }
+                }} className=" bg-red-600 p-1 cursor-pointer rounded text-white text-center hover:bg-red-400 ">delete</button>
+            </div>
+            <form onSubmit={formik.handleSubmit} className='flex relative rounded-t-none bg-white p-3 flex-col max-w-lg py-1 mx-auto space-y-1 rounded-md' action="">
+                    
                     <div className="flex flex-col space-y-2">
                         <label htmlFor="name" className='text-primary font-semibold'>Product name</label>
                         <input 
