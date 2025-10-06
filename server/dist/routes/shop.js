@@ -10,7 +10,7 @@ router.put("/approve/:shopId", protect, adminsOnly, approveShop);
 router.put("/close/:shopId", protect, closeShop);
 router.patch("/update/details/:shopId", protect, upload.single("logo"), updateShopDetails);
 router.get("/all", protect, adminsOnly, getAllShops);
-router.get("/my-shops", protect, getMyShops);
+router.get("/my-shops/:userId", protect, getMyShops);
 router.get("/my-shop", protect, getMyShop);
 router.get("/my-shop/orders/:shopId", protect, vendorsOnly, getOrdersInMyShop);
 export default router;

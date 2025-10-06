@@ -8,7 +8,7 @@ router.post("/create/:shopId", protect, vendorsOnly, upload.array("images", 10),
 router.put("/update/:productId", protect, vendorsOnly, upload.array("images", 10), updateProduct);
 router.delete("/delete/:productId", protect, vendorsOnly, deleteProduct);
 router.get("/byShop/:shopId", protect, getProductByShop);
-router.get("/:productId", protect, getSingleProduct);
-router.get("/all", protect, getAllProducts);
+router.get("/single/:productId", protect, getSingleProduct);
+router.get("/all", getAllProducts);
 export default router;
 //# sourceMappingURL=product.js.map

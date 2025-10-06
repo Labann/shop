@@ -5,10 +5,14 @@ export const addProduct = async (req, res) => {
     const { name, description, category, stock, price } = req.body;
     const files = req.files;
     const { shopId } = req.params;
+    if (!shopId)
+        return res.status(400).json({
+            error: "shop id is required"
+        });
     try {
         if (!name || !description
             || !price || !category || !stock
-            || !shopId || files.length === 0) {
+            || files.length === 0) {
             return res.status(400).json({
                 error: "bad request"
             });
@@ -29,7 +33,6 @@ export const addProduct = async (req, res) => {
         res.status(201).json(newProduct);
     }
     catch (error) {
-        console.error(error);
         return res.status(500).json({
             error: error.message
         });
@@ -91,7 +94,6 @@ export const deleteProduct = async (req, res) => {
             }
         });
         if (!productExist) {
-            console.log("here is the error");
             return res.status(404).json({
                 error: "product does not exist in the database"
             });
@@ -114,7 +116,6 @@ export const getAllProducts = async (req, res) => {
     try {
         const products = await prisma.product.findMany({});
         if (products.length === 0) {
-            console.log("here is the error");
             return res.status(404).json({
                 error: "no products found"
             });
@@ -130,6 +131,7 @@ export const getAllProducts = async (req, res) => {
 };
 export const getProductByShop = async (req, res) => {
     const { shopId } = req.params;
+    console.log("reached");
     try {
         if (!shopId)
             return res.status(400).json({
@@ -149,10 +151,12 @@ export const getProductByShop = async (req, res) => {
                 shopId: shopId
             }
         });
-        if (products.length === 0)
+        if (products.length === 0) {
+            console.error("Error in no product found");
             return res.status(404).json({
                 error: "no product found"
             });
+        }
         return res.status(200).json(products);
     }
     catch (error) {
@@ -174,10 +178,11 @@ export const getSingleProduct = async (req, res) => {
                 id: productId
             }
         });
-        if (!product)
+        if (!product) {
             return res.status(404).json({
                 error: "product not found"
             });
+        }
         return res.status(200).json(product);
     }
     catch (error) {

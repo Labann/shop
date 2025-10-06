@@ -5,7 +5,8 @@ import { useParams } from 'next/navigation'
 import AddProductModal from '@/app/components/AddProductModal'
 import { RxDotFilled } from 'react-icons/rx'
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
-import { getShopProducts, reset } from '@/app/store/productSlice'
+import { getShopProducts, getSingleProduct, reset } from '@/app/store/productSlice'
+import EditProductModal from '@/app/components/EditProduct'
 
 
 const Products = () => {
@@ -23,14 +24,22 @@ const Products = () => {
     }, [shopId, dispatch])
   
    const [isAddProduct, setIsAddProduct] = useState<boolean>(false);
-   
-  return (
+   const [isEditProduct, setIsEditProduct] = useState<boolean>(false);
+    const [productId, setProductId] = useState("");
+   return (
     <div className="max-w-7xl mx-auto">
       {
             isAddProduct && shopId && (
                 <AddProductModal setIsAddProduct={setIsAddProduct} shopId={shopId} />
             )
         }
+    {
+        isEditProduct && (
+                <EditProductModal 
+                    setIsEditProduct={setIsEditProduct} 
+                    productId={productId} />
+            )
+    }
       <div className="rounded-t bg-gray-200 w-full overflow-x-scroll">
                 <div className="flex justify-between p-3 items-center w-full rounded-t">
                     <h3 className="font-semibold text-xl">Product List</h3>
@@ -72,7 +81,11 @@ const Products = () => {
                                 </span>}
                             </td>
                             <td>20 pcs</td>
-                            <td className="text-center">...</td>
+                            <td className="text-center"><button onClick={async () => {
+                                await setProductId(value.id)
+                                await dispatch(getSingleProduct({productId: value.id}))
+                                await setIsEditProduct(!isEditProduct)
+                                }} className='bg-primary text-white cursor-pointer p-1 px-2'>Edit</button></td>
                         </tr>)}
                     </tbody>
                 </table>

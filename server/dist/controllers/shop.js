@@ -230,12 +230,15 @@ export const getAllShops = async (req, res) => {
     }
 };
 export const getMyShops = async (req, res) => {
+    const { userId } = req.params;
     try {
-        const user = req.user;
-        await checkUser(user);
+        if (!userId)
+            return res.status(400).json({
+                error: "bad request"
+            });
         const shops = await prisma.shop.findMany({
             where: {
-                userId: user.id
+                userId: userId
             }
         });
         return res.status(200).json(shops);

@@ -90,6 +90,11 @@ export const updateProduct: express.RequestHandler = async (req, res) => {
 
         }
 
+        if(data.price || data.stock){
+            data.price = parseInt(data.price)
+            data.stock = parseInt(data.stock)
+        }
+        
         const updatedProduct = await prisma.product.update({
             where: {
                 id: productId
