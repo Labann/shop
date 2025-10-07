@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { string } from "yup";
-import { ICart, ICartItem, IUser } from "../types";
+
+import { ICart } from "../types";
 import { apiUrl } from "../config/apiUrl";
+
 
 interface IInitialState{
     cart: ICart | null,
@@ -39,6 +40,7 @@ export const getCartItems = createAsyncThunk<
             return thunkApi.rejectWithValue(data.error);
         }
 
+        localStorage.setItem("cart", JSON.stringify(data));
         return data;
     } catch (error) {
         console.error(error);
@@ -66,6 +68,7 @@ export const addToCart = createAsyncThunk<
             return thunkApi.rejectWithValue(data.error);
         }
 
+        localStorage.setItem("cart", JSON.stringify(data));
         return data;
     } catch (error) {
         console.error(error);
@@ -73,6 +76,33 @@ export const addToCart = createAsyncThunk<
     }
 })
 
+
+export const createCart = createAsyncThunk<
+    ICart,
+    void,
+    {rejectValue: string}
+>("/cart/create", async (_, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/cart/create`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            credentials: "include"
+        });
+
+        const data = await res.json();
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(data));
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message)
+    }
+})
 const cartSlice = createSlice({
     name: "cart", 
     initialState: initialState,
@@ -92,6 +122,7 @@ const cartSlice = createSlice({
             .addCase(getCartItems.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
+                
                 state.cart = action.payload
             })
             .addCase(getCartItems.rejected, (state, action) => {
@@ -112,6 +143,20 @@ const cartSlice = createSlice({
                 state.isError = true
                 state.message = action.payload as string
             })
+            .addCase(createCart.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(createCart.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.cart = action.payload
+            })
+            .addCase(createCart.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload as string
+            })
+            
     })
 })
 

@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {IUser} from "../types/index"
 import { apiUrl } from "../config/apiUrl";
+import { useAppDispatch } from "../hooks/redux";
+import { createCart } from "./cartSlice";
 type IInitialState = {
     currentUser: IUser| null,
     isLoading: boolean,
@@ -70,6 +72,7 @@ export const signup = createAsyncThunk<
         if(data.error){
             return thunkApi.rejectWithValue(data.error);
         }
+        
         localStorage.setItem("user" ,JSON.stringify(data))
         return data;
     } catch (error) {

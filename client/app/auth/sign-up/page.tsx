@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { reset, signup } from '@/app/store/authSlice';
 import Spinner from '@/app/components/Spinner';
+import { createCart } from '@/app/store/cartSlice';
 
 
 const SignUp = () => {
@@ -28,6 +29,7 @@ const SignUp = () => {
             }
             if(isSuccess && currentUser){
                 toast.success("use created successfully")
+                dispatch(createCart());
                 router.push("/")
                 return
             }
@@ -37,11 +39,11 @@ const SignUp = () => {
             }
         }, [isSuccess, isError,  dispatch, message, router])
     const schema = yup.object({
-        firstName: yup.string().min(3).required(),
-        lastName: yup.string().min(3).required(),
+        firstName: yup.string().min(2).required(),
+        lastName: yup.string().min(2).required(),
         email: yup.string().email("invalid format").required(),
-        password: yup.string().min(3).required(),
-        username: yup.string().min(3).required(),
+        password: yup.string().min(2).required(),
+        username: yup.string().min(2).required(),
         confirm: yup.string()
             .oneOf([yup.ref("password")], "Password must match").required()
 

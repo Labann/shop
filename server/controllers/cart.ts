@@ -172,7 +172,7 @@ export const getMyCart: express.RequestHandler = async (req, res) => {
                 items: true
             }
         })
-
+        
         return res.status(200).json(cart)
     } catch (error) {
         console.error(error);

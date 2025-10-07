@@ -7,12 +7,14 @@ import Image from 'next/image'
 import Featured from '@/app/components/Featured'
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
 import { getSingleProduct } from '@/app/store/productSlice'
+import { addToCart } from '@/app/store/cartSlice'
 const Products = () => {
     const {id}= useParams<{id: string}>()
     
     const dispatch = useAppDispatch();
     const {currentProduct} = useAppSelector(state => state.product);
     const [currentImage, setCurrentImage] = useState("");
+    const {cart} = useAppSelector(state => state.cart);
     useEffect(() => {
         if(id){
             dispatch(getSingleProduct({productId: id}));
@@ -71,7 +73,9 @@ const Products = () => {
                     </div>
                 </div>
 
-                <button className='md:p-3 p-2 hover:bg-primary/70 cursor-pointer rounded text-center w-full bg-primary text-white'>Add to cart</button>
+                <button onClick={
+                    () => console.log("to do")
+                } className='md:p-3 p-2 hover:bg-primary/70 cursor-pointer rounded text-center w-full bg-primary text-white'>Add to cart</button>
 
             </div>
         </div>

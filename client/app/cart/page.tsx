@@ -30,6 +30,7 @@ const Cart = () => {
             <p className='pl-10'>{cart?.items?.length} items</p>
         </div>
         <div className="py-6 min-h-[45vh]">
+            {cart && cart.items.length === 0 &&  <p className='text-center font-bold text-3xl text-primary'>Cart is empty!</p>}
             {cart && cart.items.map(value => <div key={value.id} className="bg-gray-200 my-3  rounded-md p-3 flex flex-row items-center">
                 <div className="flex flex-col justify-center items-center space-y-3">
                     <div className="w-[8em] flex justify-center items-center">
