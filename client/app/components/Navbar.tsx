@@ -53,6 +53,7 @@ const Navbar = () => {
                         className='hover:font-normal'
                         >Create shop</Link>
                     <Link href={"/contact-us"} className='hover:font-normal'>Contact us</Link>
+                    
                     {
                         currentUser && currentUser.role === "VENDOR" &&  (
                             myShops.length !== 0  && <div className="flex flex-col relative">
@@ -80,6 +81,14 @@ const Navbar = () => {
                             </div>
                             
                     )}
+
+                    {
+                        currentUser && currentUser.role === "SUPER_ADMIN" && (
+                            <Link 
+                                href={"/dashboard/admin"} 
+                                className='cursor-pointer'>Admin</Link>
+                        )
+                    }
                     {
                         currentUser && <button 
                         onClick={()=> dispatch(logout())}
@@ -115,8 +124,11 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center space-x-4 md:text-xl font-bold">
             <Link href={"/"}>Home</Link>
-            <Link href={"/shop/create-shop"}>Create shop</Link>
+            {currentUser && currentUser.role !== "SUPER_ADMIN" && <Link href={"/shop/create-shop"}>Create shop</Link>}
             <Link href={"/contact-us"}>Contact us</Link>
+            {currentUser && currentUser.role === "SUPER_ADMIN" && (
+                <Link href={"/dashboard/admin"}>Admin</Link>
+            ) }
             {currentUser && currentUser.role === "VENDOR" && (
                 myShops.length !== 0  && <div className="flex flex-col relative">
                     <h5 className='flex space-x-2 items-center'>

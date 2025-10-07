@@ -12,11 +12,7 @@ const CreateShop = () => {
     const dispatch = useAppDispatch();
     
     useEffect(()=>{
-        if(isSuccess){
-            toast.success("applied for shop successfully, await admin approval")
-            return
-        }
-
+        
         if(isError){
             toast.error(message)
             return
@@ -57,7 +53,10 @@ const CreateShop = () => {
             formData.append(typedKey, val instanceof File ? val : String(val));
         }
         
-        await dispatch(applyShop(formData));
+        const action = await dispatch(applyShop(formData));
+        if(action.type === "/shop/apply/fulfilled"){
+            toast.success("shop created successfully, await admin approval");
+        }
         if (fileRef.current) {
             fileRef.current.value = ""; 
         }

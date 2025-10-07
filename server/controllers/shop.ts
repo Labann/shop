@@ -312,6 +312,27 @@ export const getMyShop: express.RequestHandler = async(req, res) => {
         console.error((error as Error).message)
     }
 }
+
+export const getApplication: express.RequestHandler = async (req, res) => {
+    try {
+        const applications = await prisma.shop.findMany({
+            where: {
+                status: "PENDING"
+            }
+        })   
+
+        if(applications.length === 0) return res.status(404).json({
+            error: "no applications found"
+        })
+
+        return res.status(200).json(applications);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: (error as Error).message
+        })
+    }
+}
 //shop controllers
 
 //apply For Shop

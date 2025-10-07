@@ -85,7 +85,7 @@ const Products = () => {
                                 await setProductId(value.id)
                                 await dispatch(getSingleProduct({productId: value.id}))
                                 await setIsEditProduct(!isEditProduct)
-                                }} className='bg-primary text-white cursor-pointer p-1 px-2'>Edit</button></td>
+                                }} className='bg-primary rounded text-white cursor-pointer p-1 px-2'>Edit</button></td>
                         </tr>)}
                     </tbody>
                 </table>
