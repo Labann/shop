@@ -2,12 +2,13 @@
 import React from 'react'
 import Image from "next/image"
 import { GrFavorite } from "react-icons/gr";
+import { IProduct } from '../types';
 
 
-const Product = ({img}:{
-    img: string
+const Product = ({product}:{
+    product: IProduct
 }) => {
-    if(!img) return
+    if(!product) return;
   return (
     <div className="flex flex-col space-y-2 max-w-[15em]">
         <div className="relative bg-gray-100 h-[12em] w-full md:h-[15em] flex justify-center items-center">
@@ -15,18 +16,19 @@ const Product = ({img}:{
                 <GrFavorite className='cursor-pointer'/>
             </div>
             
-            <Image
+            {product.images.length !== 0 && <Image
                 alt="product-img"
                 width={100}
                 height={100}
-                src={img}
+                unoptimized
+                src={product.images[0]}
                 className='w-[7em]'
-            />
+            />}
         </div>
         <div className="flex flex-col space-y-2">
-            <h3 className='font-extrabold'>HP ELITE BOOK</h3>
-            <span className='text-primary font-bold'>KSH 3000</span>
-            <span></span>
+            <h3 className='font-extrabold'>{product.name}</h3>
+            <span className='text-primary font-bold'>{product.price}</span>
+            <button className='w-full bg-primary hover:bg-primary/70 p-2 text-white rounded'>add to cart</button>
         </div>
     </div>
   )

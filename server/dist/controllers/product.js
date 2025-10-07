@@ -66,6 +66,10 @@ export const updateProduct = async (req, res) => {
             const imageUrls = images.map(img => img.secure_url);
             data.images = imageUrls;
         }
+        if (data.price || data.stock) {
+            data.price = parseInt(data.price);
+            data.stock = parseInt(data.stock);
+        }
         const updatedProduct = await prisma.product.update({
             where: {
                 id: productId
@@ -184,6 +188,58 @@ export const getSingleProduct = async (req, res) => {
             });
         }
         return res.status(200).json(product);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+export const toggleIsFeatured = async (req, res) => {
+    const { productId } = req.params;
+    try {
+        if (!productId) {
+            return res.status(400).json({
+                error: "bad request, product id is required"
+            });
+        }
+        const product = await prisma.product.findUnique({
+            where: {
+                id: productId
+            }
+        });
+        if (!product) {
+            return res.status(404).json({
+                error: "product not found"
+            });
+        }
+        if (product.isFeatured) {
+            const updatedProduct = await prisma.product.update({
+                where: {
+                    id: productId
+                },
+                data: {
+                    isFeatured: false
+                }
+            });
+            return res.status(200).json({
+                message: "remove from featured",
+                updatedProduct
+            });
+        }
+        const updatedProduct = await prisma.product.update({
+            where: {
+                id: productId
+            },
+            data: {
+                isFeatured: true
+            }
+        });
+        return res.status(200).json({
+            message: "added to featured",
+            updatedProduct
+        });
     }
     catch (error) {
         console.error(error);

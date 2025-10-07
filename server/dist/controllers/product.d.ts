@@ -5,4 +5,5 @@ export declare const deleteProduct: express.RequestHandler;
 export declare const getAllProducts: express.RequestHandler;
 export declare const getProductByShop: express.RequestHandler;
 export declare const getSingleProduct: express.RequestHandler;
+export declare const toggleIsFeatured: express.RequestHandler;
 //# sourceMappingURL=product.d.ts.map

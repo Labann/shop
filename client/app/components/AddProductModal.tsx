@@ -14,18 +14,7 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
     const { isError, message, isLoading} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     const fileRef = useRef<HTMLInputElement | null>(null);
-    useEffect(()=> {
-        
-        if(isError){
-            toast.error(message)
-            return
-        }
-
-        return () => {
-            
-            dispatch(reset());
-        }
-    }, [dispatch, isError, message])
+    
     
     const schema = yup.object({
         name: yup.string().required(),
@@ -75,6 +64,9 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
                 toast.success("created product successfully");
                 setIsAddProduct(false);
             }
+            if(action.type === "/product/create/rejected"){
+                toast.error(message)
+            }
             if (fileRef.current) {
                 fileRef.current.value = ""; 
             }
@@ -83,7 +75,7 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
         validationSchema: schema
     })
   return (
-    <div className='fixed bg-black/90 justify-center px-4 py-7 items-center top-0 left-0 h-screen w-screen'>
+    <div className='fixed bg-black/90 z-100 justify-center px-4 py-7 items-center top-0 left-0 h-screen w-screen'>
         <IoClose 
             size={"1.5em"}
             className="absolute md:right-15 right-5 top-4 md:top-6 cursor-pointer md:text-3xl font-bold text-white"

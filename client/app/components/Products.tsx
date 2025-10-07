@@ -2,43 +2,10 @@
 import React, { useEffect } from 'react'
 import Link from "next/link"
 import Product from './Product'
-import { useAppDispatch } from '../hooks/redux'
+import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { getAllProducts, reset } from '../store/productSlice'
 const Products = () => {
-    const data = [
-        {
-            item: "1",
-            img: "/shoe.png"
-        },
-        {
-            item: "2",
-            img: "/shoe.png"
-        },
-        {
-            item: "3",
-            img: "/shoe.png"
-        },
-        {
-            item: "4",
-            img: "/shoe.png"
-        },
-        {
-            item: "5",
-            img: "/shoe.png"
-        },
-        {
-            item: "6",
-            img: "/shoe.png"
-        },
-        {
-            item: "7",
-            img: "/shoe.png"
-        },
-        {
-            item: "8",
-            img: "/shoe.png"
-        }
-    ]
+    const{products} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     useEffect(()=>{
         dispatch(getAllProducts())
@@ -58,9 +25,10 @@ const Products = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 justify-center mx-auto gap-4 py-7">
             {
-                data?.map( value => <Product 
-                        key={value.item}
-                        img={value.img}
+                products.length !== 0 && products.slice(0, 4)?.map( product => <Product 
+                        key={product.id}
+                        product ={product}
+                        
                         />
                 )
             }  

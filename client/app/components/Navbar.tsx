@@ -69,7 +69,7 @@ const Navbar = () => {
                                             />
                                         }
                                 </h5>
-                                {isShowShops && <ul className='border-l border-white bg-primary/30 text-white min-w-20 p-2 text-sm  flex space-y-3'>
+                                {isShowShops && <ul className='border-l border-white bg-primary/30 text-white min-w-20 p-2 text-sm space-y-3'>
                                     
                                         { myShops.map(shop => 
                                             <li key={shop.id}>
@@ -112,13 +112,16 @@ const Navbar = () => {
                     className='md:hidden cursor-pointer'
                     
                     /> }
-            <Image
-                src={"/logo-t.png"}
-                width={200}
-                height={100}
-                className='w-[7em]'
-                alt="logo-img"
-            />
+            <Link href={"/"}>
+                <Image
+                    src={"/logo-t.png"}
+                    width={200}
+                    height={100}
+                    className='w-[7em]'
+                    alt="logo-img"
+                />
+            </Link>
+            
         </div>
 
 
@@ -130,7 +133,7 @@ const Navbar = () => {
                 <Link href={"/dashboard/admin"}>Admin</Link>
             ) }
             {currentUser && currentUser.role === "VENDOR" && (
-                myShops.length !== 0  && <div className="flex flex-col relative">
+                myShops.length !== 0  && <div className="flex z-50 flex-col relative">
                     <h5 className='flex space-x-2 items-center'>
                         <span>shops - <span className='text-sm'>{myShops.length}</span></span>
                         {
@@ -143,7 +146,7 @@ const Navbar = () => {
                                 />
                             }
                     </h5>
-                    {isShowShops && <ul className='border-l border-white bg-primary/30 text-white min-w-20 p-2 text-sm  flex space-y-3 absolute top-7'>
+                    {isShowShops && <ul className='border-l border-white bg-primary/30 text-white min-w-20 p-2 text-sm  flex flex-col space-y-3 absolute top-7 '>
                         
                            { myShops.map(shop => 
                                 <li key={shop.id}>

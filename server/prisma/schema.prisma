@@ -37,6 +37,7 @@ model Product{
   price Decimal @db.Decimal(10, 2)
   images String[]
   category String
+  isFeatured Boolean @default(false)
   stock Int
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
   shopId String

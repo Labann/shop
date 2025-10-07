@@ -17,6 +17,7 @@ export type IProduct = {
   name :string
   description :string
   price: number 
+  isFeatured: boolean
   images :string[]
   category :string
   stock: number

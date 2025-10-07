@@ -268,6 +268,26 @@ export const getMyShop = async (req, res) => {
         console.error(error.message);
     }
 };
+export const getApplication = async (req, res) => {
+    try {
+        const applications = await prisma.shop.findMany({
+            where: {
+                status: "PENDING"
+            }
+        });
+        if (applications.length === 0)
+            return res.status(404).json({
+                error: "no applications found"
+            });
+        return res.status(200).json(applications);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
 //shop controllers
 //apply For Shop
 //# sourceMappingURL=shop.js.map

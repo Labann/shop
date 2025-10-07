@@ -187,6 +187,31 @@ export const editProduct =  createAsyncThunk<
         return thunkApi.rejectWithValue((error as Error).message)
     }
 })
+
+export const toggleIsFeatured = createAsyncThunk<
+    {message: string, updatedProduct: IProduct},
+    {productId: string},
+    {rejectValue: string}
+>("/product/toggle_isFeatured", async ({productId}, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/product/toggle_isFeatured/${productId}`, {
+            method: "PUT",
+            headers: {
+                "Content-type": "application/json"
+            },
+            credentials: "include"
+        });
+        const data = await res.json();
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error)
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message);
+    }
+})
 const productSlice = createSlice({
     name: "product",
     initialState: initialState,
@@ -288,8 +313,25 @@ const productSlice = createSlice({
                 if(productIndex === -1) return //product not found
                 state.products.splice(productIndex, 1);
             })
+            .addCase(toggleIsFeatured.pending, state => {
+                state.isLoading  = true
+            })
+            .addCase(toggleIsFeatured.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                const index = state.products.findIndex(p => p.id === action.payload.updatedProduct.id)
+                if(index === -1) return
+                state.products[index] = action.payload.updatedProduct
+            })
+            .addCase(toggleIsFeatured.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload as string
+            })
     })
 })
+
+
 
 
 export const {reset} = productSlice.actions;
