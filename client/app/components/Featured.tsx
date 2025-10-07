@@ -2,21 +2,24 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Product from './Product'
-import { useAppSelector } from '../hooks/redux'
+import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { IProduct } from '../types'
+import { getAllProducts } from '../store/productSlice'
 
 
 
 
 const Featured = () => {
     
-
+    const dispatch = useAppDispatch();
     const {products} = useAppSelector(state => state.product);
     const [data, setData] = useState<IProduct[]>([])
     useEffect(()=> {
         setData(products.filter(p => p.isFeatured === true))
     }, [products])
-    
+    useEffect(() => {
+        dispatch(getAllProducts())
+    }, [])
     
     
     return (

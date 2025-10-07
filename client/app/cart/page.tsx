@@ -1,8 +1,16 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { getCartItems } from '../store/cartSlice'
 const Cart = () => {
+    const dispatch = useAppDispatch();
+    useEffect(()=>{
+        dispatch(getCartItems());
+    }, []);
+
+    const {cart} = useAppSelector(state => state.cart);
     const data = [
         {
             id: 0
@@ -19,10 +27,10 @@ const Cart = () => {
         <div className="flex items-center space-x-2">
             <Link href={"/"} className='text-slate-300 text-sm'>Home /</Link>
             <span className='text-primary'>Cart</span>
-            <p className='pl-10'>3 items</p>
+            <p className='pl-10'>{cart?.items?.length} items</p>
         </div>
         <div className="py-6 min-h-[45vh]">
-            {data.map(value => <div key={value.id} className="bg-gray-200 my-3  rounded-md p-3 flex flex-row items-center">
+            {cart && cart.items.map(value => <div key={value.id} className="bg-gray-200 my-3  rounded-md p-3 flex flex-row items-center">
                 <div className="flex flex-col justify-center items-center space-y-3">
                     <div className="w-[8em] flex justify-center items-center">
                         <Image

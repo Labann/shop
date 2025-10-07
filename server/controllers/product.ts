@@ -40,7 +40,8 @@ export const addProduct: express.RequestHandler = async (req, res) => {
                 images: imagesUrl,
                 stock: parseInt(stock),
                 shopId,
-            }
+            }, 
+            
         })
 
         res.status(201).json(newProduct)
@@ -99,7 +100,10 @@ export const updateProduct: express.RequestHandler = async (req, res) => {
             where: {
                 id: productId
             },
-            data
+            data,
+            include:{
+                shop: true
+            }
         }) 
 
         return res.status(200).json(updatedProduct)
@@ -152,7 +156,11 @@ export const deleteProduct: express.RequestHandler = async (req, res) => {
 
 export const getAllProducts:  express.RequestHandler = async (req, res) => {
     try {
-        const products = await prisma.product.findMany({});
+        const products = await prisma.product.findMany({
+            include: {
+                shop: true
+            }
+        });
         if(products.length === 0){
             
             return res.status(404).json({
@@ -189,6 +197,9 @@ export const getProductByShop: express.RequestHandler = async (req, res) => {
         const products = await prisma.product.findMany({
             where: {
                 shopId: shopId
+            },
+            include: {
+                shop: true
             }
         })
 
@@ -218,6 +229,9 @@ export const getSingleProduct: express.RequestHandler = async (req, res) => {
         const product = await prisma.product.findUnique({
             where: {
                 id: productId
+            },
+            include: {
+                shop: true
             }
         })
 
@@ -226,6 +240,8 @@ export const getSingleProduct: express.RequestHandler = async (req, res) => {
             return res.status(404).json({
             error: "product not found"
         })}
+
+        
 
         return res.status(200).json(product)
     } catch (error) {

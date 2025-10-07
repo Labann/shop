@@ -33,12 +33,12 @@ const Products = () => {
       return <div className="text-center font-bold text-red-600 min-h-[45vh] text-3xl">Admins Only!</div>
     }
     return (
-    <div className="max-w-7xl mx-auto">
+    <div className="p-4 max-w-7xl mx-auto">
       
       <div className="rounded-t bg-gray-200 w-full overflow-x-scroll">
                 <div className="flex justify-between p-3 items-center w-full rounded-t">
                     <h3 className="font-semibold text-xl">Product List</h3>
-                    <button className="bg-primary cursor-pointer px-3 py-2 text-white rounded" onClick={()=> setIsAddProduct(true)}>Add new Product</button>
+                    
                 </div>
                 <table className="w-full">
                     <thead className=" bg-white min-h-[60vh]">

@@ -11,7 +11,7 @@ export default function Home() {
       <Hero/>
       <Featured/>
       <Categories/>
-      <Featured/>
+      
       
       {/*<NewArrivals/>*/}
       {/*Featured*/}

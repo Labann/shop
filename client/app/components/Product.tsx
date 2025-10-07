@@ -3,6 +3,7 @@ import React from 'react'
 import Image from "next/image"
 import { GrFavorite } from "react-icons/gr";
 import { IProduct } from '../types';
+import Link from 'next/link';
 
 
 const Product = ({product}:{
@@ -28,7 +29,7 @@ const Product = ({product}:{
         <div className="flex flex-col space-y-2">
             <h3 className='font-extrabold'>{product.name}</h3>
             <span className='text-primary font-bold'>{product.price}</span>
-            <button className='w-full bg-primary hover:bg-primary/70 p-2 text-white rounded'>add to cart</button>
+            <Link href={`/products/${product.id}`} className='w-full bg-primary hover:bg-primary/70 p-2 text-white rounded text-center'>view product</Link>
         </div>
     </div>
   )
