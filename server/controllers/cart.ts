@@ -118,7 +118,7 @@ export const addToCart: express.RequestHandler =  async (req, res) =>{
             where: {
                 id: cartId
             }
-        })
+        });
         const productExist = await prisma.product.findUnique({
             where:{
                 id: productId

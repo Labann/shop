@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
 import { getSingleProduct } from '@/app/store/productSlice'
 import { addToCart } from '@/app/store/cartSlice'
 import { toast } from 'react-toastify'
+import Spinner from '@/app/components/Spinner'
 const Products = () => {
     const {id}= useParams<{id: string}>()
     
@@ -16,7 +17,7 @@ const Products = () => {
     const {message } = useAppSelector(state => state.cart);
     const {currentProduct} = useAppSelector(state => state.product);
     const [currentImage, setCurrentImage] = useState("");
-    const {cart} = useAppSelector(state => state.cart);
+    const {cart, isLoading} = useAppSelector(state => state.cart);
     const [quantity, setQuantity] = useState(1);
     useEffect(() => {
         if(id){
@@ -25,8 +26,8 @@ const Products = () => {
         
     }, [dispatch, id])
     useEffect(()=>{
-        if(cart && currentProduct){
-            const product = cart.items.find(p => p.id === currentProduct.id);
+        if(cart  && currentProduct){
+            const product = cart?.items?.find(p => p.id === currentProduct.id);
             if(!product) return
             setQuantity(product.quantity)
         }
@@ -100,6 +101,7 @@ const Products = () => {
 
                 <button onClick={
                     async () => {
+                    
                         const action = await dispatch(addToCart({cartId: cart.id, productId: currentProduct.id, quantity: quantity}))
                         if(action.type === "/cart/add/fulfilled"){
                             toast.success("product added to cart");
@@ -108,7 +110,10 @@ const Products = () => {
                             toast.error(message)
                         }
                 }
-                } className='md:p-3 p-2 hover:bg-primary/70 cursor-pointer rounded text-center w-full bg-primary text-white'>Add to cart</button>
+                } 
+                className='md:p-3 p-2 hover:bg-primary/70 cursor-pointer rounded text-center w-full bg-primary text-white'>
+                    {isLoading? <Spinner/>:  "Add to cart"}
+                </button>
 
             </div>
         </div>

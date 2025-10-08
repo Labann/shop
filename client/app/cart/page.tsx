@@ -21,8 +21,8 @@ const Cart = () => {
             <p className='pl-10'>{cart?.items?.length} items</p>
         </div>
         <div className="py-6 min-h-[45vh]">
-            {cart && cart.items.length === 0 &&  <p className='text-center font-bold text-3xl text-primary'>Cart is empty!</p>}
-            {cart && cart.items.map(item => <CartItemCard key={item.id} item={item}/>)}
+            {!cart || cart?.items?.length === 0 &&  <p className='text-center font-bold text-3xl text-primary'>Cart is empty!</p>}
+            {cart && cart?.items?.map(item => <CartItemCard key={item?.id} item={item}/>)}
         </div>
 
         <div className="flex items-center justify-between py-4">

@@ -167,7 +167,7 @@ const Navbar = () => {
                     size={"1.5em"}
                     className='font-bold'
                     />
-                <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>{cart.items.length}</span>
+                <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>{cart?.items?.length}</span>
             </Link>}
             
             <Link href={"/wishlist"} className="relative cursor-pointer">

@@ -53,6 +53,7 @@ export const addToCart = createAsyncThunk<
     {cartId: string, productId: string, quantity: number}
 >("/cart/add", async ({cartId, productId, quantity}, thunkApi) => {
     try {
+        console.log(cartId)
         const res = await fetch(`${apiUrl}/api/cart/add`, {
             method: "POST",
             headers: {

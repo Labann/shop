@@ -24,7 +24,7 @@ const CartItemCard = ({item}: {
                 <div className="flex flex-col justify-center items-center space-y-3">
                     <div className="w-[8em] flex justify-center items-center">
                         <Image
-                            src={item.product.images[0]}
+                            src={item?.product?.images[0]}
                             unoptimized
                             width={100}
                             height={100}
@@ -50,16 +50,17 @@ const CartItemCard = ({item}: {
                 </div>
                 <div className="flex flex-col space-y-3 md:flex-row justify-between flex-1 sm:pl-20 md:pl-44">
                     <div className="flex flex-col space-y-3 font-bold">
-                            <h3>{item.product.name}</h3>
-                            <p><span className='text-primary'>Seller : </span> {item.product.shop.name}</p>
+                            <h3>{item?.product?.name}</h3>
+                            <p><span className='text-primary'>Seller : </span> {item?.product?.shop?.name}</p>
                     </div>
                     <div className="bg-primary text-white rounded flex items-center justify-center px-4 space-x-3 h-10 max-w-[6em]">
                             <button onClick={async () => {
                                 setQuantity( prev => {
                                     const newQuantity = prev - 1;
-                                    dispatch(updateItemQuantity({itemId: item.id, quantity: newQuantity, cartId: cart.id}))
+                                    
                                     return newQuantity
                                 })
+                                dispatch(updateItemQuantity({itemId: item?.id, quantity: quantity - 1, cartId: cart?.id}))
                                 
                             }
                             } className={`${quantity  < 2 && `pointer-events-none `} focus:text-white  rounded cursor-pointer`}>-</button>
@@ -67,14 +68,15 @@ const CartItemCard = ({item}: {
                             <button onClick={async () => {
                                 setQuantity( prev => {
                                     const newQuantity = prev + 1;
-                                    dispatch(updateItemQuantity({itemId: item.id, quantity: newQuantity, cartId: cart.id}))
+                                    
                                     return newQuantity
                                 })
+                                dispatch(updateItemQuantity({itemId: item?.id, quantity: quantity + 1, cartId: cart?.id}))
                             } 
                             }className={`${quantity  < 2 && `pointer-event-none`} focus:text-white  rounded cursor-pointer`}>+</button>
                     </div>
 
-                    <p className='font-bold'>KSH {item.product.price}</p>
+                    <p className='font-bold'>KSH {item?.product?.price}</p>
                 </div>
                 
             </div>
