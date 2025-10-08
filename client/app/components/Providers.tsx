@@ -5,13 +5,18 @@ import store from '../store/store'
 import { setUser } from '../store/authSlice'
 import { useAppDispatch } from '../hooks/redux'
 import { ToastContainer } from 'react-toastify'
+import { setCart } from '../store/cartSlice'
 const InitialState = () => {
   const dispatch = useAppDispatch();
   useEffect(()=> {
     const user = JSON.parse(localStorage.getItem("user") || "null")
-    
+    const cart = JSON.parse(localStorage.getItem("cart") || "null");
+    console.log(cart)
     if(user){
       dispatch(setUser(user))
+    }
+    if(cart){
+      dispatch(setCart(cart))
     }
   }, [dispatch])
 

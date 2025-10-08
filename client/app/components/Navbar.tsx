@@ -19,7 +19,7 @@ const Navbar = () => {
     const [isMenu, setIsMenu] = useState(false);
     const dispatch = useAppDispatch();    
     const {myShops} = useAppSelector(state => state.shop);
-    
+    const {cart} = useAppSelector(state => state.cart);
     const [isShowShops, setIsShowShops] = useState(false);
     const {currentUser, isLoading, isSuccess, isError, message} = useAppSelector(state => state.auth);
     useEffect(()=>{
@@ -162,13 +162,13 @@ const Navbar = () => {
 
             
         {currentUser? <div className="flex items-center space-x-3">
-            <Link href="/cart" className="relative cursor-pointer">
+            {cart && <Link href="/cart" className="relative cursor-pointer">
                 <IoCartOutline 
                     size={"1.5em"}
                     className='font-bold'
                     />
-                <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>2</span>
-            </Link>
+                <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>{cart.items.length}</span>
+            </Link>}
             
             <Link href={"/wishlist"} className="relative cursor-pointer">
                 <MdOutlineFavoriteBorder 

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { ICart } from "../types";
+import { ICart, ICartItem } from "../types";
 import { apiUrl } from "../config/apiUrl";
 
 
@@ -49,7 +49,7 @@ export const getCartItems = createAsyncThunk<
 })
 
 export const addToCart = createAsyncThunk<
-    ICart,
+    ICartItem,
     {cartId: string, productId: string, quantity: number}
 >("/cart/add", async ({cartId, productId, quantity}, thunkApi) => {
     try {
@@ -103,6 +103,61 @@ export const createCart = createAsyncThunk<
         return thunkApi.rejectWithValue((error as Error).message)
     }
 })
+
+export const updateItemQuantity = createAsyncThunk<
+    ICartItem,
+    {cartId: string, itemId: string, quantity: number},
+    {rejectValue: string}
+>("/cart/update/quantity", async ({cartId, itemId, quantity}, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/cart/update/quantity/${itemId}/${cartId}`, {
+            method: "PUT",
+            headers: {
+                "Content-type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({quantity: quantity})
+        });
+
+        const data = await res.json();
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error);
+        }
+
+
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message)
+    }
+})
+
+export const removeFromCart = createAsyncThunk<
+    ICartItem,
+    {productId: string, cartId:  string},
+    {rejectValue: string}
+>("/cart/removeFromCart", async ({productId, cartId}, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/cart/remove/${productId}/${cartId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json"
+            },
+            credentials: "include"
+        })
+
+        const data = await res.json();
+
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error);
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message);
+    }
+})
 const cartSlice = createSlice({
     name: "cart", 
     initialState: initialState,
@@ -112,6 +167,10 @@ const cartSlice = createSlice({
             state.isSuccess = false
             state.message = ""
             state.isError = false
+        },
+        setCart(state, action){
+           console.log("Set cart")
+            state.cart = action.payload
         }
     },
     extraReducers: (builder => {
@@ -136,7 +195,17 @@ const cartSlice = createSlice({
             .addCase(addToCart.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
-                state.cart= action.payload
+                if (!state.cart) return
+                const index = state.cart?.items.findIndex(item => item.id === action.payload.id);
+                if(index === -1) {
+                    //not found
+                    state.cart?.items.push(action.payload);
+                }
+                if (state.cart && index !== -1) {
+                    state.cart.items[index] = action.payload;
+                }
+
+
             })
             .addCase(addToCart.rejected, (state, action) => {
                 state.isLoading = false
@@ -156,12 +225,49 @@ const cartSlice = createSlice({
                 state.isError = true
                 state.message = action.payload as string
             })
+            .addCase(updateItemQuantity.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateItemQuantity.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                if(!state.cart) return
+
+                const index = state.cart.items.findIndex(item  => item.id === action.payload.id);
+                if(index === -1) return //item not found
+
+                state.cart.items[index] = action.payload
+            })
+            .addCase(updateItemQuantity.rejected, (state, action)=> {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload as string
+            })
+            .addCase(removeFromCart.pending, (state, action) => {
+                state.isLoading = true
+                
+            })
+            .addCase(removeFromCart.fulfilled, (state, action) => {
+                state.isLoading= false
+                state.isSuccess = true
+                if(!state.cart) return;
+                const index = state.cart.items.findIndex(item => item.id === action.payload.id);
+
+                if(index === -1) return //item does not exist in cart
+
+                state.cart.items.splice(index, 1);
+            })
+            .addCase(removeFromCart.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload as string
+            })
             
     })
 })
 
 
 
-export const {reset} = cartSlice.actions;
+export const {reset, setCart} = cartSlice.actions;
 
 export default cartSlice.reducer;
