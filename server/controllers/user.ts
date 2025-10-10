@@ -28,6 +28,9 @@ export const login: express.RequestHandler = async (req, res) =>{
             error: "user not found"
         })
 
+        if(!user.password) return res.status(401).json({
+            error: "user logged in using google, has no password"
+        })
         
         const isMatch = await bcrypt.compare(password, user.password);
         

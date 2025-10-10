@@ -19,7 +19,7 @@ model User {
   firstName String   @default("")
   lastName  String   @default("")
   email     String   @unique
-  password  String
+  password  String?
   role      ROLE     @default(CUSTOMER)
   shops     Shop[]
   orders    Order[]

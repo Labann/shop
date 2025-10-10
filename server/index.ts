@@ -9,10 +9,13 @@ import cartRoutes from "./routes/cart.js"
 import orderRoutes from "./routes/order.js"
 import paymentRoutes from "./routes/payment.js"
 import morgan from "morgan";
-
+import prisma from "./utils/prisma.js";
+import splitName from "./utils/splitName.js";
+import passport from "passport"
+import { Strategy as GoogleStrategy} from "passport-google-oauth20";
 const app = express();
 app.use(cors({
-    origin: ["http://localhost:3000", "https://shop-rkym2sntt-labanns-projects.vercel.app/"],
+    origin: ["http://localhost:3000", "https://shop-tau-inky.vercel.app/"],
     credentials: true
 }));
 app.use(express.json({limit: "30mb"}))
@@ -28,6 +31,41 @@ app.use("/api/product", productRoutes)
 app.use("/api/cart", cartRoutes)
 app.use("/api/order", orderRoutes)
 app.use("/api/payment", paymentRoutes)
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID!,
+    clientSecret: process.env.CLIENT_SECRET!,
+    callbackURL: `${process.env.SERVER_URL}/api/user/login/v2/callback`,
+}, async (accessToken, refreshToken, profile, done) => {
+    
+    const email = profile.emails?.[0]?.value
+
+    if(!email){
+        return done(new Error("email not available"));
+    }
+
+    let user = await prisma.user.findUnique({
+        where:{
+            email: email as string
+        }
+    });
+    const name = splitName(profile.displayName);
+    //sign-up proxy
+    if(!user){
+        user = await prisma.user.create({
+            data:{
+                email: email,
+                firstName: name.firstName,
+                lastName: name.lastName,
+                username: profile.username || profile.displayName
+            }
+        })
+    }
+
+    //login
+    done(null, user);
+}
+))
 
 const port = process.env.PORT!
 app.listen(port, () => console.log(`app running in port: ${port}`));
