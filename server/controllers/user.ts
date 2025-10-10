@@ -1,5 +1,5 @@
 import * as express from "express";
-import { Prisma, type User } from "../generated/prisma/index.js";
+import { type User } from "@prisma/client";
 import bcrypt from "bcrypt"
 import prisma from "../utils/prisma.js";
 import { generateToken } from "../utils/genearateToken.js";

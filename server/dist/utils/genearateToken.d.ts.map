@@ -1,1 +1,1 @@
-{"version":3,"file":"genearateToken.d.ts","sourceRoot":"","sources":["../../utils/genearateToken.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,IAAI,EAAE,MAAM,8BAA8B,CAAA;AAKxD,eAAO,MAAM,aAAa,GAAI,MAAM,IAAI,WAIvC,CAAA"}
+{"version":3,"file":"genearateToken.d.ts","sourceRoot":"","sources":["../../utils/genearateToken.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,IAAI,EAAE,MAAM,gBAAgB,CAAA;AAK1C,eAAO,MAAM,aAAa,GAAI,MAAM,IAAI,WAIvC,CAAA"}

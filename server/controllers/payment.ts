@@ -2,7 +2,7 @@ import * as express from "express";
 import { stkPush,  } from "../utils/stkCallback.js";
 import {formatPhoneNumber} from "../utils/formmatNumber.js"
 
-import type {Payment, Prisma} from "../generated/prisma/index.js"
+import type { Prisma} from "@prisma/client"
 import prisma from "../utils/prisma.js";
 import {type StkCallbackRequest } from "../types/daraja.js";
 //payment controller
