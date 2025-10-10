@@ -2,7 +2,7 @@ import * as express from "express";
 import { protect } from "../middleware/protect.js";
 import { addProduct, deleteProduct, getAllProducts, getProductByShop, getSingleProduct, toggleIsFeatured, updateProduct } from "../controllers/product.js";
 import { adminsOnly, vendorsOnly } from "../middleware/adminsOnly.js";
-import upload from "../utils/upload";
+import upload from "../utils/upload.js";
 const router = express.Router();
 router.post("/create/:shopId", protect, vendorsOnly, upload.array("images", 10), addProduct);
 router.put("/update/:productId", protect, vendorsOnly, upload.array("images", 10), updateProduct);
