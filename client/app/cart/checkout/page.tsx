@@ -17,11 +17,11 @@ const Checkout = () => {
     <div className='max-w-7xl mx-auto min-h-[45vh]'>
         {myOrders?.length === 0 && <p className='text-4xl text-primary text-center'>No orders yet</p>}
         {myOrders?.map(order => <div key={order.id} className="max-w-lg border-1 mx-auto m-3 rounded p-3 border-primary">
-            <h3 className='text-center'>Order summary</h3>
+            <h3 className='text-center font-bold'>Order summary</h3>
             {
                 order?.items?.map(item => 
                     <div key={item.id} className="flex justify-between border-b border-b-slate-50/30">
-                        <p>{item.product.name} * {item.quantity}</p>
+                        <p>{item.product.name}: {item.product.price} * {item.quantity}</p>
                         <p>{item.product.price * item.quantity}</p>
                         
                     </div>
