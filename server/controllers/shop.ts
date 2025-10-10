@@ -1,8 +1,8 @@
 import * as express from "express"
-import type { Shop, User } from "../generated/prisma/index";
-import prisma from "../utils/prisma";
-import { checkUser } from "../utils/checkUser";
-import { uploadToCloudinary } from "../utils/cloudinary";
+import type { Shop, User } from "../generated/prisma/index.js";
+import prisma from "../utils/prisma.js";
+import { checkUser } from "../utils/checkUser.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const applyForShop: express.RequestHandler = async (req, res) => {
     const {

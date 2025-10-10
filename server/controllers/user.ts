@@ -1,9 +1,9 @@
 import * as express from "express";
-import { Prisma, type User } from "../generated/prisma/index";
+import { Prisma, type User } from "../generated/prisma/index.js";
 import bcrypt from "bcrypt"
-import prisma from "../utils/prisma";
-import { generateToken } from "../utils/genearateToken";
-import { checkUser } from "../utils/checkUser";
+import prisma from "../utils/prisma.js";
+import { generateToken } from "../utils/genearateToken.js";
+import { checkUser } from "../utils/checkUser.js";
 
 
 export const login: express.RequestHandler = async (req, res) =>{

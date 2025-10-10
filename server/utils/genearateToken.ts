@@ -1,4 +1,4 @@
-import type { User } from "../generated/prisma/index"
+import type { User } from "../generated/prisma/index.js"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 

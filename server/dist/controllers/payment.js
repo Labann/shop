@@ -1,8 +1,8 @@
 import * as express from "express";
-import { stkPush, } from "../utils/stkCallback";
-import { formatPhoneNumber } from "../utils/formmatNumber";
-import prisma from "../utils/prisma";
-import {} from "../types/daraja";
+import { stkPush, } from "../utils/stkCallback.js";
+import { formatPhoneNumber } from "../utils/formmatNumber.js";
+import prisma from "../utils/prisma.js";
+import {} from "../types/daraja.js";
 //payment controller
 export const makePayment = async (req, res) => {
     const { method, orderId } = req.body;

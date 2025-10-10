@@ -1,4 +1,4 @@
-import { checkUser } from "../utils/checkUser";
+import { checkUser } from "../utils/checkUser.js";
 import {} from "express";
 import * as express from "express";
 export const adminsOnly = async (req, res, next) => {

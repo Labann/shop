@@ -1,5 +1,5 @@
-import type { StkCallback, StkPushResponse } from "../types/daraja";
-import { getAccessToken } from "./getAccessToken";
+import type { StkCallback, StkPushResponse } from "../types/daraja.js";
+import { getAccessToken } from "./getAccessToken.js";
 
 export const stkPush = async (phone: string, amount: number): Promise<StkPushResponse> => {
   const token = await getAccessToken();

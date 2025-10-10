@@ -1,7 +1,7 @@
 import * as express from "express";
-import type { Product } from "../generated/prisma/index";
-import prisma from "../utils/prisma";
-import { uploadToCloudinary } from "../utils/cloudinary";
+import type { Product } from "../generated/prisma/index.js";
+import prisma from "../utils/prisma.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const addProduct: express.RequestHandler = async (req, res) => {
     const {

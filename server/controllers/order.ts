@@ -1,7 +1,7 @@
 import * as express from "express"
-import type { CartItem, OrderItem, Payment, Product, User } from "../generated/prisma/index";
-import prisma from "../utils/prisma";
-import { checkUser } from "../utils/checkUser";
+import type { CartItem, User } from "../generated/prisma/index.js";
+import prisma from "../utils/prisma.js";
+import { checkUser } from "../utils/checkUser.js";
 
 
 export const createOrder: express.RequestHandler = async (req, res) => {

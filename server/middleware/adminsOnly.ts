@@ -1,5 +1,5 @@
-import type { User } from "../generated/prisma/index"
-import { checkUser } from "../utils/checkUser"
+import type { User } from "../generated/prisma/index.js"
+import { checkUser } from "../utils/checkUser.js"
 import {type NextFunction} from "express"
 import * as express from "express"
 export const adminsOnly: express.RequestHandler  = async (req, res, next) => {

@@ -1,7 +1,7 @@
 import * as express from "express";
-import prisma from "../utils/prisma";
-import { checkUser } from "../utils/checkUser";
-import { uploadToCloudinary } from "../utils/cloudinary";
+import prisma from "../utils/prisma.js";
+import { checkUser } from "../utils/checkUser.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 export const applyForShop = async (req, res) => {
     const { name, description, category, location, } = req.body;
     const file = req.file;

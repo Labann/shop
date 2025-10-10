@@ -1,7 +1,7 @@
 import jwt, {type JwtPayload} from "jsonwebtoken"
 import * as express from "express"
-import prisma from "../utils/prisma"
-import type { User } from "../generated/prisma/index"
+import prisma from "../utils/prisma.js"
+import type { User } from "../generated/prisma/index.js"
 
 //const protect
 

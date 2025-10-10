@@ -1,6 +1,6 @@
 import * as express from "express";
-import prisma from "../utils/prisma";
-import { uploadToCloudinary } from "../utils/cloudinary";
+import prisma from "../utils/prisma.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 export const addProduct = async (req, res) => {
     const { name, description, category, stock, price } = req.body;
     const files = req.files;

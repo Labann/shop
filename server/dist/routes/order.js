@@ -1,7 +1,7 @@
 import * as express from "express";
-import { protect } from "../middleware/protect";
-import { cancelOrder, createOrder, getMyOrders, getSingleOrder, updateOrderStatus } from "../controllers/order";
-import { vendorsOnly } from "../middleware/adminsOnly";
+import { protect } from "../middleware/protect.js";
+import { cancelOrder, createOrder, getMyOrders, getSingleOrder, updateOrderStatus } from "../controllers/order.js";
+import { vendorsOnly } from "../middleware/adminsOnly.js";
 const router = express.Router();
 router.post("/create", protect, createOrder);
 router.get("/my-orders", protect, getMyOrders);

@@ -1,5 +1,5 @@
-import type { User } from "../generated/prisma/index"
-import prisma from "./prisma"
+import type { User } from "../generated/prisma/index.js"
+import prisma from "./prisma.js"
 import * as express from "express"
 
 export const checkUser = async (user: User) => {

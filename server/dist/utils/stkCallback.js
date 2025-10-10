@@ -1,4 +1,4 @@
-import { getAccessToken } from "./getAccessToken";
+import { getAccessToken } from "./getAccessToken.js";
 export const stkPush = async (phone, amount) => {
     const token = await getAccessToken();
     const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '').slice(0, 14);

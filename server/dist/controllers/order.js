@@ -1,6 +1,6 @@
 import * as express from "express";
-import prisma from "../utils/prisma";
-import { checkUser } from "../utils/checkUser";
+import prisma from "../utils/prisma.js";
+import { checkUser } from "../utils/checkUser.js";
 export const createOrder = async (req, res) => {
     const { items } = req.body;
     try {

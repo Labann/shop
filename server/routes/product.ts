@@ -1,7 +1,7 @@
 import * as express from "express"
-import { protect } from "../middleware/protect";
-import { addProduct, deleteProduct, getAllProducts, getProductByShop, getSingleProduct, toggleIsFeatured, updateProduct } from "../controllers/product";
-import { adminsOnly, vendorsOnly } from "../middleware/adminsOnly";
+import { protect } from "../middleware/protect.js";
+import { addProduct, deleteProduct, getAllProducts, getProductByShop, getSingleProduct, toggleIsFeatured, updateProduct } from "../controllers/product.js";
+import { adminsOnly, vendorsOnly } from "../middleware/adminsOnly.js";
 import upload from "../utils/upload";
 
 
