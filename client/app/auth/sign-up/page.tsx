@@ -1,8 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { GoEyeClosed } from "react-icons/go";
 import { GoEye } from "react-icons/go";
-import Image from 'next/image'
 import Link from 'next/link';
 import { FcGoogle } from "react-icons/fc";
 
@@ -11,33 +10,19 @@ import * as yup from "yup"
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { reset, signup } from '@/app/store/authSlice';
+import { signup } from '@/app/store/authSlice';
 import Spinner from '@/app/components/Spinner';
 import { createCart } from '@/app/store/cartSlice';
 
 
 const SignUp = () => {
     const dispatch = useAppDispatch();
-    const {isSuccess, isError, currentUser,  message, isLoading} = useAppSelector(state => state.auth);
+    
     const router = useRouter(); 
+    const {isLoading} = useAppSelector(state => state.auth);
     const [isSeen, setIsSeen] = useState(false);
     const [isSeenConfirm, setIsSeenConfirm] = useState(false);
-    useEffect(()=>{
-            if(isError){
-                toast.error(message)
-                return
-            }
-            if(isSuccess && currentUser){
-                toast.success("use created successfully")
-                dispatch(createCart());
-                router.push("/")
-                return
-            }
     
-            return () => {
-                dispatch(reset())
-            }
-        }, [isSuccess, isError,  dispatch, message, router])
     const schema = yup.object({
         firstName: yup.string().min(2).required(),
         lastName: yup.string().min(2).required(),
@@ -48,10 +33,22 @@ const SignUp = () => {
             .oneOf([yup.ref("password")], "Password must match").required()
 
     })
+    const {currentUser} = useAppSelector(state => state.auth);
     
     const formik = useFormik({
         initialValues: {email: "", password: "", firstName: "", lastName: "", confirm: "", username: ""},
-        onSubmit: (values) => dispatch(signup(values)),
+        onSubmit: async (values) => {
+            const action = await dispatch(signup(values))
+            console.log(currentUser);
+            if(action.type === "/auth/signup/fulfilled"){
+                toast.success("user created successfully")
+                if(currentUser) {
+                    toast.success("create cart executed");
+                    await dispatch(createCart())
+                }
+                router.push("/")
+            }
+        },
         validationSchema: schema
     })
   return (

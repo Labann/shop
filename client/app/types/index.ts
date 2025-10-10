@@ -94,6 +94,8 @@ export type IOrderItem = {
   id :string 
   order : IOrder 
   orderId :string
+  cartItem: ICartItem
+  cartItemId: string
   quantity : number
   product : IProduct 
   productId :string
@@ -113,7 +115,8 @@ export type ICartItem = {
   cartId    :string
   cart      : ICart      
   product   : IProduct   
-  quantity  : number       
+  quantity  : number
+  orderItem: IOrderItem | null       
   createdAt :Date 
   updatedAt : Date 
 

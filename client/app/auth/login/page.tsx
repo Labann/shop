@@ -25,7 +25,7 @@ const Login = () => {
         }
         if(isSuccess && currentUser){
             toast.success("logged in successfully")
-            router.push("/")
+            router.push("/");
             return
         }
 

@@ -20,7 +20,7 @@ const initialState: IInitialState = {
     message: ""
 }
 
-export const getCartItems = createAsyncThunk<
+export const getMyCart = createAsyncThunk<
     ICart,
     void,
     {rejectValue:  string}
@@ -36,9 +36,10 @@ export const getCartItems = createAsyncThunk<
 
         const data = await res.json();
         
-        if(data.error){
+        if(res.status !== 200){
             return thunkApi.rejectWithValue(data.error);
         }
+        
 
         localStorage.setItem("cart", JSON.stringify(data));
         return data;
@@ -69,7 +70,7 @@ export const addToCart = createAsyncThunk<
             return thunkApi.rejectWithValue(data.error);
         }
 
-        localStorage.setItem("cart", JSON.stringify(data));
+        
         return data;
     } catch (error) {
         console.error(error);
@@ -176,16 +177,16 @@ const cartSlice = createSlice({
     },
     extraReducers: (builder => {
         builder
-            .addCase(getCartItems.pending, (state) => {
+            .addCase(getMyCart.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(getCartItems.fulfilled, (state, action) => {
+            .addCase(getMyCart.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
                 
                 state.cart = action.payload
             })
-            .addCase(getCartItems.rejected, (state, action) => {
+            .addCase(getMyCart.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload as string
@@ -201,9 +202,11 @@ const cartSlice = createSlice({
                 if(index === -1) {
                     //not found
                     state.cart?.items.push(action.payload);
+                    localStorage.setItem("cart", JSON.stringify(state.cart))
                 }
                 if (state.cart && index !== -1) {
                     state.cart.items[index] = action.payload;
+                    localStorage.setItem("cart", JSON.stringify(state.cart));
                 }
 
 

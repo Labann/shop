@@ -34,6 +34,7 @@ export const protect: express.RequestHandler = async (req, res, next) => {
             })
         }
 
+        
         const user = await prisma.user.findUnique({
             where: {
                 id: decoded.userId
@@ -41,6 +42,7 @@ export const protect: express.RequestHandler = async (req, res, next) => {
         })
 
         if(!user){
+            console.log(decoded.userId);
             console.log("the error is here")
             return res.status(404).json({
                 error: 'user not found'

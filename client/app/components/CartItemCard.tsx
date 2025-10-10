@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ICartItem } from '../types'
+import { ICartItem, IOrderItem } from '../types'
 import { removeFromCart, updateItemQuantity } from '../store/cartSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { toast } from 'react-toastify'
@@ -10,17 +10,21 @@ import Spinner from './Spinner'
 const CartItemCard = ({item}: {
     item: ICartItem
 }) => {
-    
+    const {myOrders} = useAppSelector(state => state.order);
     const dispatch = useAppDispatch();
     const [quantity, setQuantity] = useState(1);
     const {cart, message} = useAppSelector(state => state.cart);
+    
     useEffect(()=> {
+        if(!item) return
         setQuantity(item.quantity);
+        
     }, [item])
+    
     const [isRemoving, setIsRemoving] = useState(false);
     if(!cart || !item) return <div className="min-h-[45vh] text-primary font-bold">no cart || item</div>
   return (
-    <div  className="bg-gray-200 my-3  rounded-md p-3 flex flex-row items-center">
+    <div  className={`${myOrders && item && myOrders?.length !== 0 && myOrders?.some(o => o?.items?.some(i => i?.cartItemId === item?.id)) && `line-through opacity-40 pointer-events-none`} bg-gray-200 my-3  rounded-md p-3 flex flex-row items-center`}>
                 <div className="flex flex-col justify-center items-center space-y-3">
                     <div className="w-[8em] flex justify-center items-center">
                         <Image

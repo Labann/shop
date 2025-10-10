@@ -50,6 +50,7 @@ export const createOrder = async (req, res) => {
             //create all order-items
             await tx.orderItem.createMany({
                 data: items.map(item => ({
+                    cartItemId: item.id,
                     orderId: newOrder.id,
                     quantity: item.quantity,
                     productId: item.productId
@@ -88,6 +89,7 @@ export const createOrder = async (req, res) => {
                     items: {
                         include: {
                             product: true,
+                            cartItem: true
                         },
                     },
                     payment: true,
@@ -111,6 +113,15 @@ export const getMyOrders = async (req, res) => {
         const order = await prisma.order.findMany({
             where: {
                 userId: user.id
+            },
+            include: {
+                items: {
+                    include: {
+                        cartItem: true,
+                        product: true
+                    }
+                },
+                payment: true,
             }
         });
         if (!order || order.length === 0)
@@ -136,6 +147,14 @@ export const getSingleOrder = async (req, res) => {
         const order = await prisma.order.findUnique({
             where: {
                 id: orderId
+            },
+            include: {
+                items: {
+                    include: {
+                        product: true,
+                        cartItem: true
+                    }
+                }
             }
         });
         if (!order)
@@ -187,6 +206,7 @@ export const getOrdersInMyShop = async (req, res) => {
                                 id: true,
                                 name: true,
                                 price: true,
+                                cartItems: true
                             },
                         },
                     },
@@ -235,6 +255,15 @@ export const updateOrderStatus = async (req, res) => {
             },
             data: {
                 status: status
+            },
+            include: {
+                payment: true,
+                items: {
+                    include: {
+                        product: true,
+                        cartItem: true
+                    }
+                }
             }
         });
         return res.status(200).json({

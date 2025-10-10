@@ -24,9 +24,7 @@ const Products = () => {
         }
     }, [shopId, dispatch])
   
-   const [isAddProduct, setIsAddProduct] = useState<boolean>(false);
-   const [isEditProduct, setIsEditProduct] = useState<boolean>(false);
-    const [productId, setProductId] = useState("");
+   
    const [isLoading, setIsLoading] = useState(false);
 
    if(currentUser?.role !== "SUPER_ADMIN"){

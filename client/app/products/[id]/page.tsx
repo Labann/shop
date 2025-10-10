@@ -106,8 +106,7 @@ const Products = () => {
                         if(action.type === "/cart/add/fulfilled"){
                             toast.success("product added to cart");
                         }else {
-                            
-                            toast.error(message)
+                            toast.error(action.payload as string);
                         }
                 }
                 } 

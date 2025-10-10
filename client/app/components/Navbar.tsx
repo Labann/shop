@@ -37,6 +37,10 @@ const Navbar = () => {
             dispatch(shopReset())
         }
     }, [dispatch, isError, isSuccess, message, currentUser])
+    const {myOrders} = useAppSelector(state => state.order);
+    const ids = myOrders.flatMap(order => order.items.map(item => item.cartItemId));
+    const filtered = cart?.items.filter(item => !ids.includes(item.id));
+
     return (
     <div className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
         {
@@ -167,16 +171,16 @@ const Navbar = () => {
                     size={"1.5em"}
                     className='font-bold'
                     />
-                <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>{cart?.items?.length}</span>
+                <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>{filtered?.length}</span>
             </Link>}
             
-            <Link href={"/wishlist"} className="relative cursor-pointer">
+            {currentUser && <Link href={"/wishlist"} className="relative cursor-pointer">
                 <MdOutlineFavoriteBorder 
                     size={"1.5em"}
                     className='font-bold'
                     />
                 <span className='absolute -top-1 bg-primary text-white rounded-full font-bold -right-1 text-[.5em] w-4 h-4 flex justify-center items-center'>2</span>
-            </Link>
+            </Link>}
             
             <Link href={"/profile"}>
                 <GoPerson 

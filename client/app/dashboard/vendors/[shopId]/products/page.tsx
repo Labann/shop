@@ -83,8 +83,8 @@ const Products = () => {
                                     <span className="">Out of Stock</span>
                                 </span>}
                             </td>
-                            <td>
-                                {<FaRegStar className={`${value.isFeatured? `bg-primary`: `bg-white`}`}/>}
+                            <td className=''>
+                                {<FaRegStar size={"1.5em"} className={`${value.isFeatured? `bg-primary`: `bg-white`} mx-auto`}/>}
                             </td>
                             <td className="text-center"><button onClick={async () => {
                                 await setProductId(value.id)

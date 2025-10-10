@@ -136,6 +136,7 @@ const shopSlice = createSlice({
     initialState: initialState,
     reducers: {
         reset: (state) => {
+            state.myShops = []
             state.isLoading = false
             state.isError = false
             state.isSuccess = false

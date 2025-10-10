@@ -4,6 +4,7 @@ import { checkUser } from "../utils/checkUser";
 export const createCart = async (req, res) => {
     try {
         const user = req.user;
+        checkUser(user);
         const cartExist = await prisma.cart.findUnique({
             where: {
                 userId: user.id
@@ -103,7 +104,6 @@ export const addToCart = async (req, res) => {
                 id: productId
             }
         });
-        console.log(cartId);
         if (!cartExist) {
             return res.status(404).json({
                 error: "cart does not exist"
@@ -127,6 +127,38 @@ export const addToCart = async (req, res) => {
             }
         });
         if (cartItem) {
+            const isOrdered = await prisma.orderItem.findUnique({
+                where: {
+                    cartItemId: cartItem.id
+                }
+            });
+            if (isOrdered) {
+                //if is in cartItem and ordered already delete and create a new one
+                await prisma.cartItem.update({
+                    where: {
+                        id: cartItem.id,
+                    },
+                    data: {
+                        cartId: null
+                    }
+                });
+                const newCartItem = await prisma.cartItem.create({
+                    data: {
+                        cartId,
+                        productId,
+                        quantity: parseInt(quantity)
+                    },
+                    include: {
+                        product: {
+                            include: {
+                                shop: true
+                            }
+                        }
+                    }
+                });
+                return res.status(200).json(newCartItem);
+            }
+            //if is cartItem and not ordered yet just update quantity
             const updatedCartItem = await prisma.cartItem.update({
                 where: {
                     productId_cartId: {
@@ -135,13 +167,9 @@ export const addToCart = async (req, res) => {
                     }
                 },
                 include: {
-                    cart: {
+                    product: {
                         include: {
-                            items: {
-                                include: {
-                                    product: true
-                                }
-                            }
+                            shop: true
                         }
                     }
                 },
@@ -158,13 +186,9 @@ export const addToCart = async (req, res) => {
                 quantity: parseInt(quantity)
             },
             include: {
-                cart: {
+                product: {
                     include: {
-                        items: {
-                            include: {
-                                product: true
-                            }
-                        }
+                        shop: true
                     }
                 }
             }

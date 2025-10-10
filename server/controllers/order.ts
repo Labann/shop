@@ -1,5 +1,5 @@
 import * as express from "express"
-import type { OrderItem, Payment, Product, User } from "../generated/prisma/index";
+import type { CartItem, OrderItem, Payment, Product, User } from "../generated/prisma/index";
 import prisma from "../utils/prisma";
 import { checkUser } from "../utils/checkUser";
 
@@ -8,7 +8,7 @@ export const createOrder: express.RequestHandler = async (req, res) => {
     const {
         items
     }: {
-        items: OrderItem[]
+        items: CartItem[]
     } = req.body
     try {
         const user = req.user as User;
@@ -68,6 +68,7 @@ export const createOrder: express.RequestHandler = async (req, res) => {
             //create all order-items
             await tx.orderItem.createMany({
                 data: items.map(item => ({
+                    cartItemId: item.id,
                     orderId: newOrder.id,
                     quantity: item.quantity,
                     productId: item.productId
@@ -111,7 +112,8 @@ export const createOrder: express.RequestHandler = async (req, res) => {
                     include: {
                     items: {
                         include: {
-                        product: true,
+                            product: true,
+                            cartItem: true
                         },
                     },
                     payment: true,
@@ -140,6 +142,16 @@ export const getMyOrders: express.RequestHandler = async (req, res) => {
         const order = await prisma.order.findMany({
             where: {
                 userId: user.id
+            },
+            include: {
+                items: {
+                    include: {
+                        cartItem: true,
+                        product: true
+                    }
+                },
+                payment: true,
+
             }
         });
 
@@ -167,6 +179,14 @@ export const getSingleOrder: express.RequestHandler = async (req, res) => {
         const order = await prisma.order.findUnique({
             where: {
                 id: orderId
+            },
+            include: {
+                items: {
+                    include: {
+                        product: true,
+                        cartItem: true
+                    }
+                }
             }
         });
 
@@ -221,7 +241,9 @@ export const getOrdersInMyShop: express.RequestHandler = async (req, res) => {
                             id: true,
                             name: true,
                             price: true,
+                            cartItems: true
                         },
+                        
                         },
                     },
                 },
@@ -277,6 +299,15 @@ export const updateOrderStatus: express.RequestHandler = async (req, res) => {
                 },
                 data:{
                     status: status
+                },
+                include: {
+                    payment: true,
+                    items: {
+                        include: {
+                            product: true,
+                            cartItem: true
+                        }
+                    }
                 }
             })
 
