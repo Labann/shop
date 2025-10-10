@@ -7,6 +7,7 @@ import { getMyCart } from '../store/cartSlice'
 import CartItemCard from '../components/CartItemCard'
 import { getMyOrders, makeOrder } from '../store/orderSlice'
 import { toast } from 'react-toastify'
+import Spinner from '../components/Spinner'
 
 
 const Cart = () => {
@@ -15,7 +16,8 @@ const Cart = () => {
     const [total, setTotal] = useState(0);
     const {message} = useAppSelector(state => state.order)
     const {cart} = useAppSelector(state => state.cart);
-    const {myOrders} = useAppSelector(state => state.order);
+    const {myOrders, isLoading} = useAppSelector(state => state.order);
+    
     useEffect(()=>{
         dispatch(getMyCart());
         dispatch(getMyOrders());
@@ -92,7 +94,9 @@ const Cart = () => {
                     <span className='font-bold text-primary pr-1'>Total:</span>
                     
                 </div>
-                <button onClick={createOrder} className={`${filtered?.length === 0 && `pointer-events-none bg-primary/30`} bg-primary cursor-pointer mt-4 rounded-md p-3 text-white font-semibold hover:bg-primary/30`}>Make order</button>
+                <button onClick={createOrder} className={`${filtered?.length === 0 && `pointer-events-none bg-primary/30`} bg-primary cursor-pointer mt-4 rounded-md p-3 text-white font-semibold hover:bg-primary/30`}>{
+                    isLoading? <Spinner/>: "Place order"
+                }</button>
             </div>
             
         </div>

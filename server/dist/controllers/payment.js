@@ -56,7 +56,7 @@ export const makePayment = async (req, res) => {
                 });
             }
             // Update payment with STK details
-            await prisma.payment.update({
+            const updatedPayment = await prisma.payment.update({
                 where: { id: payment.id },
                 data: {
                     method: "MPESA",
@@ -68,7 +68,7 @@ export const makePayment = async (req, res) => {
             });
             return res.status(200).json({
                 message: "STK Push initiated",
-                checkoutRequestId: stkResponse.CheckoutRequestID
+                updatedPayment
             });
         }
         if (method === "CARD") {
