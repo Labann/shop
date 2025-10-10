@@ -68,7 +68,7 @@ export const makePayment: express.RequestHandler = async (req, res) => {
             })
             const normalized = formatPhoneNumber(mpesaNumber)
             //make payment by Mpesa
-            const stkResponse = await stkPush(normalized, totalAmount)
+            const stkResponse = await stkPush(normalized, totalAmount, orderId)
 
             if(stkResponse.ResponseCode !== "0"){
                 return res.status(500).json({

@@ -1,5 +1,5 @@
 import { getAccessToken } from "./getAccessToken.js";
-export const stkPush = async (phone, amount) => {
+export const stkPush = async (phone, amount, orderId) => {
     const token = await getAccessToken();
     const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '').slice(0, 14);
     const password = Buffer.from(`${process.env.BusinessShortCode}${process.env.Passkey}${timestamp}`).toString('base64');
@@ -12,9 +12,9 @@ export const stkPush = async (phone, amount) => {
         PartyA: phone,
         PartyB: "174379",
         PhoneNumber: phone,
-        CallBackURL: `${process.env.SERVER_URL}/api/payment/callback`,
-        AccountReference: "Order123",
-        TransactionDesc: "Payment for Order 123"
+        CallBackURL: `${process.env.SERVER_URL}/api/mpesa/callback`,
+        AccountReference: orderId,
+        TransactionDesc: `Payment for orderId:${orderId}`
     };
     const res = await fetch('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', {
         method: 'POST',
