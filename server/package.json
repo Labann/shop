@@ -22,6 +22,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
+    "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
@@ -40,7 +41,6 @@
     "i": "^0.3.7",
     "multer": "^2.0.2",
     "npm": "^11.6.1",
-    "passport": "^0.7.0",
     "prisma": "^6.16.3",
     "streamifier": "^0.1.1",
     "tsx": "^4.20.5",
