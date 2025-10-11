@@ -18,18 +18,7 @@ export const loginV2 = createAsyncThunk<
     {rejectValue: string}
 >("/auth/login/v2",async (_, thunkApi) => {
     try {
-        const res = await fetch(`${apiUrl}/api/user/v2/login`, {
-            method: "GET",
-            headers: {"Content-type": "application/json"},
-            credentials: "include"
-        });
-        const data = await res.json();
-
-        if(data.error){
-            return thunkApi.rejectWithValue(data.error);
-        }
-
-        return data;
+        window.location.href = `${apiUrl}/api/user/v2/login`;
     } catch (error) {
       console.error(error);
       return thunkApi.rejectWithValue((error as Error).message)  
