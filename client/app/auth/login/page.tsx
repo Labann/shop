@@ -107,6 +107,10 @@ const Login = () => {
 
                 <button className='w-full bg-gray-300 p-3 cursor-pointer rounded text-sm'>{isLoading? <Spinner/>: "Sign in"}</button>
 
+                
+            </form>
+
+            <div className="flex flex-col w-full space-y-3">
                 <span className='text-center text-sm'>or</span>
                 
                 <button onClick={() => dispatch(loginV2())} type='submit' className='w-full border-1 border-primary cursor-pointer p-2 flex items-center space-x-2 justify-center rounded'>
@@ -116,7 +120,7 @@ const Login = () => {
                 <br />
 
                 <span className='text-sm'>{"Don't have an account? "} <Link href={"/auth/sign-up"} className='font-bold text-primary'>Join us</Link></span>
-            </form>
+            </div>
         </div>
         
     </div>

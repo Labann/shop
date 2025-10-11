@@ -192,16 +192,19 @@ const SignUp = () => {
                     
                     <button className='w-full bg-gray-300 cursor-pointer rounded p-3 text-sm'>{isLoading? <Spinner/>: "Sign up"}</button>
     
+                    
+                </form>
+                <div className="mx-auto flex flex-col space-y-3 w-full py-2">
                     <span className='text-center text-sm'>or</span>
                     
                     <button onClick={() => dispatch(loginV2())} className='w-full border-1 border-primary cursor-pointer p-2 flex items-center space-x-2 justify-center rounded'>
                         <FcGoogle /><span className='text-sm'>Sign in with Google</span>
                     </button>
     
-                    <br />
+                    
     
-                    <span className='text-sm'>{"Already have an account? "} <Link href={"/auth/login"} className='font-bold text-primary'>Sing in</Link></span>
-                </form>
+                    <span className='text-sm'>{"Already have an account? "} <Link href={"/auth/login"} className='font-bold text-primary'>Sign in</Link></span>
+                </div>
             </div>
             
         </div>
