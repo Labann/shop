@@ -14,11 +14,15 @@ import splitName from "./utils/splitName.js";
 import passport from "passport"
 import { Strategy as GoogleStrategy} from "passport-google-oauth20";
 const app = express();
+
 app.use(cors({
     origin: ["https://shop-tau-inky.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     credentials: true
 }));
+
+app.options("*", cors());
+
 app.use(express.json({limit: "30mb"}))
 app.use(express.urlencoded({limit: '30mb', extended: true}));
 app.use(cookieParser());
