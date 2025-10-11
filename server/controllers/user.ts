@@ -65,13 +65,13 @@ export const redirectToClientHome: express.RequestHandler = async (req, res) => 
     try {
         const user = req.user as User;
         if(!user){
-            return res.status(404).json({error: "user not found"});
+            return res.send(`<h1>user not found</h1>`).status(404);
         }
         const token = await generateToken(user);
         
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "development",
+            secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 15 * 24 * 60 * 60 * 1000 
         });
