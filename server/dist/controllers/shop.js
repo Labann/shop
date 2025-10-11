@@ -17,6 +17,25 @@ export const applyForShop = async (req, res) => {
                 error: "bad request"
             });
         }
+        const categories = [
+            "AIRPODES",
+            "CAMERA",
+            "EARPHONES",
+            "MOBILES",
+            "MOUSE",
+            "PRINTERS",
+            "PROCESSOR",
+            "REFRIGERATOR",
+            "SPEAKERS",
+            "TRIMMERS",
+            "TELEVISIONS",
+            "WATCHES"
+        ];
+        if (!categories.includes(category)) {
+            return res.status(400).json({
+                error: "category not allowed"
+            });
+        }
         const shopExist = await prisma.shop.findUnique({
             where: {
                 name: name

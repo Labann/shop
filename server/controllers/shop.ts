@@ -28,7 +28,26 @@ export const applyForShop: express.RequestHandler = async (req, res) => {
             })
         }
 
+        const categories = [
+            "AIRPODES",
+            "CAMERA",
+            "EARPHONES",
+            "MOBILES",
+            "MOUSE",
+            "PRINTERS",
+            "PROCESSOR",
+            "REFRIGERATOR",
+            "SPEAKERS",
+            "TRIMMERS",
+            "TELEVISIONS",
+            "WATCHES"
+        ]
 
+        if(!categories.includes(category)){
+            return res.status(400).json({
+                error: "category not allowed"
+            })
+        }
 
         const shopExist = await prisma.shop.findUnique({
             where: {

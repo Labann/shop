@@ -19,7 +19,7 @@ const SignUp = () => {
     const dispatch = useAppDispatch();
     
     const router = useRouter(); 
-    const {isLoading} = useAppSelector(state => state.auth);
+    const [isLoading, setIsLoading] = useState(false);
     const [isSeen, setIsSeen] = useState(false);
     const [isSeenConfirm, setIsSeenConfirm] = useState(false);
     
@@ -38,7 +38,9 @@ const SignUp = () => {
     const formik = useFormik({
         initialValues: {email: "", password: "", firstName: "", lastName: "", confirm: "", username: ""},
         onSubmit: async (values) => {
+            setIsLoading(true)
             const action = await dispatch(signup(values))
+            setIsLoading(false)
             console.log(currentUser);
             if(action.type === "/auth/signup/fulfilled"){
                 toast.success("user created successfully")

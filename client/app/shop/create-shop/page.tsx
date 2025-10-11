@@ -3,7 +3,6 @@ import Spinner from '@/app/components/Spinner'
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
 import { applyShop, reset } from '@/app/store/shopSlice'
 import { useFormik } from 'formik'
-import { useRouter } from 'next/navigation'
 import React, { useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import * as yup from "yup"
@@ -11,6 +10,57 @@ const CreateShop = () => {
     const {isLoading, isSuccess, isError, message} = useAppSelector(state => state.shop);
     const dispatch = useAppDispatch();
     
+    const categories = [
+        {
+            id: 0,
+            category: "AIRPODES"
+        },
+        {
+            id: 1,
+            category: "CAMERA"
+        },
+        {
+            id: 2,
+            category: "EARPHONES"
+        },
+        {
+            id: 3,
+            category: "MOBILES"
+        },
+        {
+            id: 4,
+            category: "MOUSE"
+        },
+        {
+            id: 5,
+            category: "PRINTERS"
+        },
+        {
+            id: 6,
+            category: "PROCESSOR"
+        },
+        {
+            id: 7,
+            category: "REFRIGERATOR"
+        },
+        {
+            id: 8,
+            category: "SPEAKERS"
+        },
+        {
+            id: 10,
+            category: "TRIMMERS"
+        },
+        {
+            id: 11,
+            category: "TELEVISIONS"
+        },
+        {
+            id: 12,
+            category: "WATCHES"
+        }
+        
+    ]
     useEffect(()=>{
         
         if(isError){
@@ -122,15 +172,25 @@ const CreateShop = () => {
 
                         <div className="flex flex-col space-y-2">
                             <label htmlFor="name" className='text-primary font-semibold'>Niche/ Business Category</label>
-                            <input 
-                                type="text" 
-                                placeholder='category'
+                            <select 
+                                title='category' 
                                 name='category'
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.category}
+                                id="category"
                                 className='w-full p-2 border-1 border-primary rounded-md'
-                                />
+                                >
+                                {categories.map(category => (
+                                    <option 
+                                        key={category.id} 
+                                        value={category.category}
+                                        
+                                        
+                                    
+                                        >{category.category}</option>
+                                ))}
+                            </select>
                             
                             {
                                 formik.touched.category && formik.errors.category &&

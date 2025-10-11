@@ -15,7 +15,7 @@ import passport from "passport"
 import { Strategy as GoogleStrategy} from "passport-google-oauth20";
 const app = express();
 app.use(cors({
-    origin: ["http://localhost:3000", "https://shop-tau-inky.vercel.app/"],
+    origin: ["https://shop-tau-inky.vercel.app", "http://localhost:3000"],
     credentials: true
 }));
 app.use(express.json({limit: "30mb"}))

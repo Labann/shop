@@ -15,8 +15,9 @@ import { useRouter } from 'next/navigation';
 import Spinner from '@/app/components/Spinner';
 const Login = () => {
     const dispatch = useAppDispatch();
-    const {isSuccess, currentUser, isError, message, isLoading} = useAppSelector(state => state.auth);
+    const {isSuccess, currentUser, isError, message} = useAppSelector(state => state.auth);
     const [isSeen, setIsSeen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter(); 
     useEffect(()=>{
         if(isError){
@@ -32,7 +33,7 @@ const Login = () => {
         return () => {
             dispatch(reset())
         }
-    }, [isSuccess, isError,  dispatch, message, router])
+    }, [isSuccess, isError,  dispatch, message, router, currentUser])
     const schema = yup.object({
         email: yup.string().email("Invalid format").required(),
         password: yup.string().min(3).max(20).required()
@@ -40,7 +41,11 @@ const Login = () => {
 
     const formik = useFormik({
         initialValues: {email: "", password: ""},
-        onSubmit: async (values) => await dispatch(login(values)),
+        onSubmit: async (values) => {
+            setIsLoading(true);
+            await dispatch(login(values))
+            setIsLoading(false)
+        },
         validationSchema: schema,
     })
   return (
