@@ -14,20 +14,24 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@types/cookie-parser": "^1.4.9",
+    "@prisma/client": "^6.17.1",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
+    "multer": "^2.0.2",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "prisma": "^6.17.1",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
-    "@prisma/client": "^6.16.3",
     "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.3",
@@ -37,12 +41,8 @@
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/streamifier": "^0.1.2",
-    "cloudinary": "^2.7.0",
     "i": "^0.3.7",
-    "multer": "^2.0.2",
     "npm": "^11.6.1",
-    "prisma": "^6.16.3",
-    "streamifier": "^0.1.1",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   }
