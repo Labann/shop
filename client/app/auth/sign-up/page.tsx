@@ -10,7 +10,7 @@ import * as yup from "yup"
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { signup } from '@/app/store/authSlice';
+import { loginV2, signup } from '@/app/store/authSlice';
 import Spinner from '@/app/components/Spinner';
 import { createCart } from '@/app/store/cartSlice';
 
@@ -194,7 +194,7 @@ const SignUp = () => {
     
                     <span className='text-center text-sm'>or</span>
                     
-                    <button className='w-full border-1 border-primary cursor-pointer p-2 flex items-center space-x-2 justify-center rounded'>
+                    <button onClick={() => dispatch(loginV2())} className='w-full border-1 border-primary cursor-pointer p-2 flex items-center space-x-2 justify-center rounded'>
                         <FcGoogle /><span className='text-sm'>Sign in with Google</span>
                     </button>
     

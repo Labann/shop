@@ -33,7 +33,7 @@ app.use("/api/payment", paymentRoutes);
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `${process.env.SERVER_URL}/api/user/login/v2/callback`,
+    callbackURL: `${process.env.SERVER_URL}/api/user/v2/login/callback`,
 }, async (accessToken, refreshToken, profile, done) => {
     const email = profile.emails?.[0]?.value;
     if (!email) {

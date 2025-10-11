@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import prisma from "../utils/prisma.js";
 import { generateToken } from "../utils/genearateToken.js";
 import { checkUser } from "../utils/checkUser.js";
+import dotenv from "dotenv";
+dotenv.config();
 export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -43,6 +45,28 @@ export const login = async (req, res) => {
     }
     catch (error) {
         console.log(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+export const redirectToClientHome = async (req, res) => {
+    try {
+        const user = req.user;
+        if (!user) {
+            return res.status(404).json({ error: "user not found" });
+        }
+        const token = await generateToken(user);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "development",
+            sameSite: "strict",
+            maxAge: 15 * 24 * 60 * 60 * 1000
+        });
+        return res.redirect(process.env.CLIENT_URL);
+    }
+    catch (error) {
+        console.error(error);
         return res.status(500).json({
             error: error.message
         });

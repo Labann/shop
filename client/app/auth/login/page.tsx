@@ -9,7 +9,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useFormik } from 'formik';
 import * as yup from "yup"
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux';
-import { login, reset } from '@/app/store/authSlice';
+import { login, loginV2, reset } from '@/app/store/authSlice';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Spinner from '@/app/components/Spinner';
@@ -109,7 +109,7 @@ const Login = () => {
 
                 <span className='text-center text-sm'>or</span>
                 
-                <button type='submit' className='w-full border-1 border-primary cursor-pointer p-2 flex items-center space-x-2 justify-center rounded'>
+                <button onClick={() => dispatch(loginV2())} type='submit' className='w-full border-1 border-primary cursor-pointer p-2 flex items-center space-x-2 justify-center rounded'>
                     <FcGoogle /><span className='text-sm'>Sign in with Google</span>
                 </button>
 

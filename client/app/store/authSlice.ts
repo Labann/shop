@@ -3,6 +3,7 @@ import {IUser} from "../types/index"
 import { apiUrl } from "../config/apiUrl";
 import { useAppDispatch } from "../hooks/redux";
 import { createCart } from "./cartSlice";
+import { stat } from "fs";
 type IInitialState = {
     currentUser: IUser| null,
     isLoading: boolean,
@@ -10,6 +11,30 @@ type IInitialState = {
     isSuccess: boolean
     message: string
 }
+
+export const loginV2 = createAsyncThunk<
+    void,
+    void,
+    {rejectValue: string}
+>("/auth/login/v2",async (_, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/user/v2/login`, {
+            method: "GET",
+            headers: {"Content-type": "application/json"},
+            credentials: "include"
+        });
+        const data = await res.json();
+
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error);
+        }
+
+        return data;
+    } catch (error) {
+      console.error(error);
+      return thunkApi.rejectWithValue((error as Error).message)  
+    }
+})
 
 export const login = createAsyncThunk<
     IUser,
@@ -161,6 +186,18 @@ const authSlice = createSlice({
             })
             .addCase(logout.rejected, (state, action) => {
                 state.isLoading = false
+                state.isError = true
+                state.message = action.payload as string
+            })
+            .addCase(loginV2.pending, (state, action) => {
+                state.isLoading = true
+            })
+            .addCase(loginV2.fulfilled, (state, action) => {
+                state.isLoading= false
+                state.isSuccess = true
+            })
+            .addCase(loginV2.rejected, (state, action) => {
+                state.isLoading=  false
                 state.isError = true
                 state.message = action.payload as string
             })
