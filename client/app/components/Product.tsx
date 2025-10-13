@@ -23,7 +23,7 @@ const Product = ({product}:{
                 height={100}
                 unoptimized
                 src={product.images[0]}
-                className='w-[7em]'
+                className='w-[7em] h-[7em]'
             />}
         </div>
         <div className="flex flex-col space-y-2">
