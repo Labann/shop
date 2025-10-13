@@ -23,10 +23,7 @@ const Navbar = () => {
     const [isShowShops, setIsShowShops] = useState(false);
     const {currentUser, isLoading, isSuccess, isError, message} = useAppSelector(state => state.auth);
     useEffect(()=>{
-        if(isSuccess && !currentUser){
-            toast.success("logged out!")
-            return
-        }
+        
         
         if(currentUser && currentUser.role == "VENDOR"){
             dispatch(getMyShops({userId: currentUser.id}))
@@ -95,7 +92,15 @@ const Navbar = () => {
                     }
                     {
                         currentUser && <button 
-                        onClick={()=> dispatch(logout())}
+                        onClick={async ()=> {
+                            const action = await dispatch(logout())
+                            if(action.type  === "/auth/logout/fulfilled"){
+                                toast.success("logged out successfully")
+                            }
+                            if(action.type === "/auth/logout/rejected"){
+                                toast.error(action.payload as string)
+                            }
+                        }}
                         className='bg-primary p-1 cursor-pointer rounded-md text-sm'>
                             {isLoading? <Spinner/>:  "Logout"}
                         </button>
