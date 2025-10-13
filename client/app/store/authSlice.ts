@@ -36,6 +36,7 @@ export const getMe = createAsyncThunk<
             headers: {"Content-type": "application/json"},
             credentials: "include"
         });
+
         const data = await res.json();
 
         if(data.error){
@@ -202,10 +203,10 @@ const authSlice = createSlice({
                 state.isError = true
                 state.message = action.payload as string
             })
-            .addCase(loginV2.pending, (state, action) => {
+            .addCase(loginV2.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(loginV2.fulfilled, (state, action) => {
+            .addCase(loginV2.fulfilled, (state) => {
                 state.isLoading= false
                 state.isSuccess = true
             })
@@ -214,7 +215,7 @@ const authSlice = createSlice({
                 state.isError = true
                 state.message = action.payload as string
             })
-            .addCase(getMe.pending, (state, action) => {
+            .addCase(getMe.pending, (state) => {
                 state.isLoading = true
             })
             .addCase(getMe.fulfilled, (state, action) => {
