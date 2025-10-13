@@ -46,7 +46,11 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
             .test("fileSize", "Each file must be less than 5MB", (files) => {
             if (!files || files.length === 0) return false;
             return files.every((file) => file.size <= 5 * 1024 * 1024); // 5MB
-            }),
+            })
+            .test("maxFiles", "You can upload a maximum of 10 images", (files) => {
+                if (!files || !Array.isArray(files)) return false;
+                return files.length <= 10;
+                }),
     })
     const initialValues = {
         name: "",
