@@ -63,7 +63,22 @@ export const redirectToClientHome = async (req, res) => {
             sameSite: "strict",
             maxAge: 15 * 24 * 60 * 60 * 1000
         });
+        if (!process.env.CLIENT_URL) {
+            throw new Error("CLIENT URL absent in .env");
+        }
         return res.redirect(process.env.CLIENT_URL);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+export const getMe = async (req, res) => {
+    try {
+        const user = req.user;
+        return res.status(200).json(user);
     }
     catch (error) {
         console.error(error);
