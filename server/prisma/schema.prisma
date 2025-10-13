@@ -20,7 +20,7 @@ model User {
   lastName  String   @default("")
   email     String   @unique
   password  String?
-  role      ROLE     @default(SUPER_ADMIN)
+  role      ROLE     @default(CUSTOMER)
   shops     Shop[]
   orders    Order[]
   cart      Cart?
