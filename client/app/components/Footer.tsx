@@ -45,7 +45,7 @@ const Footer  = () => {
                 </div>
             </div>
             <div className="text-center border-t border-slate-100 py-4">
-                <p>© 2025 LABAN_MAGOTSI. All Rights Reserved</p>
+                <p>© 2025 Magotsi Laban. All Rights Reserved</p>
             </div>
         </div>
     )
