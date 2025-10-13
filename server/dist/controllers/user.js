@@ -78,6 +78,7 @@ export const redirectToClientHome = async (req, res) => {
 export const getMe = async (req, res) => {
     try {
         const user = req.user;
+        console.log(user);
         return res.status(200).json(user);
     }
     catch (error) {
