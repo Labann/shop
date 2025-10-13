@@ -6,6 +6,7 @@ export const adminsOnly: express.RequestHandler  = async (req, res, next) => {
     try {
         const user = req.user as User
         await checkUser(user)
+        console.log(user.role);
         if(user.role !== "SUPER_ADMIN"){
             throw new Error("admins only")
         }   
