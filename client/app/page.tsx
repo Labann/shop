@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useAppDispatch } from "./hooks/redux";
 import { getMe } from "./store/authSlice";
+import { createCart } from "./store/cartSlice";
 
 export default function Home() {
   const searchParams = useSearchParams()
@@ -15,6 +16,7 @@ export default function Home() {
   useEffect(() => {
     if(token){
       dispatch(getMe())
+      dispatch(createCart());
     }
   }, [token, dispatch])
   return (

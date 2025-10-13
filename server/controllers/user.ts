@@ -290,6 +290,3 @@ export const getAllUser: express.RequestHandler = async(req, res) => {
         })
     }
 }
-//getProfile 
-//update profile
-//delete account

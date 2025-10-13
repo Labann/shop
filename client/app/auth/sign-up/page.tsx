@@ -45,7 +45,6 @@ const SignUp = () => {
             if(action.type === "/auth/signup/fulfilled"){
                 toast.success("user created successfully")
                 if(currentUser) {
-                    toast.success("create cart executed");
                     await dispatch(createCart())
                 }
                 router.push("/")

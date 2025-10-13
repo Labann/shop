@@ -245,7 +245,4 @@ export const getAllUser = async (req, res) => {
         });
     }
 };
-//getProfile 
-//update profile
-//delete account
 //# sourceMappingURL=user.js.map
