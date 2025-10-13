@@ -106,7 +106,7 @@ const CreateShop = () => {
   
   const fileRef = useRef<HTMLInputElement | null>(null);
   const formik = useFormik({
-    initialValues: {name: "", description: "", category: "", location: "", logo: null as File | null},
+    initialValues: {name: "", description: "", category: "AIRPODES", location: "", logo: null as File | null},
     onSubmit: async (values) => {
         const formData = new FormData();
 

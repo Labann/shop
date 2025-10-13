@@ -68,7 +68,7 @@ const Products = () => {
 
                 <div className="border-1 border-slate-100/100 w-full my-2"></div>
                 <div className="max-h-[20vh] overflow-y-scroll">
-                        <p className='text-xl text-slate-400 w-full'>{currentProduct?.description}</p>
+                    <p className='text-xl text-slate-400 w-full'>{currentProduct?.description}</p>
                 </div>
                 
                 <div className="flex items-center space-x-3">
@@ -120,7 +120,7 @@ const Products = () => {
             </div>
         </div>
 
-        <div className="flex items-center space-x-2 pb-10">
+        <div className="flex items-center flex-wrap space-x-2 pb-10">
                     {currentProduct?.images.map(img => <div onClick={()=> setCurrentImage(img)} key={img} className="w-[7em] cursor-pointer bg-slate-300 rounded">
                         <Image
                             alt='product-img'
@@ -128,7 +128,7 @@ const Products = () => {
                             width={100}
                             height={100}
                             src={img}
-                            className='object-center w-full h-full'
+                            className='object-center w-[7em] h-[7em]'
                         />
                     </div>)}
                    
