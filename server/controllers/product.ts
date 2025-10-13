@@ -153,6 +153,12 @@ export const deleteProduct: express.RequestHandler = async (req, res) => {
     }
 }
 
+function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
 
 export const getAllProducts:  express.RequestHandler = async (req, res) => {
     try {
@@ -167,8 +173,8 @@ export const getAllProducts:  express.RequestHandler = async (req, res) => {
                 error: "no products found"
             })
         }
-
-        return res.status(200).json(products);
+        const shuffledProducts = shuffleArray(products);
+        return res.status(200).json(shuffledProducts);
     } catch (error) {
         console.error(error);
         return res.status(500).json({

@@ -119,6 +119,12 @@ export const deleteProduct = async (req, res) => {
         });
     }
 };
+function shuffleArray(array) {
+    return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+}
 export const getAllProducts = async (req, res) => {
     try {
         const products = await prisma.product.findMany({
@@ -131,7 +137,8 @@ export const getAllProducts = async (req, res) => {
                 error: "no products found"
             });
         }
-        return res.status(200).json(products);
+        const shuffledProducts = shuffleArray(products);
+        return res.status(200).json(shuffledProducts);
     }
     catch (error) {
         console.error(error);
