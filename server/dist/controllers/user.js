@@ -38,7 +38,7 @@ export const login = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 15 * 24 * 60 * 60 * 1000
         });
         console.log(safeUser);
@@ -61,7 +61,7 @@ export const redirectToClientHome = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: "none",
             maxAge: 15 * 24 * 60 * 60 * 1000
         });
         if (!process.env.CLIENT_URL) {
@@ -122,7 +122,7 @@ export const signup = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 15 * 24 * 60 * 60 * 1000
         });
         const { password: _, ...safeUser } = newUser;
@@ -139,8 +139,8 @@ export const logout = async (req, res) => {
     try {
         res.cookie("token", "", {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "strict",
+            secure: process.env.NODE_ENV !== "production",
+            sameSite: "none",
             maxAge: 0
         });
         return res.status(200).json({
