@@ -67,7 +67,7 @@ const Products = () => {
                                     width={100}
                                     height={100}
                                     unoptimized
-                                    className="w-[5em]"
+                                    className="w-[5em] h-[5em]"
                                     alt="product-img"
                                 />
                                 <p className="truncate w-[13em]">{value.description}</p>
