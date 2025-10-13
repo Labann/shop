@@ -42,7 +42,20 @@ const EditProductModal = ({setIsEditProduct, productId}:{
             .test("fileType", "Unsupported file format", (files) => {
             if (!files || files.length === 0 || !Array.isArray(files)) return false;
             return files.every((file) =>
-                ["image/jpeg", "image/png", "image/jpg"].includes(file.type)
+                [
+                    "image/jpeg",
+                    "image/png",
+                    "image/jpg",
+                    "image/gif",
+                    "image/webp",
+                    "image/avif",
+                    "image/svg+xml",
+                    "image/bmp",
+                    "image/tiff",
+                    "image/x-icon", // for .ico files
+                    "image/heic",
+                    "image/heif"
+                ].includes(file.type)
             );
             })
             .test("fileSize", "Each file must be less than 5MB", (files) => {
