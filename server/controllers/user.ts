@@ -72,7 +72,7 @@ export const redirectToClientHome: express.RequestHandler = async (req, res) => 
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "lax",
             maxAge: 15 * 24 * 60 * 60 * 1000 
         });
         
@@ -144,7 +144,7 @@ export const signup: express.RequestHandler = async (req, res) => {
         
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "development",
+            secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 15 * 24 * 60 * 60 * 1000 
         })
