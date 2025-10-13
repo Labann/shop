@@ -27,7 +27,20 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
             .test("fileType", "Unsupported file format", (files) => {
             if (!files || files.length === 0 || !Array.isArray(files)) return false;
             return files.every((file) =>
-                ["image/jpeg", "image/png", "image/jpg"].includes(file.type)
+                [
+                    "image/jpeg",
+                    "image/png",
+                    "image/jpg",
+                    "image/gif",
+                    "image/webp",
+                    "image/avif",
+                    "image/svg+xml",
+                    "image/bmp",
+                    "image/tiff",
+                    "image/x-icon", // for .ico files
+                    "image/heic",
+                    "image/heif"
+                ].includes(file.type)
             );
             })
             .test("fileSize", "Each file must be less than 5MB", (files) => {
@@ -39,7 +52,7 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
         name: "",
         description: "",
         price: 1,
-        category: "",
+        category: "Electronics",
         images: [] as File[],
         stock: 1
     }
@@ -79,7 +92,7 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
             {id: 0, category: "Electronics"},
             {id: 1, category: "Home Appliances"},
             {id: 2, category: "Personal Care"}
-        ];
+    ];
   return (
     <div className='fixed bg-black/90 z-100 justify-center px-4 py-7 items-center top-0 left-0 h-screen w-screen'>
         <IoClose 
