@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import Image from "next/image"
 import { useParams } from 'next/navigation'
-import AddProductModal from '@/app/components/AddProductModal'
+
 import { RxDotFilled } from 'react-icons/rx'
 import { FaRegStar } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
-import { getAllProducts, getShopProducts, getSingleProduct, reset, toggleIsFeatured } from '@/app/store/productSlice'
-import EditProductModal from '@/app/components/EditProduct'
+import { getAllProducts, reset, toggleIsFeatured } from '@/app/store/productSlice'
+
 import Spinner from '@/app/components/Spinner'
 
 
@@ -24,6 +24,7 @@ const Products = () => {
         }
     }, [shopId, dispatch])
   
+     
    
    const [isLoading, setIsLoading] = useState(false);
 

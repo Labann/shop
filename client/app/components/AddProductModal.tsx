@@ -74,6 +74,12 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
         },
         validationSchema: schema
     })
+
+    const categories = [
+            {id: 0, category: "Electronics"},
+            {id: 1, category: "Home Appliances"},
+            {id: 2, category: "Personal Care"}
+        ];
   return (
     <div className='fixed bg-black/90 z-100 justify-center px-4 py-7 items-center top-0 left-0 h-screen w-screen'>
         <IoClose 
@@ -125,15 +131,25 @@ const AddProductModal = ({setIsAddProduct, shopId}:{
 
                 <div className="flex flex-col space-y-2">
                     <label htmlFor="name" className='text-primary font-semibold'>Product Category</label>
-                    <input 
-                        type="text" 
-                        placeholder='category'
-                        name='category'
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.category}
-                        className='w-full p-2 border-1 border-primary rounded-md'
-                        />
+                    <select 
+                                title='category' 
+                                name='category'
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.category}
+                                id="category"
+                                className='w-full p-2 border-1 border-primary rounded-md'
+                                >
+                                {categories.map(category => (
+                                    <option 
+                                        key={category.id} 
+                                        value={category.category}
+                                        
+                                        
+                                    
+                                        >{category.category}</option>
+                                ))}
+                        </select>
                     
                     {
                         formik.touched.category && formik.errors.category &&
