@@ -41,6 +41,7 @@ export const login = async (req, res) => {
             sameSite: "strict",
             maxAge: 15 * 24 * 60 * 60 * 1000
         });
+        console.log(safeUser);
         return res.status(200).json(safeUser);
     }
     catch (error) {

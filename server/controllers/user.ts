@@ -52,6 +52,7 @@ export const login: express.RequestHandler = async (req, res) =>{
             maxAge: 15 * 24 * 60 * 60 * 1000 
         })
 
+        console.log(safeUser)
         return res.status(200).json(safeUser)
     } catch (error) {
         console.log(error)
