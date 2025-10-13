@@ -67,7 +67,10 @@ const Products = () => {
                 </div>
 
                 <div className="border-1 border-slate-100/100 w-full my-2"></div>
-                <p className='text-xl text-slate-400 w-full'>{currentProduct?.description}</p>
+                <div className="max-h-[20vh] overflow-y-scroll">
+                        <p className='text-xl text-slate-400 w-full'>{currentProduct?.description}</p>
+                </div>
+                
                 <div className="flex items-center space-x-3">
                     <h2 className='text-xl'>Quantity</h2>
                     <div className="bg-primary text-white rounded flex items-center md:p-3 p-1 space-x-3"> 
