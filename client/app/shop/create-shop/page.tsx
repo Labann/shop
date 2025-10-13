@@ -82,7 +82,20 @@ const CreateShop = () => {
         .test("fileType", "Unsupported file format", (value) => {
           const file = value as File | null;
           if (!file) return false;
-          return ["image/jpeg", "image/png", "image/jpg"].includes(file.type);
+          return [
+                    "image/jpeg",
+                    "image/png",
+                    "image/jpg",
+                    "image/gif",
+                    "image/webp",
+                    "image/avif",
+                    "image/svg+xml",
+                    "image/bmp",
+                    "image/tiff",
+                    "image/x-icon", // for .ico files
+                    "image/heic",
+                    "image/heif"
+                ].includes(file.type);
         })
         .test("fileSize", "File too large (max 2MB)", (value) => {
           const file = value as File | null;
