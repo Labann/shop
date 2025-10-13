@@ -75,7 +75,7 @@ export const redirectToClientHome: express.RequestHandler = async (req, res) => 
             sameSite: "strict",
             maxAge: 15 * 24 * 60 * 60 * 1000 
         });
-        
+
         if(!process.env.CLIENT_URL){
             throw new Error("CLIENT URL absent in .env");
         }
@@ -87,8 +87,8 @@ export const redirectToClientHome: express.RequestHandler = async (req, res) => 
             error: (error as Error).message
         })
     }
-}
-export const getMe: express.RequestHandler =  async (req, res) => {
+
+    export const getMe: express.RequestHandler =  async (req, res) => {
     try{
         const user = req.user as User;
 
