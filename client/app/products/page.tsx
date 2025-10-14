@@ -1,5 +1,5 @@
 "use client"
-import {useParams, useSearchParams} from "next/navigation"
+import {useParams, useRouter, useSearchParams} from "next/navigation"
 import {useEffect, useState}  from "react"
 import { CiSearch } from "react-icons/ci";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -12,8 +12,13 @@ const Products = () => {
     const {products} = useAppSelector(state => state.product);
     const [search, setSearch] = useState<string>("");
     const dispatch = useAppDispatch();
+    const router = useRouter();
     useEffect(() => {
-        
+        if(query){
+            setSearch(query);
+            const cleanUrl = window.location.pathname; 
+            window.history.replaceState({}, "", cleanUrl);
+        }
         dispatch(getAllProducts());
         if(search){
             setTimeout(() => dispatch(searchProducts({search})), 1000)
@@ -32,7 +37,7 @@ const Products = () => {
                     id="search"
                     onChange={(e) => setSearch(e.target.value)}
                     value={search}
-                    className='bg-slate-600 flex-1 text-xl border-0 focus:outline-none h-full p-2 pl-8 w-full'
+                    className='bg-slate-300 flex-1 text-xl border-0 focus:outline-none h-full p-2 pl-8 w-full'
                     placeholder='Search products'
                     />
             </div>
