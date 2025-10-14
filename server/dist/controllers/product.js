@@ -305,7 +305,6 @@ export const searchProducts = async (req, res) => {
             where: {
                 OR: [
                     { name: { contains: search, mode: "insensitive" } },
-                    { description: { contains: search, mode: "insensitive" } },
                     { category: { contains: search, mode: "insensitive" } },
                 ],
             },
