@@ -3,6 +3,13 @@ export const stkPush = async (phone, amount, orderId) => {
     const token = await getAccessToken();
     const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '').slice(0, 14);
     const password = Buffer.from(`${process.env.BusinessShortCode}${process.env.Passkey}${timestamp}`).toString('base64');
+    console.log(`all .env
+      businessShortCode: ${process.env.BusinessShortCode}
+      passKey: ${process.env.Passkey}
+      timestamp: ${timestamp}
+      serverUrl: ${process.env.SERVER_URL}
+
+    `);
     const body = {
         BusinessShortCode: "174379",
         Password: password,
