@@ -8,7 +8,7 @@ const Hero = () => {
   const router = useRouter();
   
   function  query(){
-    router.push(`/products/?query=${search}`)
+    router.push(`/products/?query=${search}`);
   }
   return (
     <div className="relative py-30 bg-[url('/hero.png')] bg-cover bg-center p-4">
