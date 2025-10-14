@@ -53,7 +53,7 @@ export const makePayment: express.RequestHandler = async (req, res) => {
 
         const allowedMethod = ["MPESA", "CARD"]
 
-        if(!allowedMethod.some(method)){
+        if(!allowedMethod.includes(method)){
             return res.status(400).json({
                 error: "method accepted are MPESA or CARD"
             })

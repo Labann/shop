@@ -36,7 +36,7 @@ export const makePayment = async (req, res) => {
             return res.status(404).json({ error: "Payment record missing" });
         const totalAmount = order.items.reduce((sum, item) => sum + (Number(item.product.price) * item.quantity), 0);
         const allowedMethod = ["MPESA", "CARD"];
-        if (!allowedMethod.some(method)) {
+        if (!allowedMethod.includes(method)) {
             return res.status(400).json({
                 error: "method accepted are MPESA or CARD"
             });
