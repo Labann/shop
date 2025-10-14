@@ -16,13 +16,25 @@ const Products = () => {
     useEffect(() => {
         if(query){
             setSearch(query);
-            const cleanUrl = window.location.pathname; 
+            dispatch(searchProducts({search: query}))
+
+            // Clear query params from URL (without reload)
+            const cleanUrl = window.location.pathname;
             window.history.replaceState({}, "", cleanUrl);
+        }else{
+            dispatch(getAllProducts())
         }
+    }, [query, dispatch])
+    useEffect(() => {
+        if (!search || query === search) return;
+        
         dispatch(getAllProducts());
-        if(search){
-            setTimeout(() => dispatch(searchProducts({search})), 1000)
-        }
+        
+        const delay = setTimeout(() => {
+                dispatch(searchProducts({ search }));
+        }, 3000);
+        
+        return () => clearTimeout(delay);
     }, [search, dispatch, query])
     return(
         <div className="max-w-7xl mx-auto p-3 min-h-screen">

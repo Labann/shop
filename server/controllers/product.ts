@@ -356,7 +356,6 @@ export const searchProducts: express.RequestHandler = async (req, res) => {
                 where: {
                     OR: [
                     { name: { contains: search, mode: "insensitive" } },
-                    { description: { contains: search, mode: "insensitive" } },
                     { category: { contains: search, mode: "insensitive" } },
                     ],
                 },
