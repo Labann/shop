@@ -1,8 +1,8 @@
 "use client"
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
-
+import React, { useState } from 'react'
 import { CiSearch } from "react-icons/ci";
+
 const Hero = () => {
   const [search, setSearch] = useState("");
   const router = useRouter();
