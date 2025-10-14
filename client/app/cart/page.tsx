@@ -77,7 +77,7 @@ const Cart = () => {
         
 
         <div className="flex flex-row-reverse py-6">
-            <div className="border-2 border-primary/30 w-sm rounded p-4 flex flex-col space-y-6">
+            <form className="border-2 border-primary/30 w-sm rounded p-4 flex flex-col space-y-6">
                 <h3 className='font-semibold'>Cart Totals</h3>
                 <div className="flex items-center justify-between">
                     <p className='text-primary'>Subtotal</p>
@@ -94,10 +94,18 @@ const Cart = () => {
                     <span className='font-bold text-primary pr-1'>Total:</span>
                     
                 </div>
-                <button onClick={createOrder} className={`${filtered?.length === 0 && `pointer-events-none bg-primary/30`} bg-primary cursor-pointer mt-4 rounded-md p-3 text-white font-semibold hover:bg-primary/30`}>{
+                <input 
+                    name='number'
+                    id='number'
+                    placeholder='number'
+                    type="mobile"
+                    required 
+                    className='w-full'
+                    />
+                <button type='submit' onClick={createOrder} className={`${filtered?.length === 0 && `pointer-events-none bg-primary/30`} bg-primary cursor-pointer mt-4 rounded-md p-3 text-white font-semibold hover:bg-primary/30`}>{
                     isLoading? <Spinner/>: "Place order"
                 }</button>
-            </div>
+            </form>
             
         </div>
         {myOrders.length !== 0 && <div className="flex flex-row-reverse w-sm rounded">
