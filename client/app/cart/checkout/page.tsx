@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
 import { getMyOrders } from '@/app/store/orderSlice';
 import { makePayment } from '@/app/store/paymentSlice';
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 
 const Checkout = () => {
     const [number, setNumber] = useState<string>("")
@@ -14,6 +15,9 @@ const Checkout = () => {
         dispatch(getMyOrders())
     }, [dispatch])
     
+    async function submit(e: React.FormEvent){
+        //payment
+    }
     return (
     <div className='max-w-7xl mx-auto min-h-[45vh]'>
         {myOrders?.length === 0 && <p className='text-4xl text-primary text-center'>No orders yet</p>}
@@ -54,8 +58,16 @@ const Checkout = () => {
                     onChange={(e) => setNumber(e.target.value)}
                     className='w-full p-3'
                     />
-            <button onClick={async () => {
-                dispatch(makePayment({method: "MPESA", orderId: order.id, mpesaNumber: number}));
+            <button onClick={async (e) => {
+                e.preventDefault();
+        
+                const action = await dispatch(makePayment({method: "MPESA", orderId: order.id, mpesaNumber: number}));
+                if(action.type === "/payment/initiate/fulfilled"){
+                    toast.success("payment initiated")
+                }
+                if(action.type === "/payment/initiate/rejected"){
+                    toast.error(action.payload as string)
+                }
             }} className='bg-primary w-full text-white p-2 rounded mt-4 hover:bg-primary/50 cursor-pointer'>{
                 isLoading? <Spinner/>: "Make payment"
             }</button>
