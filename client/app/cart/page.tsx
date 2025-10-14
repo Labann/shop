@@ -100,6 +100,9 @@ const Cart = () => {
             </div>
             
         </div>
+        {myOrders.length !== 0 && <div className="flex flex-row-reverse w-sm rounded">
+                <Link href={"/cart/checkout"} className='bg-primary p-2'>proceed to checkout</Link>
+        </div>}
     </div>
   )
 }
