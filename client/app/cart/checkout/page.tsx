@@ -55,7 +55,7 @@ const Checkout = () => {
                     className='w-full p-3'
                     />
             <button onClick={async () => {
-                dispatch(makePayment({method: "MPESA", orderId: order.id}));
+                dispatch(makePayment({method: "MPESA", orderId: order.id, mpesaNumber: number}));
             }} className='bg-primary w-full text-white p-2 rounded mt-4 hover:bg-primary/50 cursor-pointer'>{
                 isLoading? <Spinner/>: "Make payment"
             }</button>

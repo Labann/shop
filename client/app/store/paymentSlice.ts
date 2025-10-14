@@ -13,10 +13,11 @@ interface IInitialState{
 
 export const makePayment = createAsyncThunk<
     IPayment,
-    {method: "MPESA" | "CARD", orderId: string}
+    {method: "MPESA" | "CARD", orderId: string, mpesaNumber: string}
 >("/payment/initiate", async ({
     method,
-    orderId
+    orderId,
+    mpesaNumber
 }, thunkApi) => {
     try {
         const res = await fetch(`${apiUrl}/api/payment/mpesa/stkPush`, {
@@ -25,7 +26,7 @@ export const makePayment = createAsyncThunk<
                 "Content-type": "application/json"
             },
             credentials: "include",
-            body: JSON.stringify({orderId, method})
+            body: JSON.stringify({orderId, method, mpesaNumber})
         });
 
         const data = await res.json();
