@@ -38,7 +38,7 @@ const Products = () => {
                     placeholder='Search products'
                     />
             </div>
-            <div className="flex flex-wrap">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {
                     products.length === 0 && (
                         <p className="font-bold text-center text-primary">No products found</p>
