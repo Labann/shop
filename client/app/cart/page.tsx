@@ -101,9 +101,9 @@ const Cart = () => {
             </div>
             
         </div>
-        {myOrders.length !== 0  && <div className="flex flex-row-reverse w-sm rounded">
-                <Link href={"/cart/checkout"} className='bg-primary text-white'>proceed to payment</Link>
-        </div>}
+        {myOrders.length !== 0  && <Link href={"/cart/checkout"} className="flex bg-primary text-white p-3 flex-row-reverse w-sm rounded">
+                proceed to payment
+        </Link>}
     </div>
   )
 }
