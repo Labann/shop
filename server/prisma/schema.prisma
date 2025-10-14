@@ -23,6 +23,7 @@ model User {
   role      ROLE     @default(CUSTOMER)
   shops     Shop[]
   orders    Order[]
+  payments Payment[]
   cart      Cart?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -79,6 +80,8 @@ model Payment {
   method             PAYMENT_METHOD @default(MPESA)
   status             PAYMENT_STATUS @default(PENDING)
   amount             Decimal        @default(0.00) @db.Decimal(10, 2)
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String         
   // ===== M-Pesa Specific =====
   merchantRequestId  String? // From initial STK push response
   checkoutRequestId  String? // From initial STK push response

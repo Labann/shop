@@ -12,7 +12,7 @@ interface IInitialState{
 
 
 export const makePayment = createAsyncThunk<
-    IPayment,
+    {message: string, updatedPayment: IPayment},
     {method: "MPESA" | "CARD", orderId: string, mpesaNumber: string}
 >("/payment/initiate", async ({
     method,
@@ -41,6 +41,32 @@ export const makePayment = createAsyncThunk<
         return thunkApi.rejectWithValue((error as Error).message);
     }
 })
+
+export const getPayment = createAsyncThunk<
+    IPayment[],
+    {userId: string},
+    {rejectValue: string}
+>("/payment/all", async ({userId}, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/payment/all`, {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        const data = await res.json();
+
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error)
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message)
+    }
+})
+
 const initialState: IInitialState = {
     payment: [],
     isLoading: false,
@@ -68,12 +94,20 @@ const paymentSlice = createSlice({
             .addCase(makePayment.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
-                state.payment = [action.payload, ...state.payment]
+                state.payment = [action.payload.updatedPayment, ...state.payment]
             })
             .addCase(makePayment.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload as string
+            })
+            .addCase(getPayment.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getPayment.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.payment = action.payload
+                state.isSuccess = true
             })
     })
 })

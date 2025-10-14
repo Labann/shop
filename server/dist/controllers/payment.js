@@ -3,6 +3,7 @@ import { stkPush, } from "../utils/stkCallback.js";
 import { formatPhoneNumber } from "../utils/formmatNumber.js";
 import prisma from "../utils/prisma.js";
 import {} from "../types/daraja.js";
+import { checkUser } from "../utils/checkUser.js";
 //payment controller
 export const makePayment = async (req, res) => {
     const { method, orderId } = req.body;
@@ -161,6 +162,27 @@ export const mpesaCallback = async (req, res) => {
     catch (error) {
         console.error("Error handling MPESA callback:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+};
+export const getMyPayment = async (req, res) => {
+    try {
+        const user = req.user;
+        checkUser(user);
+        const payments = await prisma.payment.findMany({
+            where: {}
+        });
+        if (payments.length === 0) {
+            return res.status(404).json({
+                error: "no payments found"
+            });
+        }
+        return res.status(200).json(payments);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
     }
 };
 //# sourceMappingURL=payment.js.map

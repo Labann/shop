@@ -102,6 +102,7 @@ export const createOrder: express.RequestHandler = async (req, res) => {
             await tx.payment.create({
                 data:{
                     orderId: newOrder.id,
+                    userId: user.id,
                     method: "MPESA",
                     status: "PENDING"
                 }

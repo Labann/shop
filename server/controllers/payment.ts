@@ -2,9 +2,10 @@ import * as express from "express";
 import { stkPush,  } from "../utils/stkCallback.js";
 import {formatPhoneNumber} from "../utils/formmatNumber.js"
 
-import type { Prisma} from "@prisma/client"
+import type { Prisma, User} from "@prisma/client"
 import prisma from "../utils/prisma.js";
 import {type StkCallbackRequest } from "../types/daraja.js";
+import { checkUser } from "../utils/checkUser.js";
 //payment controller
 
 
@@ -207,4 +208,34 @@ export const mpesaCallback: express.RequestHandler = async (req, res) => {
     console.error("Error handling MPESA callback:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+
+}
+
+
+
+export const getMyPayment: express.RequestHandler = async (req, res) => {
+    
+    try {
+      const user = req.user as User;
+      checkUser(user);
+
+      const payments = await prisma.payment.findMany({
+        where: {
+          
+        }
+      });
+      
+      if(payments.length === 0){
+        return res.status(404).json({
+          error: "no payments found"
+        })
+      }
+
+      return res.status(200).json(payments);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: (error as Error).message
+      })
+    }
+}

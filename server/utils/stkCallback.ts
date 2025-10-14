@@ -10,7 +10,8 @@ export const stkPush = async (phone: string, amount: number, orderId: string): P
       passKey: ${process.env.Passkey}
       timestamp: ${timestamp}
       serverUrl: ${process.env.SERVER_URL}
-
+      consumerKey: ${process.env.CONSUMER_KEY}
+      consumerSecret: ${process.env.CONSUMER_SECRET}
     `)
   const body = {
     BusinessShortCode: "174379",
