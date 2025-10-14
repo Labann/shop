@@ -188,6 +188,52 @@ export const editProduct =  createAsyncThunk<
     }
 })
 
+export const getProductsByCategory = createAsyncThunk<
+    IProduct[],
+    {category: string},
+    {rejectValue: string}
+>("/product/byCategory", async ({category}, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/product/category/${category}`, {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json"
+            }
+        })    
+
+        const data = await res.json();
+        
+        return data;
+    } catch (error) {
+        return thunkApi.rejectWithValue((error as Error).message);
+    }}
+)
+
+export const searchProducts = createAsyncThunk<
+    IProduct[],
+    {search: string},
+    {rejectValue: string}
+>("/product/search", async ({search}, thunkApi) => {
+    try {
+        const res = await fetch(`${apiUrl}/api/product/search/${search}`,{
+            method: "GET",
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+
+        const data = await res.json();
+
+        if(data.error){
+            return thunkApi.rejectWithValue(data.error);
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+        return thunkApi.rejectWithValue((error as Error).message)
+    }
+})
 export const toggleIsFeatured = createAsyncThunk<
     {message: string, updatedProduct: IProduct},
     {productId: string},
@@ -327,6 +373,27 @@ const productSlice = createSlice({
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload as string
+            })
+            .addCase(getProductsByCategory.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getProductsByCategory.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.products = action.payload
+            })
+            .addCase(getProductsByCategory.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError= true
+                state.message = action.payload as string
+            })
+            .addCase(searchProducts.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(searchProducts.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.products = action.payload
             })
     })
 })

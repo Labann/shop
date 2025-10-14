@@ -1,6 +1,6 @@
 import * as express from "express";
 import { protect } from "../middleware/protect.js";
-import { addProduct, deleteProduct, getAllProducts, getProductByShop, getSingleProduct, toggleIsFeatured, updateProduct } from "../controllers/product.js";
+import { addProduct, deleteProduct, getAllProducts, getProductByCategory, getProductByShop, getSingleProduct, searchProducts, toggleIsFeatured, updateProduct } from "../controllers/product.js";
 import { adminsOnly, vendorsOnly } from "../middleware/adminsOnly.js";
 import upload from "../utils/upload.js";
 const router = express.Router();
@@ -11,5 +11,7 @@ router.put("/toggle_isFeatured/:productId", protect, adminsOnly, toggleIsFeature
 router.get("/byShop/:shopId", protect, getProductByShop);
 router.get("/single/:productId", protect, getSingleProduct);
 router.get("/all", getAllProducts);
+router.get("/category/:category", getProductByCategory);
+router.get("/search/:search", searchProducts);
 export default router;
 //# sourceMappingURL=product.js.map

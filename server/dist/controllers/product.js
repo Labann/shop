@@ -268,4 +268,58 @@ export const toggleIsFeatured = async (req, res) => {
         });
     }
 };
+export const getProductByCategory = async (req, res) => {
+    const { category } = req.params;
+    try {
+        if (!category) {
+            return res.status(400).json({
+                error: 'bad request'
+            });
+        }
+        const shops = await prisma.shop.findMany({
+            where: {
+                category: category
+            },
+            include: {
+                products: true
+            }
+        });
+        const products = shops.map(shop => shop.products);
+        return res.status(200).json(products);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
+export const searchProducts = async (req, res) => {
+    const { search } = req.params;
+    try {
+        if (!search || typeof search !== "string") {
+            return res.status(400).json({ error: "Search search is required" });
+        }
+        // Search products by name, description, or category
+        const products = await prisma.product.findMany({
+            where: {
+                OR: [
+                    { name: { contains: search, mode: "insensitive" } },
+                    { description: { contains: search, mode: "insensitive" } },
+                    { category: { contains: search, mode: "insensitive" } },
+                ],
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+        return res.status(200).json(products);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+};
 //# sourceMappingURL=product.js.map

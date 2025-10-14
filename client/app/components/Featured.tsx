@@ -26,7 +26,7 @@ const Featured = () => {
     <div className='max-w-7xl mx-auto p-4'>
         <div className="flex justify-between items-center">
             <h1 className='md:text-3xl text-2xl font-bold'>Featured Products</h1>
-            <Link href="" className=''>
+            <Link href="/products" className=''>
                 <span className='md:hidden text-primary'>See all</span>
                 <span className='hidden md:block bg-primary text-white px-6 rounded p-2'>view all</span>
             </Link>
