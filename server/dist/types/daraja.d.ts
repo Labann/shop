@@ -8,6 +8,7 @@ export interface StkPushResponse {
     ResponseCode: string;
     ResponseDescription: string;
     CustomerMessage: string;
+    errorMessage?: string;
 }
 export interface StkCallbackRequest {
     Body: {

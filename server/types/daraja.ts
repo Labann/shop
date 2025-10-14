@@ -10,6 +10,7 @@ export interface StkPushResponse {
   ResponseCode: string;        // e.g., "0" means request accepted
   ResponseDescription: string; // e.g., "Success. Request accepted for processing"
   CustomerMessage: string;     // Message shown to the customer
+  errorMessage?: string
 }
 
 

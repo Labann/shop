@@ -15,7 +15,7 @@ export const stkPush = async (phone: string, amount: number, orderId: string): P
     PartyA: phone,
     PartyB: "174379",
     PhoneNumber: phone,
-    CallBackURL: `${process.env.SERVER_URL}/api/mpesa/callback`,
+    CallBackURL: `${process.env.SERVER_URL}/api/payment/mpesa/callback`,
     AccountReference: orderId,
     TransactionDesc: `Payment for orderId:${orderId}`
   };

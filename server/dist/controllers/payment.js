@@ -53,7 +53,7 @@ export const makePayment = async (req, res) => {
             if (stkResponse.ResponseCode !== "0") {
                 console.log(stkResponse);
                 return res.status(500).json({
-                    error: `MPESA payment error: ${stkResponse.ResponseDescription}`
+                    error: `MPESA payment error: ${stkResponse.errorMessage}`
                 });
             }
             // Update payment with STK details

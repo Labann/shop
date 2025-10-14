@@ -58,7 +58,7 @@ const Checkout = () => {
                     onChange={(e) => setNumber(e.target.value)}
                     className='w-full p-3'
                     />
-            <button onClick={async (e) => {
+            <button type='submit' onClick={async (e) => {
                 e.preventDefault();
         
                 const action = await dispatch(makePayment({method: "MPESA", orderId: order.id, mpesaNumber: number}));
