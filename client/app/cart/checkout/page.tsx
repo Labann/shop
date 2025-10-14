@@ -52,7 +52,7 @@ const Checkout = () => {
             </div>
             <input 
                     type="mobile" 
-                    placeholder='mpesa number' 
+                    placeholder='07xxxxxxxx' 
                     required
                     value={number}
                     onChange={(e) => setNumber(e.target.value)}
