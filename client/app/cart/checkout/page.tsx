@@ -3,9 +3,10 @@ import Spinner from '@/app/components/Spinner';
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
 import { getMyOrders } from '@/app/store/orderSlice';
 import { makePayment } from '@/app/store/paymentSlice';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const Checkout = () => {
+    const [number, setNumber] = useState<string>("")
     const {myOrders} = useAppSelector(state => state.order);
     const dispatch = useAppDispatch();
     const {isLoading} = useAppSelector(state => state.payment);
@@ -16,7 +17,7 @@ const Checkout = () => {
     return (
     <div className='max-w-7xl mx-auto min-h-[45vh]'>
         {myOrders?.length === 0 && <p className='text-4xl text-primary text-center'>No orders yet</p>}
-        {myOrders?.map(order => <div key={order.id} className="max-w-lg border-1 mx-auto m-3 rounded p-3 border-primary">
+        {myOrders?.map(order => <form key={order.id} className="max-w-lg border-1 mx-auto m-3 rounded p-3 border-primary">
             <h3 className='text-center font-bold'>Order summary</h3>
             {
                 order?.items?.map(item => 
@@ -45,13 +46,20 @@ const Checkout = () => {
                 <p className='font-bold'>Total</p>
                 <p>{order?.items?.reduce((acc, item) => acc + (item.product.price * item.quantity), 0) + 200}</p>
             </div>
-            
+            <input 
+                    type="mobile" 
+                    placeholder='mpesa number' 
+                    required
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                    className='w-full p-3'
+                    />
             <button onClick={async () => {
                 dispatch(makePayment({method: "MPESA", orderId: order.id}));
             }} className='bg-primary w-full text-white p-2 rounded mt-4 hover:bg-primary/50 cursor-pointer'>{
                 isLoading? <Spinner/>: "Make payment"
             }</button>
-        </div>)}
+        </form>)}
     </div>
   )
 }

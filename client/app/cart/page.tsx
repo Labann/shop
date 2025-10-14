@@ -94,6 +94,7 @@ const Cart = () => {
                     <span className='font-bold text-primary pr-1'>Total:</span>
                     
                 </div>
+                
                 <button onClick={createOrder} className={`${filtered?.length === 0 && `pointer-events-none bg-primary/30`} bg-primary cursor-pointer mt-4 rounded-md p-3 text-white font-semibold hover:bg-primary/30`}>{
                     isLoading? <Spinner/>: "Place order"
                 }</button>
