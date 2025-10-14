@@ -19,7 +19,7 @@ export const makePayment = createAsyncThunk<
     orderId
 }, thunkApi) => {
     try {
-        const res = await fetch(`${apiUrl}/api/mpesa/stkPush`, {
+        const res = await fetch(`${apiUrl}/api/payment/mpesa/stkPush`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
