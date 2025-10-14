@@ -45,6 +45,7 @@ const Checkout = () => {
                 <p className='font-bold'>Total</p>
                 <p>{order?.items?.reduce((acc, item) => acc + (item.product.price * item.quantity), 0) + 200}</p>
             </div>
+            
             <button onClick={async () => {
                 dispatch(makePayment({method: "MPESA", orderId: order.id}));
             }} className='bg-primary w-full text-white p-2 rounded mt-4 hover:bg-primary/50 cursor-pointer'>{

@@ -62,7 +62,7 @@ export const makePayment: express.RequestHandler = async (req, res) => {
 
         if(method === "MPESA"){
             const {mpesaNumber} = req.body
-
+            
             if(!mpesaNumber) return res.status(400).json({
                 error: "bad request, mpesa number required"
             })
