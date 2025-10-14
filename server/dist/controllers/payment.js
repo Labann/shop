@@ -122,6 +122,11 @@ export const mpesaCallback = async (req, res) => {
             console.error("Payment not found for CheckoutRequestID:", stk.CheckoutRequestID);
             return res.status(404).json({ error: "Payment record not found" });
         }
+        if (payment.status === "SUCCESS") {
+            return res.status(500).json({
+                error: "payment done already"
+            });
+        }
         if (stk.ResultCode === 0) {
             // =======================
             // SUCCESS CASE

@@ -163,6 +163,11 @@ export const mpesaCallback: express.RequestHandler = async (req, res) => {
       return res.status(404).json({ error: "Payment record not found" });
     }
 
+    if(payment.status === "SUCCESS"){
+      return res.status(500).json({
+        error: "payment done already"
+      })
+    }
     
     if (stk.ResultCode === 0) {
       // =======================
