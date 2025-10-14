@@ -71,6 +71,7 @@ export const makePayment: express.RequestHandler = async (req, res) => {
             const stkResponse = await stkPush(normalized, totalAmount, orderId)
 
             if(stkResponse.ResponseCode !== "0"){
+                console.log(stkResponse)
                 return res.status(500).json({
                     error: `MPESA payment error: ${stkResponse.ResponseDescription}`
                 })
