@@ -7,8 +7,12 @@ const Hero = () => {
   const [search, setSearch] = useState("");
   const router = useRouter();
   
-  function  query(){
-    router.push(`/products/?query=${search}`);
+  function  query(e: React.FormEvent){
+    e.preventDefault()
+    if(search){
+      router.push(`/products/?query=${search}`);
+    }
+    
   }
   return (
     <div className="relative py-30 bg-[url('/hero.png')] bg-cover bg-center p-4">
