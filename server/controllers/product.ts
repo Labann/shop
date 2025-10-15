@@ -333,7 +333,7 @@ export const getProductByCategory: express.RequestHandler = async (req, res) => 
             }
         });
 
-        const products = shops.map(shop => shop.products);
+        const products = shops.flatMap(shop => shop.products);
 
         return res.status(200).json(products);
     } catch (error) {

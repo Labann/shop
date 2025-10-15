@@ -284,7 +284,7 @@ export const getProductByCategory = async (req, res) => {
                 products: true
             }
         });
-        const products = shops.map(shop => shop.products);
+        const products = shops.flatMap(shop => shop.products);
         return res.status(200).json(products);
     }
     catch (error) {
