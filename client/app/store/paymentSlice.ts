@@ -4,6 +4,7 @@ import { apiUrl } from "../config/apiUrl";
 
 interface IInitialState{
     payment: IPayment[],
+    currentPayment: IPayment | null
     isLoading: boolean
     isError: boolean
     isSuccess: boolean
@@ -46,7 +47,7 @@ export const getPayment = createAsyncThunk<
     IPayment[],
     {userId: string},
     {rejectValue: string}
->("/payment/all", async ({userId}, thunkApi) => {
+>("/payment/all", async (_, thunkApi) => {
     try {
         const res = await fetch(`${apiUrl}/api/payment/all`, {
             method: "GET",
@@ -69,6 +70,7 @@ export const getPayment = createAsyncThunk<
 
 const initialState: IInitialState = {
     payment: [],
+    currentPayment: null,
     isLoading: false,
     isSuccess: false,
     isError: false,
@@ -94,7 +96,7 @@ const paymentSlice = createSlice({
             .addCase(makePayment.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
-                state.payment = [action.payload.updatedPayment, ...state.payment]
+                state.currentPayment = action.payload.updatedPayment
             })
             .addCase(makePayment.rejected, (state, action) => {
                 state.isLoading = false
