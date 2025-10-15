@@ -26,13 +26,14 @@ const CartItemCard = ({item}: {
   return (
     <div  className={`${myOrders && item && myOrders?.length !== 0 && myOrders?.some(o => o?.items?.some(i => i?.cartItemId === item?.id)) && `line-through opacity-40 pointer-events-none`} bg-gray-200 my-3  rounded-md p-3 flex flex-row items-center`}>
                 <div className="flex flex-col justify-center items-center space-y-3">
-                    <div className="w-[8em] h-[8em] flex justify-center items-center">
+                    <div className="w-[8em] h-[5em] flex justify-center items-center">
                         <Image
                             src={item?.product?.images[0]}
                             unoptimized
                             width={100}
                             height={100}
                             alt='product-img'
+                            className='h-full w-full'
                         />
                         
                     </div>
