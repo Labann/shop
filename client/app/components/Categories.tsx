@@ -6,28 +6,28 @@ const Categories = () => {
     const data = [
         {
             id: "0",
-            category: "Home and Living",
-            img: "/room.jpg"
+            category: "AIRPODES",
+            img: "/airpode.png"
         },
         {
             id: "1",
-            category: "Fashion",
-            img: "/fashion.png"
+            category: "CAMERA",
+            img: "/camera.png"
         },
         {
             id: "2",
-            category: "Electronics",
-            img: "/electronics.png"
+            category: "EARPHONES",
+            img: "/earphones.png"
         },
         {
             id: "3",
-            category: "Beauty and Personal Care",
-            img: "/beauty.jpeg"
+            category: "MOBILES",
+            img: "/mobile.png"
         },
         {
             id: "4",
-            category: "Kids, and Toys",
-            img: "/toys.png"
+            category: "REFRIGERATOR",
+            img: "/refrigerators.png"
         },
     ]
   return (
