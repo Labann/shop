@@ -11,7 +11,7 @@ const WishList = () => {
     const dispatch = useAppDispatch();
     const {cart} = useAppSelector(state => state.cart);
     if(!cart) dispatch(getMyCart());
-    
+
   return (
     <div className='max-w-7xl mx-auto p-4'>
         <div className="flex items-center space-x-2 text-sm">
@@ -30,6 +30,7 @@ const WishList = () => {
                                 src={value.images[0]}
                                 width={300}
                                 height={300}
+                                unoptimized
                                 className=''
                                 />
                         </div>
