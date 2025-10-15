@@ -56,7 +56,7 @@ const Products = () => {
             </div>
             <div className="mx-auto py-6 self-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {
-                    products.length === 0 && (
+                    products.length === 0 && !isLoading && (
                         <p className="font-bold text-center text-primary">No products found</p>
                     )
                 }

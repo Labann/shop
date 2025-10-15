@@ -49,7 +49,7 @@ const Featured = () => {
                 )
             } 
             {
-                data.length === 0 && <p className="text-primary text-center w-full col-span-2 sm:col-span-3 lg:col-span-4 font-bold">no featured products yet!</p>
+                data.length === 0 && !isLoading && <p className="text-primary text-center w-full col-span-2 sm:col-span-3 lg:col-span-4 font-bold">no featured products yet!</p>
             } 
         </div>
     </div>

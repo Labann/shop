@@ -46,8 +46,10 @@ const Products = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
             <div className="rounded-md bg-slate-400 max-h-[55vh]">
-                
-                    {currentProduct.images.length !== 0 && currentProduct.images[0] && <Image 
+                    {
+                        isLoading && <div className="h-full w-full animate-pulse"></div>
+                    }
+                    {currentProduct.images.length !== 0 && currentProduct.images[0] && !isLoading && <Image 
                         alt="product-img"
                         width={600}
                         height={600}
@@ -59,20 +61,20 @@ const Products = () => {
                 
             </div>
             <div className="flex flex-col space-y-4 md:p-6">
-                <h2 className='md:text-4xl text-2xl font-bold'>{currentProduct?.name}</h2>
-                <p className='text-xl'>KSH {currentProduct.price}</p>
+                <h2 className={`md:text-4xl text-2xl font-bold ${isLoading && 'w-full p-2 animate-pulse'}`}>{currentProduct?.name}</h2>
+                <p className={`text-xl ${isLoading && 'w-[7em] p-2 animate-pulse'} `}>KSH {currentProduct.price}</p>
                 <div className="flex justify-between">
-                    <p>Store Name:<span className='text-primary mx-2 font-bold'>{currentProduct.shop.name}</span></p>
-                    <p>Availability <span className='text-green-400'>{currentProduct.stock !== 0 && "In Stock"}</span></p>
+                    <p className={`${isLoading && 'w-[7em] p-2 animate-pulse'}`}>Store Name:<span className='text-primary mx-2 font-bold'>{currentProduct.shop.name}</span></p>
+                    <p className={`${isLoading && 'w-[7em] p-2 animate-pulse'}`}>Availability <span className='text-green-400'>{currentProduct.stock !== 0 && "In Stock"}</span></p>
                 </div>
 
                 <div className="border-1 border-slate-100/100 w-full my-2"></div>
                 <div className="max-h-[20vh] overflow-y-scroll">
-                    <p className='text-xl text-slate-400 w-full'>{currentProduct?.description}</p>
+                    <p className={`text-xl text-slate-400 w-full ${isLoading && `p-2 animate-pulse`}`}>{currentProduct?.description}</p>
                 </div>
                 
                 <div className="flex items-center space-x-3">
-                    <h2 className='text-xl'>Quantity</h2>
+                    <h2 className={`text-xl ${isLoading && `animate-pulse w-[5em]`}`}>Quantity</h2>
                     <div className="bg-primary text-white rounded flex items-center md:p-3 p-1 space-x-3"> 
                         <button onClick={async () => {
                             if(quantity > 1){
