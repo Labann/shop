@@ -34,7 +34,7 @@ const Products = () => {
         }
     }, [quantity, currentProduct, cart])
     
-   if(isLoading || !currentProduct || !cart) return <div className='grid md:grid-cols-2 min-h-[45vh] bg-gray-100'>
+   if(!currentProduct || !cart) return <div className='grid md:grid-cols-2 min-h-[45vh] bg-gray-100'>
     <div className='animate-pulse bg-gray-100 h-full w-full'></div>
     <div className='w-full h-full flex flex-col space-y-3'>
                     <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
