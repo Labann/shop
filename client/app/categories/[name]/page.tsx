@@ -19,7 +19,7 @@ const Categories = () => {
   }, [name, dispatch]);
   return (
     <div className='max-w-7xl mx-auto'>
-        <h1><Link href={"/"}>home</Link> / <span className='font-bold text-primary'>{}</span></h1>
+        <h1><Link href={"/"}>home</Link> / <span className='font-bold text-primary'>{name}</span></h1>
         <div className="grid w-fit sm:w-auto md:grid-cols-3">
           {
               isLoading  && (
