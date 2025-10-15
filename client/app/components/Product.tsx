@@ -19,7 +19,7 @@ const Product = ({product}:{
         <div className="relative bg-gray-100 h-[12em] w-full md:h-[15em] flex justify-center items-center">
             <div className="rounded-full bg-white p-1 absolute top-2 right-2">
                 {wish && wish.some(item => item.id === product.id)?  (
-                    <GrFavorite onClick={() => dispatch(unWish(product))} className='cursor-pointer fill-red-600 overflow-hidden'/>)
+                    <GrFavorite onClick={() => dispatch(unWish(product))} className='cursor-pointer text-red-600 overflow-hidden'/>)
                 : <GrFavorite onClick={() => dispatch(makeWish(product))} className='cursor-pointer'/>}
                 
                 
