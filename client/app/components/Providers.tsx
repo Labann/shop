@@ -21,7 +21,7 @@ const InitialState = () => {
       
     }
     if(wish){
-      setWish(wish)
+      dispatch(setWish(wish))
     }
     if(order){
       setOrder(order);
