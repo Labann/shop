@@ -14,7 +14,7 @@ const InitialState = () => {
     const user = JSON.parse(localStorage.getItem("user") || "null")
     const cart = JSON.parse(localStorage.getItem("cart") || "null");
     const order = JSON.parse(localStorage.getItem("order") || "null");
-
+    const wish = JSON.parse(localStorage.getItem("wish") || "null")
     if(user){
       dispatch(setUser(user))
       

@@ -5,6 +5,7 @@ import productReducer from "./productSlice"
 import cartReducer from "./cartSlice"
 import orderReducer from "./orderSlice"
 import paymentReducer from "./paymentSlice"
+import wishReducer from "./wishSlice"
 const store = configureStore({
     reducer: {
         auth: authReducer,
@@ -12,7 +13,8 @@ const store = configureStore({
         product: productReducer,
         cart: cartReducer,
         order: orderReducer,
-        payment: paymentReducer
+        payment: paymentReducer,
+        wish: wishReducer
     }
 })
 
