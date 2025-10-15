@@ -87,7 +87,9 @@ const Checkout = () => {
                 isLoading? <Spinner/>: "Make payment"
             }</button>
         </form>
-        <button key={order.id} onClick={() => cancel(order.id)} className='bg-red-600 hove:bg-red-700 text-white w-full mx-auto'>cancel</button>
+        <button key={order.id} onClick={() => cancel(order.id)} className='bg-red-600 hove:bg-red-700 text-white w-full mx-auto'>
+            {isCancelling ? <Spinner/>: "Cancel"}
+        </button>
         </>
     )}
     </div>

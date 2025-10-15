@@ -45,9 +45,22 @@ const Products = () => {
             <span className='text-primary'>/ {currentProduct?.name}</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
+            {
+                isLoading && <div className='animate-pulse bg-slate-400 h-full w-full'></div>
+            }
+            {
+                isLoading && <div className='w-full h-full flex flex-col space-y-3'>
+                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-1/3 p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-full p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
+                </div>
+            }
+
             <div className="rounded-md bg-slate-400 max-h-[55vh]">
-                
-                    {currentProduct.images.length !== 0 && currentProduct.images[0] && <Image 
+
+                    {!isLoading && currentProduct.images.length !== 0 && currentProduct.images[0] && <Image 
                         alt="product-img"
                         width={600}
                         height={600}
@@ -119,9 +132,13 @@ const Products = () => {
 
             </div>
         </div>
-
+        {
+            isLoading && (
+                ["1", "2", "3"].map(item => <div key={item} className='w-[7em] h-[7em] animate-pulse'/>)
+            )
+        }
         <div className="flex items-center flex-wrap space-x-2 pb-10">
-                    {currentProduct?.images.map(img => <div onClick={()=> setCurrentImage(img)} key={img} className="w-[7em] cursor-pointer bg-slate-300 rounded">
+                    {!isLoading && currentProduct?.images.map(img => <div onClick={()=> setCurrentImage(img)} key={img} className="w-[7em] cursor-pointer bg-slate-300 rounded">
                         <Image
                             alt='product-img'
                             unoptimized
