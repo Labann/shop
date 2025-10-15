@@ -22,8 +22,7 @@ const Product = ({product}:{
                     <GrFavorite onClick={() => dispatch(unWish(product))} className='cursor-pointer fill-red-600 overflow-hidden'/>)
                 : <GrFavorite onClick={() => dispatch(makeWish(product))} className='cursor-pointer'/>}
                 
-                {!wish && <GrFavorite onClick={() => dispatch(makeWish(product))} className='cursor-pointer'/>}
-                {wish && wish.length === 0 && <GrFavorite onClick={() => dispatch(makeWish(product))} className='cursor-pointer'/>}
+                
             </div>
             
             {product.images.length !== 0 && <Image
