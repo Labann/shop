@@ -85,7 +85,8 @@ export const cancelOrder = createAsyncThunk<
         method: "DELETE",
         headers: {
             "Content-type": "application/json"
-        }
+        },
+        credentials: "include"
     });
 
     const data = await res.json();
