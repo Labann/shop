@@ -92,9 +92,12 @@ const Checkout = () => {
                 isLoading? <Spinner/>: "Make payment"
             }</button>
         </form>
-        <button key={order.id} onClick={() => cancel(order.id)} className='p-2 cursor-pointer bg-red-600 hove:bg-red-700 text-white w-lg mx-auto'>
+        <div className="flex max-w-lg mx-auto">
+             <button key={order.id} onClick={() => cancel(order.id)} className='p-2 cursor-pointer bg-red-600 hove:bg-red-700 text-white w-full'>
             {isCancelling ? <Spinner/>: "Cancel"}
         </button>
+        </div>
+       
         </>
     )}
     </div>
