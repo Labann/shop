@@ -19,8 +19,8 @@ const Categories = () => {
   }, [name, dispatch]);
   return (
     <div className='max-w-7xl mx-auto'>
-        <h1><Link href={"/"}>home</Link> / <span className='font-bold text-primary'>{name}</span></h1>
-        <div className="grid w-fit sm:w-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 mx-auto">
+        <h1><Link href={"/"}>home</Link> / <span className='font-bold text-primary text-2xl'>{name}</span></h1>
+        <div className="grid w-fit sm:w-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6 gap-7 mx-auto">
           {
               isLoading  && (
                 [1, 2, 3, 4, 5, 6].map(item => <ProductLoader key={item}/>)
