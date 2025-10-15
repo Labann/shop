@@ -16,8 +16,8 @@ const Categories = () => {
         },
         {
             id: "2",
-            category: "EARPHONES",
-            img: "/earphones.png"
+            category: "PRINTERS",
+            img: "/printers.png"
         },
         {
             id: "3",
