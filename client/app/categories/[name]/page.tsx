@@ -22,7 +22,7 @@ const Categories = () => {
     <div className='max-w-7xl mx-auto min-h[75vh]'>
         <h1><Link href={"/"}>home</Link> / <span className='font-bold text-primary text-2xl'>{name}</span></h1>
         {products.length === 0 && <span className="font-bold text-primary">no products of type {name} found</span>}
-        <div className="grid w-fit sm:w-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6 gap-7 mx-auto">
+        <div className="grid grid-cols-1 w-fit sm:w-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6 gap-7 mx-auto">
           {
               isLoading  && (
                 [1, 2, 3, 4, 5, 6].map(item => <ProductLoader key={item}/>)
