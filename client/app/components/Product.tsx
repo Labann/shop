@@ -21,6 +21,7 @@ const Product = ({product}:{
                 {wish && wish.some(item => item.id === product.id) && <GrFavorite onClick={() => dispatch(unWish(product))} className='cursor-pointer bg-red-600'/>}
             
                 {wish && wish.some(item => item.id !== product.id) && <GrFavorite onClick={() => dispatch(makeWish(product))} className='cursor-pointer'/>}
+                {!wish && <GrFavorite onClick={() => dispatch(makeWish(product))} className='cursor-pointer'/>}
             </div>
             
             {product.images.length !== 0 && <Image
