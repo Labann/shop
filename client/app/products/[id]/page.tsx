@@ -10,6 +10,7 @@ import { getSingleProduct } from '@/app/store/productSlice'
 import { addToCart } from '@/app/store/cartSlice'
 import { toast } from 'react-toastify'
 import Spinner from '@/app/components/Spinner'
+import ProductLoader from '@/app/components/ProductLoader'
 const Products = () => {
     const {id}= useParams<{id: string}>()
     
@@ -33,7 +34,19 @@ const Products = () => {
         }
     }, [quantity, currentProduct, cart])
     
-   if(!currentProduct || !cart) return <div className='animate-pulse min-h-[45vh]'></div>
+   if(isLoading || !currentProduct || !cart) return <div className='grid md:grid-cols-2 min-h-[45vh] bg-gray-100'>
+    <div className='animate-pulse bg-gray-100 h-full w-full'></div>
+    <div className='w-full h-full flex flex-col space-y-3'>
+                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-1/3 p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-full p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
+                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
+                </div>
+                {
+                    [1, 2, 3, 4].map(item => <ProductLoader key={item} />)
+                }
+   </div>
 
     
     
@@ -45,18 +58,8 @@ const Products = () => {
             <span className='text-primary'>/ {currentProduct?.name}</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
-            {
-                isLoading && <div className='animate-pulse bg-slate-400 h-full w-full'></div>
-            }
-            {
-                isLoading && <div className='w-full h-full flex flex-col space-y-3'>
-                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-1/3 p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-full p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
-                </div>
-            }
+            
+            
 
             <div className="rounded-md bg-slate-400 max-h-[55vh]">
 

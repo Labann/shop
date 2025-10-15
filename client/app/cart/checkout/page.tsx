@@ -34,7 +34,12 @@ const Checkout = () => {
     
     return (
     <div className='max-w-7xl mx-auto min-h-[45vh]'>
-        {myOrders?.length === 0 && <p className='text-4xl text-primary text-center'>No orders yet</p>}
+        {isLoading && (
+            <div className='w-sm flex flex-col space-y-3'>
+                <div className="w-1/3 p-2 animate-pulse"></div>
+            </div>
+        )}
+        {!isLoading && myOrders?.length === 0 && <p className='text-4xl text-primary text-center'>No orders yet</p>}
         {myOrders?.map(order => <><form key={order.id} className={`${order.status === "CANCELLED" && "pointer-events-none bg-gray-100/30"} max-w-lg border-1 mx-auto m-3 rounded p-3 border-primary`}>
             {order.status === "CANCELLED" && <p className='text-red-600'>order cancelled</p>}
             <h3 className='text-center font-bold'>Order summary</h3>
