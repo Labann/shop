@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { getMyCart } from '../store/cartSlice'
 import CartItemCard from '../components/CartItemCard'
-import { getMyOrders, makeOrder } from '../store/orderSlice'
+import { cancelOrder, getMyOrders, makeOrder } from '../store/orderSlice'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
 
@@ -17,7 +17,8 @@ const Cart = () => {
     const {message} = useAppSelector(state => state.order)
     const {cart} = useAppSelector(state => state.cart);
     const {myOrders, isLoading} = useAppSelector(state => state.order);
-    
+    const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+    const [isCancelOrder, setIsCancelOrder] = useState(false);
     useEffect(()=>{
         dispatch(getMyCart());
         dispatch(getMyOrders());
@@ -45,8 +46,9 @@ const Cart = () => {
             
             const cartItems = cart.items;
             const filtered = cartItems.filter(item => !ids.includes(item.id));
-            
+            setIsCreatingOrder(true)
             const action = await dispatch(makeOrder(filtered));
+            setIsCreatingOrder(false)
             if(action.type === "/order/create/fulfilled"){
                 toast.success("order created successfully")
             }
@@ -62,7 +64,8 @@ const Cart = () => {
             
     const cartItems = cart?.items;
     const filtered = cartItems?.filter(item => !ids.includes(item.id));
-  return (
+    
+    return (
     <div className='max-w-7xl mx-auto p-4'>
         <div className="flex items-center space-x-2">
             <Link href={"/"} className='text-slate-300 text-sm'>Home /</Link>
@@ -95,15 +98,21 @@ const Cart = () => {
                     
                 </div>
                 
+                
                 <button onClick={createOrder} className={`${filtered?.length === 0 && `pointer-events-none bg-primary/30`} bg-primary cursor-pointer mt-4 rounded-md p-3 text-white font-semibold hover:bg-primary/30`}>{
-                    isLoading? <Spinner/>: "Place order"
+                    isCreatingOrder? <Spinner/>: "Place order"
                 }</button>
+                
+                
+                
             </div>
             
         </div>
-        {myOrders.length !== 0  && <Link href={"/cart/checkout"} className="flex bg-primary text-white p-3 flex-row-reverse w-sm rounded">
-                proceed to payment
-        </Link>}
+        {myOrders.length !== 0  && <div className="flex flex-row-reverse w-sm bg-primary">
+                <Link href={"/cart/checkout"} className=" text-white p-3 rounded">
+                        proceed to payment
+                </Link>
+            </div>}
     </div>
   )
 }

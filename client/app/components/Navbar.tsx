@@ -22,17 +22,18 @@ const Navbar = () => {
     const {cart} = useAppSelector(state => state.cart);
     const [isShowShops, setIsShowShops] = useState(false);
     const {currentUser, isLoading, isSuccess, isError, message} = useAppSelector(state => state.auth);
+    
     useEffect(()=>{
-        
-        
         if(currentUser && currentUser.role == "VENDOR"){
             dispatch(getMyShops({userId: currentUser.id}))
             return
         }
+
         return () => {
             dispatch(reset());
             dispatch(shopReset())
         }
+
     }, [dispatch, isError, isSuccess, message, currentUser])
     const {myOrders} = useAppSelector(state => state.order);
     const ids = myOrders.flatMap(order => order.items.map(item => item.cartItemId));
@@ -54,6 +55,7 @@ const Navbar = () => {
                         className='hover:font-normal'
                         >Create shop</Link>
                     <Link href={"/contact-us"} className='hover:font-normal'>Contact us</Link>
+                    <Link href={"/cart/checkout"} className='hover:font-normal'>order</Link>
                     
                     {
                         currentUser && currentUser.role === "VENDOR" &&  (
@@ -136,6 +138,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center space-x-4 md:text-xl font-bold">
             <Link href={"/"}>Home</Link>
+            {currentUser && <Link href={"/cart/checkout"}>orders</Link>}
             {currentUser && currentUser.role !== "SUPER_ADMIN" && <Link href={"/shop/create-shop"}>Create shop</Link>}
             <Link href={"/contact-us"}>Contact us</Link>
             {currentUser && currentUser.role === "SUPER_ADMIN" && (

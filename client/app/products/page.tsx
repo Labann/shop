@@ -1,18 +1,19 @@
 "use client"
-import {useParams, useRouter, useSearchParams} from "next/navigation"
+import { useSearchParams} from "next/navigation"
 import {useEffect, useState}  from "react"
 import { CiSearch } from "react-icons/ci";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { getAllProducts, searchProducts } from "../store/productSlice";
 import Product from "../components/Product";
+import ProductLoader from "../components/ProductLoader";
 
 const Products = () => {
     const searchParams = useSearchParams();
     const query = searchParams.get("query");
-    const {products} = useAppSelector(state => state.product);
+    const {products, isLoading} = useAppSelector(state => state.product);
     const [search, setSearch] = useState<string>("");
     const dispatch = useAppDispatch();
-    const router = useRouter();
+    
     useEffect(() => {
         if(query){
             setSearch(query);
@@ -60,7 +61,10 @@ const Products = () => {
                     )
                 }
                 {
-                    products?.map(product => <Product key={product.id} product={product}/>)
+                    isLoading && ["1","2", "3", "4", "5", "6", "7", "8"].map(item => <ProductLoader key={item}/>)
+                }
+                {
+                    !isLoading && products?.map(product => <Product key={product.id} product={product}/>)
                 }
             </div>
         </div>

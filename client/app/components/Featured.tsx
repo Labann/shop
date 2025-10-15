@@ -5,6 +5,7 @@ import Product from './Product'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { IProduct } from '../types'
 import { getAllProducts } from '../store/productSlice'
+import ProductLoader from './ProductLoader'
 
 
 
@@ -12,7 +13,7 @@ import { getAllProducts } from '../store/productSlice'
 const Featured = () => {
     
     const dispatch = useAppDispatch();
-    const {products} = useAppSelector(state => state.product);
+    const {products, isLoading} = useAppSelector(state => state.product);
     const [data, setData] = useState<IProduct[]>([])
     useEffect(()=> {
         setData(products.filter(p => p.isFeatured === true))
@@ -21,7 +22,10 @@ const Featured = () => {
         dispatch(getAllProducts())
     }, [])
     
-    
+    const array = [
+        "1",
+        "2","3","4"
+    ]
     return (
     <div className='max-w-7xl mx-auto p-4'>
         <div className="flex justify-between items-center">
@@ -33,8 +37,12 @@ const Featured = () => {
         </div>
 
         <div className="grid grid-cols-2 min-h-[20vh] sm:grid-cols-3 lg:grid-cols-4 justify-center mx-auto gap-4 py-7">
+
             {
-                 data.length !== 0 && data?.slice(0, 4).map( value => <Product 
+                isLoading && array.map(item => <ProductLoader key={item}/>)
+            }
+            {
+                 data.length !== 0 && !isLoading && data?.slice(0, 4).map( value => <Product 
                         key={value.id}
                         product={value}
                         />

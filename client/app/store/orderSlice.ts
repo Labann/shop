@@ -75,6 +75,28 @@ ICartItem[],
         return thunkApi.rejectWithValue((error as Error).message)
     }
 })
+
+export const cancelOrder = createAsyncThunk<
+    {orderCancelled: IOrder, message: string},
+    {orderId: string},
+    {rejectValue: string}
+>("/order/cancel", async ({orderId}, thunkApi) => {
+    const res = await fetch(`${apiUrl}/api/order/cancel/${orderId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-type": "application/json"
+        }
+    });
+
+    const data = await res.json();
+
+    if(data.error){
+        return thunkApi.rejectWithValue(data.error);
+    }
+
+
+    return data;
+})
 const orderSlice = createSlice({
     name: "order",
     initialState: initialState,
@@ -116,6 +138,24 @@ const orderSlice = createSlice({
             .addCase(getMyOrders.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = false
+                state.message = action.payload as string
+            })
+            .addCase(cancelOrder.pending, (state) => {
+                state.isLoading= true
+            })
+            .addCase(cancelOrder.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                const index = state.myOrders.findIndex(order => order.id === action.payload.orderCancelled.id);
+
+                if(index === -1) return //order not found
+
+                state.myOrders[index] = action.payload.orderCancelled;
+            
+            })
+            .addCase(cancelOrder.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
                 state.message = action.payload as string
             })
     })

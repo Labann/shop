@@ -4,8 +4,9 @@ import Link from "next/link"
 import Product from './Product'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { getAllProducts, reset } from '../store/productSlice'
+import ProductLoader from './ProductLoader'
 const Products = () => {
-    const{products} = useAppSelector(state => state.product);
+    const{products, isLoading} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     useEffect(()=>{
         dispatch(getAllProducts())
@@ -24,8 +25,9 @@ const Products = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 justify-center mx-auto gap-4 py-7">
+            {isLoading && ["1", "2", "3", "4"].map(item => <ProductLoader key={item}/>)}
             {
-                products.length !== 0 && products.slice(0, 4)?.map( product => <Product 
+                products.length !== 0 && !isLoading && products.slice(0, 4)?.map( product => <Product 
                         key={product.id}
                         product ={product}
                         

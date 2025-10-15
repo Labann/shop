@@ -1,7 +1,7 @@
 "use client"
 import Spinner from '@/app/components/Spinner';
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
-import { getMyOrders } from '@/app/store/orderSlice';
+import { cancelOrder, getMyOrders } from '@/app/store/orderSlice';
 import { makePayment } from '@/app/store/paymentSlice';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -18,10 +18,25 @@ const Checkout = () => {
     async function submit(e: React.FormEvent){
         //payment
     }
+    const [isCancelling, setIsCancelling] = useState(false);
+    async function cancel(orderId: string){
+        setIsCancelling(true)
+        const action = await dispatch(cancelOrder({orderId}))
+        setIsCancelling(false)
+        if(action.type === "/order/cancel/fulfilled"){
+            toast.success("cancel successfully")
+        }
+
+        if(action.payload === "/order/cancel/rejected"){
+            toast.error("cancel failed");
+        }
+    }
+    
     return (
     <div className='max-w-7xl mx-auto min-h-[45vh]'>
         {myOrders?.length === 0 && <p className='text-4xl text-primary text-center'>No orders yet</p>}
-        {myOrders?.map(order => <form key={order.id} className="max-w-lg border-1 mx-auto m-3 rounded p-3 border-primary">
+        {myOrders?.map(order => <><form key={order.id} className={`${order.status === "CANCELLED" && "pointer-events-none bg-gray-100/30"} max-w-lg border-1 mx-auto m-3 rounded p-3 border-primary`}>
+            {order.status === "CANCELLED" && <p className='text-red-600'>order cancelled</p>}
             <h3 className='text-center font-bold'>Order summary</h3>
             {
                 order?.items?.map(item => 
@@ -71,7 +86,10 @@ const Checkout = () => {
             }} className='bg-primary w-full text-white p-2 rounded mt-4 hover:bg-primary/50 cursor-pointer'>{
                 isLoading? <Spinner/>: "Make payment"
             }</button>
-        </form>)}
+        </form>
+        <button key={order.id} onClick={() => cancel(order.id)} className='bg-red-600 hove:bg-red-700'>cancel</button>
+        </>
+    )}
     </div>
   )
 }
