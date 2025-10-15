@@ -108,8 +108,8 @@ const Cart = () => {
             </div>
             
         </div>
-        {myOrders.length !== 0  && <div className="flex flex-row-reverse w-sm bg-primary">
-                <Link href={"/cart/checkout"} className=" text-white p-3 rounded">
+        {myOrders.length !== 0  && <div className="w-full bg-primary">
+                <Link href={"/cart/checkout"} className="w-sm flex flex-row-reverse text-white p-3 rounded">
                         proceed to payment
                 </Link>
             </div>}
