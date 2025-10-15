@@ -65,7 +65,7 @@ const wishSlice = createSlice({
                 }
                 const index = state.wish.findIndex(wish => wish.id === action.payload.id);
                 if(index !== -1) return;
-                
+
                 state.wish = [action.payload, ...state.wish]
 
                 localStorage.setItem("wish", JSON.stringify(state.wish))
@@ -87,7 +87,7 @@ const wishSlice = createSlice({
 
                 if(index === -1) return //does not exist in wishList
 
-                state.wish.slice(index, 1);
+                state.wish.splice(index, 1);
 
                 localStorage.setItem("wish", JSON.stringify(state.wish));
             })
