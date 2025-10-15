@@ -49,6 +49,9 @@ const wishSlice = createSlice({
             state.isLoading = false
             state.isError = false
             state.isSuccess = false
+        },
+        setWish: (state, action) =>{
+            state.wish = action.payload
         }
     },
     extraReducers: (builder => {
@@ -94,6 +97,6 @@ const wishSlice = createSlice({
     })
 })
 
-export const {reset} = wishSlice.actions;
+export const {reset, setWish} = wishSlice.actions;
 
 export default wishSlice.reducer

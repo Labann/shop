@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify'
 import { reset as authReset } from '../store/authSlice'  
 import { getMyCart, reset, setCart } from '../store/cartSlice'
 import { getMyOrders, setOrder } from '../store/orderSlice'
+import { setWish } from '../store/wishSlice'
 const InitialState = () => {
   const dispatch = useAppDispatch();
   useEffect(()=> {
@@ -18,6 +19,9 @@ const InitialState = () => {
     if(user){
       dispatch(setUser(user))
       
+    }
+    if(wish){
+      setWish(wish)
     }
     if(order){
       setOrder(order);
