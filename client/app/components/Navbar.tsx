@@ -195,7 +195,7 @@ const Navbar = () => {
             <Link href={"/profile"}>
                 <GoPerson 
                     size={"1.5em"}
-                    className='font-bold'
+                    className='font-bold hidden'
                 />
             </Link>
             
