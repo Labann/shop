@@ -44,7 +44,7 @@ passport.use(new GoogleStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
     
     const email = profile.emails?.[0]?.value
-
+    
     if(!email){
         return done(new Error("email not available"));
     }

@@ -17,12 +17,19 @@ const Products = () => {
     const dispatch = useAppDispatch();
     const {message } = useAppSelector(state => state.cart);
     const {currentProduct} = useAppSelector(state => state.product);
+    //const productLoading = useAppSelector(state => state.product.isLoading);
     const [currentImage, setCurrentImage] = useState("");
     const {cart, isLoading} = useAppSelector(state => state.cart);
     const [quantity, setQuantity] = useState(1);
+    const [productLoading, setProductLoading] = useState(false);
+    const getProduct = async (id: string) => {
+        setProductLoading(true);
+        await dispatch(getSingleProduct({productId: id}));
+        setProductLoading(false);
+    }
     useEffect(() => {
         if(id){
-            dispatch(getSingleProduct({productId: id}));
+            getProduct(id)
         }
         
     }, [dispatch, id])
@@ -33,20 +40,9 @@ const Products = () => {
             setQuantity(product.quantity)
         }
     }, [quantity, currentProduct, cart])
+    const [test, setTest] = useState(true);
     
-   if(!currentProduct || !cart) return <div className='grid md:grid-cols-2 min-h-[45vh] bg-gray-100'>
-    <div className='animate-pulse bg-gray-100 h-full w-full'></div>
-    <div className='w-full h-full flex flex-col space-y-3'>
-                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-1/3 p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-full p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
-                    <div className="w-2/3 p-2 animate-pulse bg-gray-100"></div>
-                </div>
-                {
-                    [1, 2, 3, 4].map(item => <ProductLoader key={item} />)
-                }
-   </div>
+   
 
     
     
@@ -57,18 +53,52 @@ const Products = () => {
             
             <span className='text-primary'>/ {currentProduct?.name}</span>
         </div>
+    {productLoading? (
+    
+    <div className='grid md:grid-cols-2 gap-3 max-w-7xl mx-auto p-4'>
+        <div className="max-w-xl md:w-lg sm:w-xs w-xs mx-auto">
+            <div className="md:h-[400px] h-[300px] bg-gray-300 animate-pulse w-full rounded-md"></div>
+            <div className="flex items-center space-x-2 py-2">
+                <div className="w-20 h-20 rounded-md bg-gray-300 animate-pulse"></div>
+                <div className="w-20 h-20 rounded-md bg-gray-300 animate-pulse"></div>
+                <div className="w-20 h-20 rounded-md bg-gray-300 animate-pulse"></div>
+                
+            </div>
+        </div>
+        <div className="md:flex flex-col md:w-lg hidden space-y-3 w-xs mx-auto">
+            <div className="w-3/4 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/2 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/4 h-2 bg-gray-300 animate-pulse rounded"></div>
+            <div className="w-3/4 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/2 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/4 h-2 bg-gray-300 animate-pulse rounded"></div>
+            <div className="w-3/4 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/2 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/4 h-2 bg-gray-300 animate-pulse rounded"></div>
+            <div className="w-3/4 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/2 h-2 bg-gray-300 animate-pulse"></div>
+            <div className="w-1/4 h-2 bg-gray-300 animate-pulse rounded"></div>
+            <div className="flex items-center space-x-2">
+                <div className="w-20 h-5 animate-pulse bg-gray-300 rounded-md"></div>
+                <div className="w-20 h-5 animate-pulse bg-gray-300 rounded-md"></div>
+            </div>
+        </div>
+    </div>
+    
+   
+   ) :
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
             
             
 
             <div className="rounded-md bg-slate-400 max-h-[55vh]">
 
-                    {!isLoading && currentProduct.images.length !== 0 && currentProduct.images[0] && <Image 
+                    {!isLoading && currentProduct?.images?.length !== 0 && currentProduct?.images[0] && <Image 
                         alt="product-img"
                         width={600}
                         height={600}
                         unoptimized
-                        src={currentImage || currentProduct.images[0]}
+                        src={currentImage || currentProduct?.images[0]}
                         quality={100}
                         className='object-center rounded w-full h-full'
                         />}
@@ -76,10 +106,10 @@ const Products = () => {
             </div>
             <div className="flex flex-col space-y-4 md:p-6">
                 <h2 className='md:text-4xl text-2xl font-bold'>{currentProduct?.name}</h2>
-                <p className='text-xl'>KSH {currentProduct.price}</p>
+                <p className='text-xl'>KSH {currentProduct?.price}</p>
                 <div className="flex justify-between">
-                    <p>Store Name:<span className='text-primary mx-2 font-bold'>{currentProduct.shop.name}</span></p>
-                    <p>Availability <span className='text-green-400'>{currentProduct.stock !== 0 && "In Stock"}</span></p>
+                    <p>Store Name:<span className='text-primary mx-2 font-bold'>{currentProduct?.shop.name}</span></p>
+                    <p>Availability <span className='text-green-400'>{currentProduct?.stock !== 0 && "In Stock"}</span></p>
                 </div>
 
                 <div className="border-1 border-slate-100/100 w-full my-2"></div>
@@ -120,13 +150,15 @@ const Products = () => {
 
                 <button onClick={
                     async () => {
-                    
+                        
+                       if(cart && currentProduct) {
                         const action = await dispatch(addToCart({cartId: cart.id, productId: currentProduct.id, quantity: quantity}))
                         if(action.type === "/cart/add/fulfilled"){
                             toast.success("product added to cart");
                         }else {
                             toast.error(action.payload as string);
                         }
+                    }
                 }
                 } 
                 className='md:p-3 p-2 hover:bg-primary/70 cursor-pointer rounded text-center w-full bg-primary text-white'>
@@ -134,14 +166,14 @@ const Products = () => {
                 </button>
 
             </div>
-        </div>
+        </div>}
         {
-            isLoading && (
+            productLoading && (
                 ["1", "2", "3"].map(item => <div key={item} className='w-[7em] h-[7em] animate-pulse'/>)
             )
         }
         <div className="flex items-center flex-wrap space-x-2 pb-10">
-                    {!isLoading && currentProduct?.images.map(img => <div onClick={()=> setCurrentImage(img)} key={img} className="w-[7em] cursor-pointer bg-slate-300 rounded">
+                    {!productLoading && currentProduct?.images.map(img => <div onClick={()=> setCurrentImage(img)} key={img} className="w-[7em] cursor-pointer bg-gray-100 rounded">
                         <Image
                             alt='product-img'
                             unoptimized

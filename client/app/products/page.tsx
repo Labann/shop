@@ -18,7 +18,6 @@ const Products = () => {
         if(query){
             setSearch(query);
             dispatch(searchProducts({search: query}))
-
             // Clear query params from URL (without reload)
             const cleanUrl = window.location.pathname;
             window.history.replaceState({}, "", cleanUrl);
