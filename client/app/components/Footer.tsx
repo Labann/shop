@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
+import Link from "next/link"
 const Footer  = () => {
     return (
         <div className="bg-primary py-3 text-white p-4">
@@ -45,7 +46,7 @@ const Footer  = () => {
                 </div>
             </div>
             <div className="text-center border-t border-slate-100 py-4">
-                <p>© 2025 Magotsi Laban. All Rights Reserved</p>
+                <p>© 2025 <Link href="https://magotsi.vercel.app" className="hover:text-primary">Magotsi Laban</Link>. All Rights Reserved</p>
             </div>
         </div>
     )
