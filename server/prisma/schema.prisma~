@@ -29,7 +29,7 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model Product {
+model Product 
   id          String      @id @default(uuid())
   name        String
   description String

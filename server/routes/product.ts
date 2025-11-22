@@ -12,7 +12,7 @@ router.put("/update/:productId", protect, vendorsOnly, upload.array("images", 10
 router.delete("/delete/:productId", protect, vendorsOnly, deleteProduct);
 router.put("/toggle_isFeatured/:productId", protect, adminsOnly, toggleIsFeatured);
 router.get("/byShop/:shopId", protect, getProductByShop);
-router.get("/single/:productId", protect, getSingleProduct);
+router.get("/single/:productId", getSingleProduct);
 router.get("/all", getAllProducts)
 router.get("/category/:category", getProductByCategory);
 router.get("/search/:search", searchProducts)
