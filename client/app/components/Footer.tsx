@@ -46,7 +46,7 @@ const Footer  = () => {
                 </div>
             </div>
             <div className="text-center border-t border-slate-100 py-4">
-                <p>© 2025 <Link href="https://magotsi.vercel.app" className="hover:text-primary">Magotsi Laban</Link>. All Rights Reserved</p>
+                <p>© 2025 <Link href="https://magotsi.vercel.app" className="font-bold">magotsi</Link>. All Rights Reserved</p>
             </div>
         </div>
     )
