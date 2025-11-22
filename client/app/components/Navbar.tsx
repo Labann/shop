@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { FaBars } from "react-icons/fa";
 import { IoCartOutline } from "react-icons/io5";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
@@ -16,6 +16,7 @@ import Spinner from './Spinner';
 import { toast } from 'react-toastify';
 import { getMyShops } from '../store/shopSlice';
 const Navbar = () => {
+    const navRef = useRef<HTMLDivElement>(null);
     const [isMenu, setIsMenu] = useState(false);
     const dispatch = useAppDispatch();    
     const {myShops} = useAppSelector(state => state.shop);
@@ -38,24 +39,38 @@ const Navbar = () => {
     const {myOrders} = useAppSelector(state => state.order);
     const ids = myOrders.flatMap(order => order.items.map(item => item.cartItemId));
     const filtered = cart?.items.filter(item => !ids.includes(item.id));
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if(navRef.current && !navRef.current.contains(event.target as Node)){
+                setIsMenu(false);
+            }
+        }
 
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, []);
     return (
-    <div className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
+    <div ref={navRef} className='p-3 flex items-center relative justify-between text-primary max-w-7xl mx-auto'>
         {
             isMenu && (
-                <div className='absolute top-26 left-0 z-50 md:hidden text-white bg-primary/30 flex flex-col space-y-2 p-2 py-3 font-bold rounded-r-md'>
+                <div className='absolute top-26 left-0 w-full z-50 md:hidden text-white bg-primary/30 flex flex-col space-y-2 p-2 py-3 font-bold rounded-r-md'>
                     <Link 
+                        onClick={() => setIsMenu(!isMenu)}
                         href={"/"} 
                         className='hover:font-normal'
                         >
                         Home
                     </Link>
                     <Link 
+                        onClick={() => setIsMenu(!isMenu)}
                         href={"/shop/create-shop"}
                         className='hover:font-normal'
                         >Create shop</Link>
-                    <Link href={"/contact-us"} className='hover:font-normal'>Contact us</Link>
-                    <Link href={"/cart/checkout"} className='hover:font-normal'>order</Link>
+                    <Link onClick={() => setIsMenu(!isMenu)} href={"/contact-us"} className='hover:font-normal'>Contact us</Link>
+                    <Link onClick={() => setIsMenu(!isMenu)} href={"/cart/checkout"} className='hover:font-normal'>order</Link>
                     
                     {
                         currentUser && currentUser.role === "VENDOR" &&  (

@@ -3,7 +3,6 @@ import { useParams } from 'next/navigation'
 import React, {useEffect, useState} from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-
 import Featured from '@/app/components/Featured'
 import { useAppDispatch, useAppSelector } from '@/app/hooks/redux'
 import { getSingleProduct } from '@/app/store/productSlice'
@@ -22,6 +21,7 @@ const Products = () => {
     const {cart, isLoading} = useAppSelector(state => state.cart);
     const [quantity, setQuantity] = useState(1);
     const [productLoading, setProductLoading] = useState(false);
+    const {currentUser} = useAppSelector(state => state.auth)
     const getProduct = async (id: string) => {
         setProductLoading(true);
         await dispatch(getSingleProduct({productId: id}));
@@ -88,11 +88,7 @@ const Products = () => {
    
    ) :
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
-            
-            
-
             <div className="rounded-md bg-slate-400 max-h-[55vh]">
-
                     {!isLoading && currentProduct?.images?.length !== 0 && currentProduct?.images[0] && <Image 
                         alt="product-img"
                         width={600}
@@ -124,39 +120,32 @@ const Products = () => {
                             if(quantity > 1){
                                 await setQuantity(quantity - 1)
                             }
-                            console.log(quantity);
-                           
+                            
                         }
-                        } className={`${quantity === 0 && `pointer-events-none`} focus:text-white w-10 rounded text-xl cursor-pointer`}>-</button>
+                        } className={`${quantity === 0 && `pointer-events-none`} hover:bg-primary/30 focus:text-white w-10 rounded text-xl cursor-pointer`}>-</button>
                         <span className='text-center focus:text-white w-10 rounded text-xs'>{quantity}</span>
                         <button onClick={async () => {
-                                    setQuantity(quantity + 1);
-                                    console.log(quantity);
+                                    setQuantity(quantity + 1)
                                 }
                             }  
-                        className={`focus:text-white w-10  rounded text-xl cursor-pointer`}>+</button>
+                        className={`focus:text-white w-10  rounded text-xl cursor-pointer hover:bg-primary/30`}>+</button>
                     </div>
                 </div>
-
-                <div className="flex items-center space-x-3">
-                    <h3 className='text-2xl'>Size: </h3>
-                    <div className="flex items-center space-x-2">
-                        <button className='border-primary border-1  focus:text-white w-10 p-2 rounded  focus:bg-primary'>S</button>
-                        <button className='border-primary border-1  focus:text-white w-10 p-2 rounded focus:bg-primary'>M</button>
-                        <button className='border-primary border-1  focus:text-white w-10 p-2 rounded focus:bg-primary'>L</button>
-                        <button className='border-primary border-1  focus:text-white w-10 p-2 rounded focus:bg-primary'>XL</button>
-                    </div>
-                </div>
-
                 <button onClick={
                     async () => {
-                        
                        if(cart && currentProduct) {
+                        if(!currentUser || !cart) {
+                            toast.error("You are required to log-in")
+                            return
+                        }
+                        
                         const action = await dispatch(addToCart({cartId: cart.id, productId: currentProduct.id, quantity: quantity}))
                         if(action.type === "/cart/add/fulfilled"){
                             toast.success("product added to cart");
+                            return
                         }else {
                             toast.error(action.payload as string);
+                            return
                         }
                     }
                 }
